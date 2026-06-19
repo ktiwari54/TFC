@@ -1,0 +1,29 @@
+{
+  "name": "tfc",
+  "version": "1.0.0",
+  "description": "",
+  "main": "test-ui.js",
+  "scripts": {
+    "test:backup": "node test-backup-recovery.js",
+    "test:db": "node test-db.js",
+    "test:seo": "node test-seo.js",
+    "test:perf": "node test-performance.js",
+    "test:ui": "node test-ui.js",
+    "backup": "node scripts/build-backup-manifest.js && powershell -ExecutionPolicy Bypass -File backup.ps1"
+  },
+  "devDependencies": {
+    "playwright": "^1.52.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ktiwari54/TFC.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/ktiwari54/TFC/issues"
+  },
+  "homepage": "https://github.com/ktiwari54/TFC#readme"
+}

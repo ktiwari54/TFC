@@ -1,0 +1,53 @@
+name: Daily Backup
+
+on:
+  schedule:
+    # 02:00 UTC daily
+    - cron: '0 2 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  backup:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Build backup archive
+        run: |
+          STAMP=$(date -u +%Y%m%d)
+          ARCHIVE="tfc-backup-${STAMP}.tar.gz"
+          MANIFEST="backup-manifest-${STAMP}.json"
+
+          node scripts/build-backup-manifest.js "$MANIFEST"
+
+          tar czf "$ARCHIVE" \
+            --exclude='node_modules' \
+            --exclude='.git' \
+            --exclude='backups' \
+            --exclude='*-report.json' \
+            index.html serve.py vercel.json start.ps1 start.bat \
+            js css films \
+            about-us.html blogs.html contact.html crew.html faqs.html \
+            films.html films-search.html pricing.html workshop.html \
+            tales-from-the-culture.html \
+            RESTORE.md backup.ps1 backup.sh \
+            .github/workflows/daily-backup.yml \
+            scripts/build-backup-manifest.js
+
+          echo "archive=$ARCHIVE" >> "$GITHUB_OUTPUT"
+          echo "manifest=$MANIFEST" >> "$GITHUB_OUTPUT"
+        id: pack
+
+      - name: Upload daily backup artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: tfc-daily-backup-${{ github.run_number }}
+          path: |
+            ${{ steps.pack.outputs.archive }}
+            ${{ steps.pack.outputs.manifest }}
+          retention-days: 30
+          if-no-files-found: error
