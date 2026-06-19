@@ -713,6 +713,50 @@ body.home-reveal-all .home-scroll-reveal {
   overflow: visible;
   padding-bottom: 0;
   margin-bottom: 0;
+  opacity: 1 !important;
+  transform: none !important;
+}
+
+/* Chapter IV — lite mode: no GPU-heavy effects while scrolling */
+.home-page .dream-films-lite .dream-films-aurora {
+  animation: none;
+  filter: blur(24px);
+  opacity: 0.65;
+  transform: none;
+}
+
+.home-page .dream-films-lite .dream-float {
+  animation: none;
+  opacity: 0.45;
+}
+
+.home-page .dream-films-lite .dream-card-glow {
+  display: none;
+}
+
+.home-page .dream-films-lite .trailer-item,
+.home-page .dream-films-lite .dream-card {
+  perspective: none;
+  transform-style: flat;
+}
+
+.home-page .dream-films-lite .trailer-item-wrap,
+.home-page .dream-films-lite .dream-card-inner {
+  transform-style: flat;
+  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.38);
+  transition: transform 0.35s ease, box-shadow 0.35s ease;
+}
+
+.home-page .dream-films-lite .trailer-media,
+.home-page .dream-films-lite .trailer-media img,
+.home-page .dream-films-lite .film-card-preview {
+  contain: strict;
+  backface-visibility: hidden;
+  transform: translateZ(0);
+}
+
+.home-page .tfc-img-stable {
+  background: rgba(255, 255, 255, 0.04);
 }
 
 .home-page .dream-films .home-chapter-head {

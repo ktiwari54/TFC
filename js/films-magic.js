@@ -364,6 +364,25 @@
     if (!panel || typeof gsap === 'undefined') return;
 
     const items = panel.querySelectorAll('.trailer-item, .film-card');
+    const isHome = document.body.classList.contains('home-page');
+
+    if (isHome) {
+      gsap.set(items, { clearProps: 'transform' });
+      gsap.fromTo(items, {
+        opacity: 0,
+        y: 14,
+      }, {
+        opacity: 1,
+        y: 0,
+        duration: 0.45,
+        stagger: 0.05,
+        ease: 'power2.out',
+        overwrite: 'auto',
+      });
+      panel.classList.add('is-panel-ready');
+      return;
+    }
+
     gsap.fromTo(items, {
       y: 120,
       opacity: 0,
@@ -386,6 +405,16 @@
 
   window.TFC_magicPanelExit = function magicPanelExit(panel) {
     if (!panel || typeof gsap === 'undefined') return Promise.resolve();
+    const isHome = document.body.classList.contains('home-page');
+
+    if (isHome) {
+      return gsap.to(panel.querySelectorAll('.trailer-item'), {
+        opacity: 0,
+        duration: 0.2,
+        ease: 'power1.in',
+      });
+    }
+
     return gsap.to(panel.querySelectorAll('.trailer-item'), {
       y: -60,
       opacity: 0,

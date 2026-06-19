@@ -66,6 +66,7 @@
     if (el.classList.contains('magic-media')) return;
     if (el.closest('.magic-media')) return;
     if (el.closest('.home-page .cs-gallery')) return;
+    if (el.closest('.home-page .dream-films')) return;
 
     if (el.tagName === 'IMG' || el.tagName === 'VIDEO') {
       const wrapper = document.createElement('div');

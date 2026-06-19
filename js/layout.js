@@ -237,4 +237,12 @@
     magicScript.defer = true;
     document.body.appendChild(magicScript);
   }
+
+  document.querySelectorAll('img').forEach((img) => {
+    if (!img.hasAttribute('decoding')) img.decoding = 'async';
+    if (!img.hasAttribute('loading') && !img.closest('.hero-slide, .hero-media, .homepage-banner-video')) {
+      img.loading = 'lazy';
+    }
+    img.classList.add('tfc-img-stable');
+  });
 })();

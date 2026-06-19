@@ -17,8 +17,10 @@ document.addEventListener('DOMContentLoaded', () => {
   initHomeChapterStatic();
   initHomeRevealObserver();
   initHomeGallery();
+  initHomeDreamFilms();
   initHomeTabFlip();
   initHomeHoverCards();
+  initHomeImages();
 });
 
 function initHomeTabFlip() {
@@ -132,9 +134,24 @@ function initHomeRevealObserver() {
   targets.forEach((el) => {
     if (el.classList.contains('shell-top-bar')) return;
     if (el.classList.contains('section-hero-banner')) return;
-    if (el.id === 'hero') return;
+    if (el.classList.contains('dream-films')) return;
+    if (el.id === 'hero' || el.id === 'films') return;
     el.classList.add('home-reveal');
     observer.observe(el);
+  });
+}
+
+function initHomeDreamFilms() {
+  const section = document.getElementById('films');
+  if (!section) return;
+  section.classList.add('is-revealed', 'dream-films-lite');
+}
+
+function initHomeImages() {
+  document.querySelectorAll('.home-page img').forEach((img) => {
+    if (!img.getAttribute('loading')) img.loading = 'lazy';
+    if (!img.getAttribute('decoding')) img.decoding = 'async';
+    img.classList.add('tfc-img-stable');
   });
 }
 

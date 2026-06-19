@@ -17,16 +17,34 @@ function initTrailerSection() {
       <div class="trailer-panel film-panel${i === 0 ? ' active' : ''}" id="${id}" data-tab-panel="${id}">
         <p class="dream-scroll-hint">Let the celebration unfold</p>
         <div class="trailer-wrapper">
-          <div class="trailer-list-wrapper dream-carousel-track" data-lenis-prevent>${items}</div>
+          <div class="trailer-list-wrapper dream-carousel-track" data-lenis-prevent data-lenis-prevent-wheel>${items}</div>
         </div>
       </div>`;
   }).join('');
 
   initTrailerDragScroll();
   initTrailerTabs();
-  window.TFC_initFilmHoverPreview?.(mount);
 
-  setTimeout(() => window.TFC_initDreamFilmsCarousel?.(), 200);
+  const isHome = document.body.classList.contains('home-page');
+  const filmsSection = document.getElementById('films');
+
+  function bootCarousel() {
+    window.TFC_initFilmHoverPreview?.(mount);
+    window.TFC_initDreamFilmsCarousel?.();
+    const active = mount.querySelector('.trailer-panel.active');
+    if (active) window.TFC_magicPanelEnter?.(active);
+  }
+
+  if (isHome && filmsSection && 'IntersectionObserver' in window) {
+    const bootObserver = new IntersectionObserver((entries) => {
+      if (!entries[0]?.isIntersecting) return;
+      bootObserver.disconnect();
+      requestAnimationFrame(bootCarousel);
+    }, { rootMargin: '120px 0px', threshold: 0.05 });
+    bootObserver.observe(filmsSection);
+  } else {
+    setTimeout(bootCarousel, 200);
+  }
 }
 
 function trailerItemHtml(film, assets) {
@@ -57,7 +75,7 @@ function trailerItemHtml(film, assets) {
         </div>
         <img class="trailer-sufi" src="${assets.sufi || ''}" alt="" aria-hidden="true" width="72">
         <div class="trailer-media film-card-media">
-          <img class="trailer-image film-card-poster" src="${film.image}" alt="${film.name}" loading="lazy">
+          <img class="trailer-image film-card-poster" src="${film.image}" alt="${film.name}" width="420" height="560" loading="lazy" decoding="async">
         </div>
       </div>
     </article>`;
@@ -109,7 +127,9 @@ function initTrailerTabs() {
 
   function resetAuto() {
     clearInterval(autoInterval);
-    autoInterval = setInterval(autoNext, 18000);
+    if (!document.body.classList.contains('home-page')) {
+      autoInterval = setInterval(autoNext, 18000);
+    }
   }
 
   resetAuto();

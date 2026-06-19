@@ -148,31 +148,36 @@ function initFilmHoverPreview(root = document) {
 
     if (!media) return;
 
-    const video = document.createElement('video');
-    video.className = 'film-card-preview';
-    video.muted = true;
-    video.loop = true;
-    video.playsInline = true;
-    video.setAttribute('playsinline', '');
-    video.preload = 'metadata';
-    video.src = url;
-    media.appendChild(video);
-
     card.classList.add('has-preview');
 
     let enterTimer;
+    let video = null;
     const shell = hoverShell(card);
+
+    function ensureVideo() {
+      if (video) return video;
+      video = document.createElement('video');
+      video.className = 'film-card-preview';
+      video.muted = true;
+      video.loop = true;
+      video.playsInline = true;
+      video.setAttribute('playsinline', '');
+      video.preload = 'none';
+      video.src = url;
+      media.appendChild(video);
+      return video;
+    }
 
     function startPreview() {
       if (activeCard && activeCard !== card) stopPreview(activeCard);
       activeCard = card;
       card.classList.add('is-playing-preview');
       shell.classList.add('is-playing-preview');
-      video.play().catch(() => {});
+      ensureVideo().play().catch(() => {});
     }
 
     card.addEventListener('mouseenter', () => {
-      enterTimer = setTimeout(startPreview, 150);
+      enterTimer = setTimeout(startPreview, 220);
     });
 
     card.addEventListener('mouseleave', () => {
