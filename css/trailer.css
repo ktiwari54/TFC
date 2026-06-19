@@ -1,0 +1,272 @@
+/* Trailer section — inspired by tfc.html horizontal film showcase */
+
+.trailer-section {
+  padding: 5rem 0 4rem;
+  overflow: hidden;
+}
+
+.trailer-section .trailer-header {
+  text-align: center;
+  margin-bottom: 2.5rem;
+  padding: 0 1.5rem;
+}
+
+.trailer-wrapper {
+  position: relative;
+  margin-top: 2rem;
+}
+
+.trailer-scroll-hint {
+  text-align: center;
+  font-size: 0.68rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: rgba(0, 0, 0, 0.35);
+  margin-bottom: 1rem;
+}
+
+.trailer-list-wrapper {
+  display: flex;
+  gap: 1.25rem;
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding: 1rem 4vw 2.5rem;
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  cursor: grab;
+}
+
+.trailer-list-wrapper::-webkit-scrollbar {
+  display: none;
+}
+
+.trailer-list-wrapper.is-dragging {
+  cursor: grabbing;
+  scroll-snap-type: none;
+  user-select: none;
+}
+
+.trailer-item {
+  flex: 0 0 min(78vw, 520px);
+  scroll-snap-align: start;
+  position: relative;
+}
+
+.trailer-item-wrap {
+  position: relative;
+  border-radius: 14px;
+  overflow: hidden;
+  background: #111;
+  min-height: 420px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  transition: transform 0.55s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.55s ease;
+}
+
+.trailer-item-wrap:hover,
+.trailer-item-wrap.is-playing-preview {
+  transform: translateY(-8px) scale(1.01);
+  box-shadow: 0 28px 56px rgba(196, 30, 58, 0.2);
+}
+
+.trailer-media {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+}
+
+.trailer-media .film-card-poster,
+.trailer-media .trailer-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.8s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.5s ease;
+}
+
+.trailer-media .film-card-preview {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0;
+  transform: scale(1.05);
+  transition: opacity 0.5s cubic-bezier(0.22, 1, 0.36, 1), transform 0.8s ease;
+  z-index: 1;
+}
+
+.trailer-item-wrap.is-playing-preview .film-card-preview {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.trailer-item-wrap.is-playing-preview .film-card-poster {
+  opacity: 0;
+  transform: scale(1.08);
+}
+
+.trailer-item-wrap::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.92) 0%, rgba(0, 0, 0, 0.35) 45%, rgba(0, 0, 0, 0.1) 100%);
+  z-index: 1;
+  pointer-events: none;
+  transition: background 0.45s ease;
+}
+
+.trailer-item-wrap:hover::after,
+.trailer-item-wrap.is-playing-preview::after {
+  background: linear-gradient(to top, rgba(196, 30, 58, 0.55) 0%, rgba(0, 0, 0, 0.4) 50%, rgba(0, 0, 0, 0.15) 100%);
+}
+
+.trailer-content-wrap {
+  position: relative;
+  z-index: 3;
+  padding: 2rem 1.75rem 1.25rem;
+  text-decoration: none;
+  color: #fff;
+  display: block;
+}
+
+.trailer-subtitle {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  margin-bottom: 0.65rem;
+}
+
+.wedding-location {
+  font-size: 0.62rem;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.75);
+}
+
+.trailer-arrow {
+  width: 10px;
+  height: auto;
+  opacity: 0.8;
+}
+
+.trailer-name {
+  font-family: var(--font-heading);
+  font-size: clamp(1.6rem, 4vw, 2.2rem);
+  letter-spacing: 0.08em;
+  line-height: 1.05;
+  color: #fff;
+  text-transform: uppercase;
+}
+
+.slider-play-button {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 4;
+  opacity: 0;
+  transition: opacity 0.4s ease, transform 0.4s ease;
+  pointer-events: none;
+}
+
+.trailer-item-wrap:hover .slider-play-button,
+.trailer-item-wrap.is-playing-preview .slider-play-button {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.slider-play-button .play-btn-img {
+  width: 52px;
+  height: 52px;
+  display: block;
+  filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.4));
+  transition: transform 0.3s ease;
+}
+
+.trailer-item-wrap:hover .play-btn-img {
+  transform: scale(1.08);
+}
+
+.trailer-sufi {
+  position: absolute;
+  right: 1.25rem;
+  bottom: 38%;
+  width: 4.5rem;
+  opacity: 0.45;
+  z-index: 2;
+  pointer-events: none;
+  animation: floatSufi 6s ease-in-out infinite;
+}
+
+.trailer-panel {
+  display: none;
+}
+
+.trailer-panel.active {
+  display: block;
+  animation: trailerFadeIn 0.6s ease;
+}
+
+@keyframes trailerFadeIn {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.main_content .trailer-section .film-tab {
+  color: #666;
+  border-color: rgba(0, 0, 0, 0.08);
+}
+
+.main_content .trailer-section .film-tab.active {
+  color: #fff;
+  background: var(--tfc-red);
+  border-color: var(--tfc-red);
+}
+
+@media (max-width: 991px) {
+  .trailer-section {
+    padding: 3.5rem 0 2.5rem;
+  }
+
+  .trailer-list-wrapper,
+  .dream-carousel-track {
+    padding-inline: clamp(1rem, 4vw, 2rem);
+    gap: 1.25rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .trailer-item,
+  .dream-films .trailer-item,
+  .dream-card {
+    flex: 0 0 min(88vw, 340px);
+  }
+
+  .trailer-item-wrap,
+  .dream-films .trailer-item-wrap,
+  .dream-card-inner {
+    min-height: 360px;
+  }
+
+  .trailer-name,
+  .dream-films .trailer-name {
+    font-size: clamp(1.5rem, 6vw, 2rem);
+  }
+}
+
+@media (max-width: 480px) {
+  .trailer-item,
+  .dream-films .trailer-item,
+  .dream-card {
+    flex: 0 0 92vw;
+  }
+
+  .trailer-item-wrap,
+  .dream-films .trailer-item-wrap {
+    min-height: 320px;
+  }
+}

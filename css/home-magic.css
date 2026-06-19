@@ -1,0 +1,1198 @@
+/* Home — Disney-inspired magical 3D experience */
+
+.home-page .main_content {
+  background: #070b14;
+  color: #f8f4ef;
+  overflow-x: hidden;
+}
+
+.home-page .shell-top-bar {
+  background: rgba(7, 11, 20, 0.92);
+  border-bottom-color: rgba(255, 255, 255, 0.06);
+  backdrop-filter: blur(12px);
+}
+
+.home-page .shell-search {
+  background: rgba(255, 255, 255, 0.06);
+  border-color: rgba(255, 255, 255, 0.08);
+}
+
+.home-page .shell-search input {
+  color: #fff;
+}
+
+.home-page .shell-search input::placeholder {
+  color: rgba(255, 255, 255, 0.4);
+}
+
+.home-page .shell-top-link {
+  color: rgba(248, 244, 239, 0.85);
+  border-color: rgba(255, 255, 255, 0.18);
+}
+
+.home-page .shell-top-link:hover {
+  color: var(--home-cream);
+  background: rgba(255, 255, 255, 0.06);
+  border-color: rgba(232, 200, 114, 0.35);
+}
+
+.home-page .shell-top-link.active {
+  color: var(--home-gold-bright);
+  background: rgba(232, 200, 114, 0.12);
+  border-color: rgba(232, 200, 114, 0.4);
+}
+
+.home-experience {
+  position: relative;
+  --home-gold: #e8c872;
+  --home-gold-bright: #f4d88a;
+  --home-royal: #2a4a8a;
+  --home-magic: #7b5ea7;
+  --home-cream: #f8f4ef;
+  --home-deep: #070b14;
+}
+
+.home-mesh {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.65;
+  contain: strict;
+  background:
+    radial-gradient(ellipse 55% 45% at 15% 15%, rgba(123, 94, 167, 0.22) 0%, transparent 55%),
+    radial-gradient(ellipse 50% 40% at 85% 25%, rgba(42, 74, 138, 0.25) 0%, transparent 50%),
+    radial-gradient(ellipse 70% 55% at 50% 100%, rgba(232, 200, 114, 0.1) 0%, transparent 60%),
+    radial-gradient(ellipse 40% 30% at 70% 60%, rgba(196, 30, 58, 0.12) 0%, transparent 50%);
+}
+
+.home-grain {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
+  opacity: 0.035;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+.home-stars {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
+  overflow: hidden;
+}
+
+.home-star {
+  position: absolute;
+  border-radius: 50%;
+  background: var(--home-gold-bright);
+  box-shadow: 0 0 6px 1px rgba(244, 216, 138, 0.6);
+  opacity: 0.35;
+  animation: homeStarTwinkle 3s ease-in-out infinite;
+}
+
+@keyframes homeStarTwinkle {
+  0%, 100% { opacity: 0.2; transform: scale(0.85); }
+  50% { opacity: 0.85; transform: scale(1); }
+}
+
+/* ── Chapter headers ── */
+.home-chapter {
+  position: relative;
+  z-index: 2;
+  transform-style: preserve-3d;
+}
+
+.home-chapter-head {
+  text-align: center;
+  max-width: 720px;
+  margin: 0 auto 1rem;
+  padding: 1.25rem 2rem 0;
+}
+
+.home-section-head {
+  text-align: center;
+  max-width: 720px;
+  margin: 0 auto 1rem;
+  padding: 1.25rem 2rem 0;
+}
+
+.home-section-kicker {
+  font-size: 0.72rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--home-gold);
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+
+.home-section-title {
+  font-family: "Cormorant Garamond", Georgia, serif;
+  font-size: clamp(1.75rem, 3.5vw, 2.5rem);
+  font-weight: 400;
+  color: var(--home-cream);
+  line-height: 1.2;
+  margin: 0;
+}
+
+.home-section-title .accent,
+.home-section-title .feel {
+  color: var(--home-gold-bright);
+  font-style: italic;
+}
+
+.home-chapter-num {
+  font-family: "Cormorant Garamond", Georgia, serif;
+  font-size: 3.5rem;
+  line-height: 1;
+  color: rgba(255, 255, 255, 0.32);
+  margin-bottom: -0.75rem;
+}
+
+.home-chapter-title {
+  font-family: "Cormorant Garamond", Georgia, serif;
+  font-size: clamp(1.75rem, 3.5vw, 2.75rem);
+  font-weight: 400;
+  color: #ffffff;
+  margin-bottom: 0.5rem;
+}
+
+.home-chapter-text {
+  color: rgba(255, 255, 255, 0.72);
+  line-height: 1.7;
+  font-size: 0.98rem;
+  margin: 0;
+}
+
+/* Always light chapter copy on the dark home canvas */
+.home-page .home-chapter-head .home-chapter-num {
+  color: rgba(255, 255, 255, 0.32) !important;
+}
+
+.home-page .home-chapter-head .home-chapter-title {
+  color: #ffffff !important;
+}
+
+.home-page .home-chapter-head .home-chapter-text {
+  color: rgba(255, 255, 255, 0.72) !important;
+}
+
+.home-divider {
+  display: none;
+}
+
+/* ── Tight vertical rhythm — no gaps between sections ── */
+.home-experience > section {
+  margin: 0;
+}
+
+.home-page .divider-line {
+  display: none;
+}
+
+/* ── Enchanted scroll panels ── */
+.home-scroll-wrap {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 0 2rem;
+  perspective: 1200px;
+  transform-style: preserve-3d;
+}
+
+.home-scroll {
+  position: relative;
+  background: linear-gradient(180deg, #f5ead4 0%, #ebe0c8 8%, #e8dcc4 92%, #ddd0b0 100%);
+  border-radius: 4px;
+  padding: 3rem 2.5rem;
+  color: #2a2218;
+  box-shadow:
+    0 40px 80px rgba(0, 0, 0, 0.45),
+    inset 0 2px 0 rgba(255, 255, 255, 0.5);
+  transform-origin: top center;
+  transform-style: preserve-3d;
+}
+
+.home-scroll::before,
+.home-scroll::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 24px;
+  background: linear-gradient(90deg, #c4a86a, #e8c872, #c4a86a);
+  opacity: 0.6;
+}
+
+.home-scroll::before { top: 0; border-radius: 4px 4px 0 0; }
+.home-scroll::after { bottom: 0; border-radius: 0 0 4px 4px; }
+
+.home-scroll-ribbon {
+  position: absolute;
+  top: -6px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 60px;
+  height: 12px;
+  background: linear-gradient(180deg, var(--tfc-red), var(--tfc-red-dark));
+  border-radius: 0 0 4px 4px;
+  box-shadow: 0 4px 12px rgba(196, 30, 58, 0.35);
+  z-index: 2;
+}
+
+.home-scroll-inner {
+  position: relative;
+  z-index: 1;
+}
+
+/* ── Hero magic ── */
+.home-page .section-hero-banner {
+  padding: 0 1.25rem;
+  position: relative;
+  z-index: 2;
+}
+
+.home-page .hero.wedding-hero {
+  border: 1px solid rgba(232, 200, 114, 0.2);
+  box-shadow:
+    0 30px 80px rgba(0, 0, 0, 0.5),
+    0 0 60px rgba(123, 94, 167, 0.15);
+}
+
+.home-page .hero.wedding-hero .hero-overlay {
+  background: linear-gradient(
+    to top,
+    rgba(7, 11, 20, 0.92) 0%,
+    rgba(42, 74, 138, 0.35) 40%,
+    rgba(123, 94, 167, 0.15) 100%
+  );
+}
+
+.home-page .hero.wedding-hero .eyebrow {
+  color: var(--home-gold);
+  letter-spacing: 0.2em;
+}
+
+.home-page .hero.wedding-hero .hero-title {
+  font-family: "Cormorant Garamond", Georgia, serif;
+  text-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);
+}
+
+.home-page .hero.wedding-hero .hero-desc {
+  color: rgba(248, 244, 239, 0.75);
+}
+
+.home-page .hero-arrow {
+  border-color: rgba(232, 200, 114, 0.3);
+  background: rgba(7, 11, 20, 0.5);
+  backdrop-filter: blur(8px);
+}
+
+.home-page .hero-arrow:hover {
+  border-color: var(--home-gold);
+  color: var(--home-gold-bright);
+}
+
+.home-page .hero-dot {
+  background: rgba(232, 200, 114, 0.3);
+}
+
+.home-page .hero-dot.active {
+  background: var(--home-gold-bright);
+  box-shadow: 0 0 12px rgba(244, 216, 138, 0.6);
+}
+
+.home-scroll-hint {
+  position: absolute;
+  bottom: 2.5rem;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-size: 0.68rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.4);
+  z-index: 5;
+}
+
+.home-scroll-hint span {
+  width: 40px;
+  height: 1px;
+  background: linear-gradient(90deg, var(--home-gold), transparent);
+  animation: homePulseLine 2s ease-in-out infinite;
+}
+
+@keyframes homePulseLine {
+  0%, 100% { opacity: 0.4; transform: scaleX(0.7); }
+  50% { opacity: 1; transform: scaleX(1); }
+}
+
+.home-page .sufi-deco {
+  filter: drop-shadow(0 0 20px rgba(244, 216, 138, 0.3));
+  opacity: 0.35;
+}
+
+/* ── Tagline ── */
+.home-page .lottie-section,
+.home-page .home-tagline-section {
+  background: transparent;
+  padding: 1rem 2rem 0;
+  position: relative;
+  z-index: 2;
+  text-align: center;
+}
+
+.home-page .home-tagline-text {
+  font-family: "Cormorant Garamond", Georgia, serif;
+  font-weight: 400;
+  font-style: italic;
+  font-size: clamp(1.35rem, 2.6vw, 2rem);
+  line-height: 1.4;
+  letter-spacing: 0.02em;
+  color: rgba(248, 244, 239, 0.88);
+  max-width: 520px;
+  margin: 0 auto;
+  text-transform: none;
+}
+
+.home-page .home-tagline-text em {
+  font-style: italic;
+  font-weight: 500;
+  color: var(--home-gold-bright);
+}
+
+.home-page .lottie-divider {
+  margin-top: 0.75rem;
+  background: var(--home-gold);
+}
+
+/* ── Intro ── */
+.home-page .cs-intro {
+  padding: 1rem 0 0;
+  background: transparent;
+  border: none;
+}
+
+.home-page .cs-kicker {
+  color: var(--home-gold);
+}
+
+.home-page .cs-intro-title {
+  color: var(--home-cream);
+}
+
+.home-page .cs-intro-title span {
+  color: var(--home-gold-bright);
+  font-style: italic;
+}
+
+.home-page .cs-intro-text {
+  color: rgba(248, 244, 239, 0.6);
+}
+
+/* Chapter I parchment scroll — dark text on light paper */
+#discover .home-scroll--chapter1 {
+  overflow: hidden;
+  will-change: transform, clip-path, opacity;
+}
+
+#discover .home-scroll--chapter1 .cs-kicker {
+  color: #7a5c1e !important;
+}
+
+#discover .home-scroll--chapter1 .cs-intro-text {
+  color: rgba(26, 21, 16, 0.84) !important;
+}
+
+#discover .home-scroll--chapter1 .cs-rating-card {
+  background: #fff;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.08);
+}
+
+#discover .home-scroll--chapter1 .cs-rating-card p {
+  color: rgba(26, 21, 16, 0.55) !important;
+}
+
+#discover .home-scroll--chapter1 .cs-rating-num {
+  color: #1a1510 !important;
+  text-shadow: none;
+}
+
+#discover .home-scroll--chapter1 .cs-stars {
+  color: #d4920a;
+}
+
+#discover .home-scroll--chapter1 .btn.is-outline {
+  border-color: rgba(26, 21, 16, 0.22) !important;
+  color: #1a1510 !important;
+  background: rgba(255, 255, 255, 0.45);
+}
+
+#discover .home-scroll--chapter1 .btn.is-outline:hover {
+  border-color: var(--tfc-red) !important;
+  color: var(--tfc-red) !important;
+  background: rgba(255, 255, 255, 0.75);
+}
+
+.home-typewriter.is-typing::after {
+  content: '|';
+  display: inline-block;
+  margin-left: 2px;
+  color: var(--tfc-red);
+  font-weight: 300;
+  animation: homeTypeCursor 0.75s step-end infinite;
+}
+
+@keyframes homeTypeCursor {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .home-typewriter.is-typing::after {
+    animation: none;
+  }
+}
+
+.home-page .cs-rating-card {
+  background: linear-gradient(145deg, rgba(42, 74, 138, 0.25), rgba(123, 94, 167, 0.15));
+  border: 1px solid rgba(232, 200, 114, 0.25);
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.35);
+}
+
+.home-page .cs-rating-card p {
+  color: rgba(248, 244, 239, 0.5);
+}
+
+.home-page .cs-rating-num {
+  color: var(--home-gold-bright);
+  text-shadow: 0 0 20px rgba(244, 216, 138, 0.3);
+}
+
+.home-page .btn.is-outline {
+  border-color: rgba(232, 200, 114, 0.35);
+  color: var(--home-cream);
+}
+
+.home-page .btn.is-outline:hover {
+  border-color: var(--home-gold);
+  background: rgba(232, 200, 114, 0.08);
+}
+
+/* ── Gallery ── */
+.home-page .cs-gallery {
+  background: transparent;
+  padding: 0;
+  position: relative;
+  z-index: 2;
+}
+
+.home-page .cs-gallery-track {
+  padding: 0.75rem 4vw 0.5rem;
+}
+
+.home-page .cs-gallery-item {
+  border: 2px solid rgba(232, 200, 114, 0.2);
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.45);
+  transition: border-color 0.4s ease;
+  display: block;
+  overflow: hidden;
+}
+
+.home-page .cs-gallery-item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center center;
+  display: block;
+}
+
+.home-page .cs-gallery-item:hover {
+  border-color: rgba(232, 200, 114, 0.5);
+}
+
+/* ── Tabs ── */
+.home-page .cs-tabs-section {
+  padding: 0.5rem 0 0;
+  background: transparent;
+  position: relative;
+  z-index: 2;
+}
+
+.home-page .cs-tab-nav {
+  justify-content: center;
+  margin-bottom: 1rem;
+}
+
+.home-page .cs-tab-btn {
+  color: rgba(248, 244, 239, 0.5);
+  border-color: rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.home-page .cs-tab-btn.active {
+  color: var(--home-deep);
+  background: var(--home-gold);
+  border-color: var(--home-gold);
+}
+
+.home-page .cs-tab-scroll .cs-tab-panel {
+  max-width: none;
+}
+
+.home-page .home-scroll--chapter2 {
+  overflow: hidden;
+  will-change: transform, clip-path, opacity;
+}
+
+#chapter-two .home-scroll--chapter2 .cs-tab-nav {
+  margin-bottom: 1.5rem;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+#chapter-two .home-scroll--chapter2 .cs-tab-btn {
+  color: rgba(26, 21, 16, 0.55) !important;
+  border-color: rgba(26, 21, 16, 0.14) !important;
+  background: rgba(255, 255, 255, 0.4) !important;
+}
+
+#chapter-two .home-scroll--chapter2 .cs-tab-btn.active {
+  color: #1a1510 !important;
+  background: var(--home-gold) !important;
+  border-color: var(--home-gold) !important;
+}
+
+#chapter-two .home-scroll--chapter2 .cs-kicker {
+  color: #7a5c1e !important;
+}
+
+#chapter-two .home-scroll--chapter2 .cs-tab-panel h3 {
+  font-family: "Cormorant Garamond", Georgia, serif;
+  color: #1a1510 !important;
+}
+
+#chapter-two .home-scroll--chapter2 .cs-tab-panel p,
+#chapter-two .home-scroll--chapter2 .cs-tab-panel li {
+  color: rgba(26, 21, 16, 0.82) !important;
+}
+
+.home-page .cs-tab-panel h3 {
+  font-family: "Cormorant Garamond", Georgia, serif;
+  color: #1a1510;
+}
+
+.home-page .cs-tab-panel p,
+.home-page .cs-tab-panel li {
+  color: #3d3428;
+}
+
+/* ── Stats ── */
+.home-page .cs-stats {
+  background: transparent;
+  padding: 0.5rem 0 0;
+  position: relative;
+  z-index: 2;
+}
+
+.home-page .cs-stats-grid {
+  margin-top: 0;
+}
+
+.home-page .cs-stat-card {
+  background: linear-gradient(145deg, rgba(42, 74, 138, 0.2), rgba(123, 94, 167, 0.1));
+  border: 1px solid rgba(232, 200, 114, 0.15);
+  transform-style: preserve-3d;
+}
+
+.home-page .cs-stat-card:hover {
+  border-color: rgba(232, 200, 114, 0.4);
+  box-shadow: 0 20px 50px rgba(123, 94, 167, 0.2);
+}
+
+.home-page .cs-stat-num {
+  color: var(--home-gold-bright);
+  text-shadow: 0 0 20px rgba(244, 216, 138, 0.25);
+}
+
+.home-page .cs-stat-label {
+  color: var(--home-cream);
+}
+
+.home-page .cs-stat-desc {
+  color: rgba(248, 244, 239, 0.45);
+}
+
+.home-page .dream-films {
+  min-height: auto;
+  overflow: visible;
+  padding-bottom: 0;
+  margin-bottom: 0;
+}
+
+.home-page .dream-films .home-chapter-head {
+  padding: 1rem clamp(1.5rem, 5vw, 3rem) 0;
+  margin-bottom: 1rem;
+  position: relative;
+  z-index: 3;
+}
+
+.home-page .dream-films-stage {
+  min-height: auto;
+  justify-content: flex-start;
+  width: 100%;
+  max-width: 1440px;
+  margin-inline: auto;
+  padding: clamp(1.25rem, 3vw, 2rem) clamp(1.5rem, 5vw, 3.5rem) clamp(1.5rem, 3vw, 2.5rem);
+  box-sizing: border-box;
+}
+
+.home-page .dream-tabs-wrap {
+  width: 100%;
+  padding: 0.25rem 0 1.25rem;
+  display: flex;
+  justify-content: center;
+}
+
+.home-page .dream-films .film-tabs-magic {
+  max-width: 100%;
+}
+
+.home-page .dream-films .film-tabs-magic .film-tabs {
+  flex-wrap: wrap;
+  justify-content: center;
+  max-width: 100%;
+}
+
+.home-page .dream-carousel-mount,
+.home-page .dream-films #trailerMount {
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  overflow: visible;
+}
+
+.home-page .dream-films .trailer-panel {
+  width: 100%;
+}
+
+.home-page .dream-scroll-progress,
+.home-page .dream-scroll-hint,
+.home-page .dream-films-merge--bottom {
+  display: none;
+}
+
+.home-page .dream-films .trailer-wrapper {
+  overflow: visible;
+  margin-top: 0;
+  width: 100%;
+}
+
+.home-page .dream-films .dream-carousel-track,
+.home-page .dream-films .trailer-list-wrapper {
+  display: flex;
+  align-items: stretch;
+  gap: clamp(1.25rem, 2.5vw, 2rem);
+  padding: 0.75rem clamp(0.5rem, 2vw, 1rem) 1.25rem;
+  margin: 0;
+  overflow-x: auto;
+  overflow-y: visible;
+  scroll-snap-type: x proximity;
+  scroll-padding-inline: clamp(0.5rem, 2vw, 1rem);
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+
+.home-page .dream-films .dream-carousel-track::-webkit-scrollbar,
+.home-page .dream-films .trailer-list-wrapper::-webkit-scrollbar {
+  display: none;
+}
+
+.home-page .dream-films .trailer-item,
+.home-page .dream-films .dream-card {
+  flex: 0 0 clamp(260px, 30vw, 360px);
+  scroll-snap-align: start;
+  max-width: 360px;
+}
+
+.home-page .dream-films .trailer-item-wrap,
+.home-page .dream-films .dream-card-inner {
+  width: 100%;
+  min-height: clamp(380px, 48vw, 440px);
+  aspect-ratio: 3 / 4;
+}
+
+.home-page .dream-films-cta {
+  padding: 1.25rem 0 0;
+  margin: 0;
+}
+
+.home-page .dream-films .dream-films-particles {
+  display: none;
+}
+
+/* ── Dream films merge fix ── */
+.home-page .dream-films-merge--top {
+  height: 60px;
+  background: linear-gradient(180deg, var(--home-deep) 0%, rgba(7, 11, 20, 0.85) 25%, transparent 100%);
+}
+
+.home-page .dream-films-aurora {
+  filter: blur(24px);
+  will-change: auto;
+}
+
+/* ── Stories ── */
+.home-page .cs-stories {
+  background: transparent;
+  padding: 0;
+  margin-top: 0;
+  position: relative;
+  z-index: 2;
+}
+
+.home-page .cs-stories .view-more {
+  margin-top: 1.25rem !important;
+}
+
+.home-page .cs-story-card {
+  border: 1px solid rgba(232, 200, 114, 0.12);
+  background: rgba(255, 255, 255, 0.03);
+  transform-style: preserve-3d;
+}
+
+.home-page .cs-story-card:hover {
+  border-color: rgba(232, 200, 114, 0.35);
+  box-shadow: 0 25px 60px rgba(123, 94, 167, 0.2);
+}
+
+.home-page .cs-story-body h3 {
+  color: var(--home-cream);
+}
+
+/* ── About, music, crew, workshop, locations ── */
+.home-page .about-section,
+.home-page .music-section,
+.home-page .crew-section,
+.home-page .locations-section {
+  background: transparent;
+  color: var(--home-cream);
+  position: relative;
+  z-index: 2;
+  padding: 0.5rem 0 0;
+}
+
+.home-page .crew-section {
+  padding-bottom: clamp(1.5rem, 4vw, 2.5rem);
+}
+
+.home-page .workshop-section {
+  background: transparent;
+  color: var(--home-cream);
+  position: relative;
+  z-index: 2;
+  padding: clamp(2rem, 5vw, 3.5rem) 0 clamp(2rem, 4vw, 3rem);
+  overflow: visible;
+  isolation: isolate;
+}
+
+.home-page .workshop-section .home-section-head {
+  margin-bottom: clamp(1.25rem, 3vw, 2rem);
+  padding-inline: clamp(1.5rem, 5vw, 3rem);
+}
+
+.home-page .workshop-section .container {
+  position: relative;
+  z-index: 1;
+  padding-inline: clamp(1rem, 4vw, 2rem);
+}
+
+.home-page .section-sub {
+  color: var(--home-gold);
+}
+
+.home-page .section-heading {
+  color: var(--home-cream);
+}
+
+.home-page .section-heading .accent,
+.home-page .section-heading .feel {
+  color: var(--home-gold-bright);
+}
+
+.home-page .about-text,
+.home-page .music-text {
+  color: rgba(248, 244, 239, 0.6);
+}
+
+.home-page .stat-item h3 {
+  color: var(--home-gold-bright);
+  font-family: "Cormorant Garamond", Georgia, serif;
+}
+
+.home-page .stat-item p {
+  color: rgba(248, 244, 239, 0.5);
+}
+
+.home-page .about-image {
+  border: 2px solid rgba(232, 200, 114, 0.25);
+  box-shadow: 0 30px 60px rgba(0, 0, 0, 0.45);
+  width: 100%;
+  aspect-ratio: 4 / 5;
+}
+
+.home-page .about-image img,
+.home-page .music-visual img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center center;
+  display: block;
+}
+
+.home-page .about-image::after {
+  background: linear-gradient(135deg, rgba(123, 94, 167, 0.2), transparent);
+  transform: translate(8px, 8px);
+  z-index: 0;
+  pointer-events: none;
+}
+
+.home-page .crew-photo {
+  width: 100%;
+}
+
+.home-page .crew-photo img,
+.home-page .magic-media.crew-photo img,
+.home-page .crew-photo.magic-media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center top;
+  display: block;
+}
+
+.home-page .magic-media {
+  width: 100%;
+  height: 100%;
+}
+
+.home-page .music-visual {
+  aspect-ratio: 4 / 5;
+  overflow: hidden;
+}
+
+.home-page .track-item {
+  background: rgba(255, 255, 255, 0.04);
+  border-color: rgba(255, 255, 255, 0.08);
+}
+
+.home-page .track-item:hover,
+.home-page .track-item.active {
+  background: rgba(42, 74, 138, 0.2);
+  border-color: rgba(232, 200, 114, 0.25);
+}
+
+.home-page .track-name {
+  color: var(--home-cream);
+}
+
+.home-page .track-artist,
+.home-page .track-duration {
+  color: rgba(248, 244, 239, 0.45);
+}
+
+.home-page .music-visual {
+  border: 2px solid rgba(232, 200, 114, 0.2);
+  box-shadow: 0 30px 60px rgba(0, 0, 0, 0.45);
+}
+
+.home-page .music-visual-badge {
+  background: linear-gradient(135deg, rgba(42, 74, 138, 0.9), rgba(123, 94, 167, 0.8));
+  border: 1px solid rgba(232, 200, 114, 0.3);
+}
+
+.home-page .crew-card {
+  background: linear-gradient(145deg, rgba(42, 74, 138, 0.15), rgba(123, 94, 167, 0.08));
+  border: 1px solid rgba(232, 200, 114, 0.12);
+  transform-style: preserve-3d;
+}
+
+.home-page .crew-card:hover {
+  border-color: rgba(232, 200, 114, 0.35);
+  box-shadow: 0 25px 50px rgba(123, 94, 167, 0.2);
+}
+
+.home-page .crew-name {
+  color: var(--home-cream);
+}
+
+.home-page .crew-role {
+  color: var(--home-gold);
+}
+
+.home-page .workshop-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: clamp(1.25rem, 2.5vw, 2rem);
+  align-items: stretch;
+}
+
+.home-page .workshop-card {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  border: 1px solid rgba(232, 200, 114, 0.12);
+  background: rgba(255, 255, 255, 0.03);
+  transform-style: preserve-3d;
+  overflow: hidden;
+  border-radius: 12px;
+}
+
+.home-page .workshop-card > .magic-media,
+.home-page .workshop-card > img {
+  display: block;
+  width: 100%;
+  flex-shrink: 0;
+  aspect-ratio: 16 / 9;
+  border-radius: 12px 12px 0 0;
+}
+
+.home-page .workshop-card .magic-media > img,
+.home-page .workshop-card .magic-media .magic-media-target {
+  width: 100%;
+  height: 100%;
+  aspect-ratio: unset;
+  object-fit: cover;
+}
+
+.home-page .workshop-card-body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding: 1.5rem;
+}
+
+.home-page .workshop-card-body .btn {
+  margin-top: auto;
+}
+
+.home-page .workshop-card:hover {
+  border-color: rgba(232, 200, 114, 0.3);
+  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.35);
+}
+
+.home-page .workshop-card-body h3 {
+  color: var(--home-cream);
+}
+
+.home-page .workshop-card-body p,
+.home-page .workshop-date {
+  color: rgba(248, 244, 239, 0.55);
+}
+
+.home-page .locations-map {
+  border: 1px solid rgba(232, 200, 114, 0.15);
+  box-shadow: 0 30px 60px rgba(0, 0, 0, 0.4);
+}
+
+.home-page .map-pin {
+  background: rgba(7, 11, 20, 0.85);
+  border: 1px solid rgba(232, 200, 114, 0.25);
+}
+
+.home-page .map-pin h4 {
+  color: var(--home-cream);
+}
+
+.home-page .map-pin p {
+  color: var(--home-gold);
+}
+
+/* ── Awards ── */
+.home-page .awards-section {
+  background: rgba(42, 74, 138, 0.1);
+  border-top: 1px solid rgba(232, 200, 114, 0.1);
+  border-bottom: 1px solid rgba(232, 200, 114, 0.1);
+  position: relative;
+  z-index: 2;
+  padding: 0;
+  margin: 0;
+}
+
+.home-page .award-item {
+  color: var(--home-cream);
+}
+
+.home-page .award-icon {
+  color: var(--home-gold-bright);
+}
+
+/* ── Reviews & press ── */
+.home-page .cs-reviews {
+  background: transparent;
+  position: relative;
+  z-index: 2;
+  padding: 0.5rem 0 0;
+}
+
+.home-page .cs-reviews-badge {
+  background: linear-gradient(145deg, rgba(42, 74, 138, 0.25), rgba(123, 94, 167, 0.15));
+  border: 1px solid rgba(232, 200, 114, 0.2);
+}
+
+.home-page .cs-reviews-badge h3 {
+  color: var(--home-cream);
+}
+
+.home-page .cs-review-card {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  transform-style: preserve-3d;
+}
+
+.home-page .cs-review-card:hover {
+  border-color: rgba(232, 200, 114, 0.25);
+}
+
+.home-page .cs-review-name {
+  color: var(--home-cream);
+}
+
+.home-page .cs-review-text {
+  color: rgba(248, 244, 239, 0.6);
+}
+
+.home-page .cs-press {
+  background: rgba(42, 74, 138, 0.08);
+  border-top: 1px solid rgba(232, 200, 114, 0.08);
+  position: relative;
+  z-index: 2;
+  padding: 0;
+  margin: 0;
+}
+
+.home-page .cs-press h4 {
+  color: var(--home-gold);
+}
+
+.home-page .cs-press-item {
+  color: rgba(248, 244, 239, 0.45);
+}
+
+/* ── Contact ── */
+.home-page .contact-section {
+  background: transparent;
+  position: relative;
+  z-index: 2;
+  padding: 0.5rem 0 3rem;
+}
+
+.home-page .glow-card {
+  border: 1px solid rgba(232, 200, 114, 0.2);
+  background: linear-gradient(145deg, rgba(42, 74, 138, 0.2), rgba(123, 94, 167, 0.12));
+}
+
+.home-page .glow-card-inner h3 {
+  color: var(--home-cream);
+  font-family: "Cormorant Garamond", Georgia, serif;
+}
+
+.home-page .glow-card-inner p {
+  color: rgba(248, 244, 239, 0.55) !important;
+}
+
+.home-page .contact-form {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.home-page .form-field label {
+  color: rgba(248, 244, 239, 0.6);
+}
+
+.home-page .form-field input,
+.home-page .form-field textarea {
+  background: rgba(255, 255, 255, 0.06);
+  border-color: rgba(255, 255, 255, 0.1);
+  color: var(--home-cream);
+}
+
+.home-page .form-field input::placeholder,
+.home-page .form-field textarea::placeholder {
+  color: rgba(248, 244, 239, 0.3);
+}
+
+.home-page .form-field input:focus,
+.home-page .form-field textarea:focus {
+  border-color: rgba(232, 200, 114, 0.4);
+}
+
+/* ── Footer in shell ── */
+.home-page .main_content .footer {
+  background: #050810;
+  position: relative;
+  z-index: 2;
+}
+
+.home-scroll {
+  padding: 2rem 2rem;
+}
+
+@media (max-width: 991px) {
+  .home-scroll {
+    padding: 1.75rem 1.25rem;
+  }
+
+  .home-chapter-head,
+  .home-section-head {
+    margin-bottom: 0.75rem;
+    padding-top: 1rem;
+  }
+
+  .home-page .dream-films-stage {
+    padding-inline: clamp(1rem, 4vw, 1.75rem);
+  }
+
+  .home-page .dream-films .trailer-item,
+  .home-page .dream-films .dream-card {
+    flex: 0 0 clamp(260px, 72vw, 320px);
+    max-width: 320px;
+  }
+
+  .home-page .dream-films .trailer-item-wrap,
+  .home-page .dream-films .dream-card-inner {
+    min-height: clamp(340px, 90vw, 400px);
+  }
+}
+
+@media (max-width: 480px) {
+  .home-page .dream-films .trailer-item,
+  .home-page .dream-films .dream-card {
+    flex: 0 0 min(82vw, 300px);
+    max-width: 300px;
+  }
+
+  .home-page .dream-films .film-tabs-magic .film-tab {
+    padding: 0.55rem 0.85rem;
+    font-size: 0.58rem;
+  }
+
+  .home-page .workshop-grid {
+    grid-template-columns: 1fr;
+    gap: 1.25rem;
+  }
+
+  .home-page .workshop-section {
+    padding-top: 2rem;
+    padding-bottom: 2rem;
+  }
+}
+
+@media (max-width: 1024px) {
+  .home-page .workshop-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}

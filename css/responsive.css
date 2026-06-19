@@ -1,0 +1,507 @@
+/* ═══════════════════════════════════════════════════════════
+   TFC — Global responsive design (all pages)
+   Loaded via sidebar.css on every HTML page
+   ═══════════════════════════════════════════════════════════ */
+
+/* ── Tablet & below (≤991px) ── */
+@media (max-width: 991px) {
+  :root {
+    --shell-margin: 0.5rem;
+    --shell-radius: 14px;
+  }
+
+  .container {
+    width: min(1400px, 94vw);
+  }
+
+  body.shell-layout.inner-page {
+    padding-top: 0 !important;
+  }
+
+  /* Shell — every page */
+  .main-shell {
+    margin-left: 0;
+    padding: var(--shell-margin);
+  }
+
+  .main_content {
+    min-height: calc(100dvh - var(--shell-margin) * 2);
+    border-radius: var(--shell-radius);
+    padding-bottom: max(4.5rem, env(safe-area-inset-bottom, 0px));
+  }
+
+  .shell-top-bar {
+    flex-wrap: wrap;
+    padding: 0.85rem 1rem;
+    gap: 0.65rem;
+  }
+
+  .shell-search {
+    flex: 1 1 100%;
+    max-width: none;
+  }
+
+  .shell-top-actions {
+    flex: 1 1 100%;
+    justify-content: stretch;
+    gap: 0.5rem;
+    margin-left: 0;
+  }
+
+  .shell-top-actions .btn,
+  .shell-top-actions .shell-top-link {
+    flex: 1;
+    justify-content: center;
+    font-size: 0.72rem;
+    padding: 0.65rem 0.85rem;
+  }
+
+  .sc-menu-btn {
+    bottom: max(1.25rem, env(safe-area-inset-bottom, 0px));
+    left: max(1.25rem, env(safe-area-inset-left, 0px));
+  }
+
+  /* Section rhythm */
+  .about-section,
+  .music-section,
+  .crew-section,
+  .locations-section,
+  .testimonials-section,
+  .contact-section,
+  .workshop-section,
+  .trailer-section,
+  .tagline-section,
+  .page-section,
+  .page-hero {
+    padding-top: 3.5rem;
+    padding-bottom: 3.5rem;
+  }
+
+  .page-hero {
+    padding-top: 2.5rem;
+  }
+
+  .section-hero-banner {
+    padding: 0 0.5rem;
+  }
+
+  .hero.wedding-hero {
+    height: min(70vh, 640px);
+    min-height: 420px;
+  }
+
+  .hero-content,
+  .film-detail-content {
+    padding: 2rem clamp(1rem, 4vw, 2rem) 2.5rem;
+  }
+
+  .hero-title {
+    font-size: clamp(2rem, 8vw, 3.5rem);
+  }
+
+  .about-grid,
+  .music-grid,
+  .contact-grid,
+  .contact-page-grid,
+  .film-detail-grid,
+  .pricing-grid {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+    padding-top: 1rem;
+  }
+
+  .pricing-card.is-featured {
+    order: -1;
+  }
+
+  .pricing-card {
+    padding: 1.75rem 1.35rem 1.5rem;
+  }
+
+  .about-image::after {
+    transform: translate(6px, 6px);
+  }
+
+  .workshop-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1.25rem;
+  }
+
+  .blog-grid {
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 280px), 1fr));
+    gap: 1.5rem;
+  }
+
+  .crew-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1.25rem;
+  }
+
+  .film-grid,
+  .search-results {
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 220px), 1fr));
+    gap: 1.25rem;
+  }
+
+  .footer-top {
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+  }
+
+  .footer-bottom {
+    flex-direction: column;
+    align-items: flex-start;
+    text-align: left;
+  }
+
+  .glow-card {
+    padding: 1.5rem;
+  }
+
+  .glow-card-inner {
+    padding: 1.5rem;
+  }
+
+  .glow-card h3 {
+    font-size: 1.5rem;
+  }
+
+  .map-pins {
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 160px), 1fr));
+    padding: 1.25rem;
+  }
+
+  .locations-map {
+    min-height: 320px;
+  }
+
+  .stats-row {
+    flex-wrap: wrap;
+    gap: 1.25rem;
+  }
+
+  .stat-item h3 {
+    font-size: 2rem;
+  }
+
+  /* CandidShutters (homepage) */
+  .cs-intro {
+    padding: 3rem 0 2rem;
+  }
+
+  .cs-intro-grid {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+
+  .cs-rating-card {
+    min-width: 0;
+    width: 100%;
+    max-width: 280px;
+    margin: 0 auto;
+  }
+
+  .cs-tab-nav {
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    padding-bottom: 0.75rem;
+    margin-bottom: 2rem;
+    gap: 0.35rem;
+  }
+
+  .cs-tab-nav::-webkit-scrollbar {
+    display: none;
+  }
+
+  .cs-tab-btn {
+    flex: 0 0 auto;
+    white-space: nowrap;
+  }
+
+  .cs-stats-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1rem;
+  }
+
+  .cs-stories-grid {
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 260px), 1fr));
+  }
+
+  .cs-reviews-layout {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+
+  .cs-reviews-badge {
+    position: static;
+    top: auto;
+  }
+
+  .cs-reviews-scroll {
+    max-height: none;
+    overflow-y: visible;
+    padding-right: 0;
+  }
+
+  .cs-gallery-item {
+    flex: 0 0 clamp(160px, 42vw, 240px);
+  }
+
+  /* Tales page */
+  .tales-hero {
+    padding: 4rem 1.25rem 3rem;
+    min-height: auto;
+  }
+
+  .tales-pillars {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1rem;
+  }
+
+  /* Film detail */
+  .film-detail-hero {
+    min-height: 55vh;
+    margin-top: 0 !important;
+  }
+}
+
+/* ── Mobile (≤768px) ── */
+@media (max-width: 768px) {
+  .container {
+    width: min(1400px, 92vw);
+  }
+
+  .section-heading {
+    font-size: clamp(1.65rem, 7vw, 2.5rem);
+  }
+
+  .page-hero-text {
+    font-size: 0.95rem;
+    padding: 0 0.25rem;
+  }
+
+  .hero.wedding-hero {
+    height: min(65vh, 520px);
+    min-height: 360px;
+    border-radius: 12px;
+  }
+
+  .hero-arrows,
+  .hero-dots {
+    display: none;
+  }
+
+  .hero-content {
+    padding-bottom: 2rem;
+  }
+
+  .hero-desc {
+    font-size: 0.9rem;
+    line-height: 1.65;
+  }
+
+  .workshop-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .crew-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .film-grid,
+  .search-results {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1rem;
+  }
+
+  .film-name {
+    font-size: 1.15rem;
+  }
+
+  .footer-top {
+    grid-template-columns: 1fr;
+    gap: 1.75rem;
+    margin-bottom: 2rem;
+    padding-bottom: 2rem;
+  }
+
+  .footer-brand p {
+    max-width: none;
+  }
+
+  .form-row {
+    grid-template-columns: 1fr;
+  }
+
+  .contact-form .btn,
+  .page-section .btn {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .faq-question {
+    padding: 1rem 1.15rem;
+    font-size: 0.92rem;
+  }
+
+  .faq-answer p {
+    padding: 0 1.15rem 1rem;
+    font-size: 0.9rem;
+  }
+
+  .search-form {
+    max-width: none;
+  }
+
+  .track-item {
+    padding: 0.65rem 0.85rem;
+    gap: 0.75rem;
+  }
+
+  .track-thumb {
+    width: 40px;
+    height: 40px;
+  }
+
+  .modal-content {
+    width: 96vw;
+  }
+
+  .modal-close {
+    top: -40px;
+    right: 0;
+  }
+
+  .film-detail-hero {
+    min-height: 48vh;
+  }
+
+  .film-video-placeholder {
+    margin-bottom: 1.5rem;
+  }
+
+  .film-meta-list {
+    gap: 0.75rem;
+  }
+
+  .cs-stats,
+  .cs-stories,
+  .cs-reviews,
+  .cs-tabs-section,
+  .cs-press {
+    padding: 3.5rem 0;
+  }
+
+  .cs-stat-card {
+    padding: 1.5rem 0.75rem;
+  }
+
+  .dream-films-stage {
+    padding: 3rem 0 2rem;
+  }
+}
+
+/* ── Small phones (≤480px) ── */
+@media (max-width: 480px) {
+  :root {
+    --shell-margin: 0.35rem;
+    --shell-radius: 12px;
+  }
+
+  .shell-top-bar {
+    padding: 0.75rem 0.85rem;
+  }
+
+  .crew-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .film-grid,
+  .search-results {
+    grid-template-columns: 1fr;
+    max-width: 360px;
+    margin-inline: auto;
+  }
+
+  .film-card {
+    aspect-ratio: 16/11;
+  }
+
+  .blog-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .stats-row {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+    text-align: center;
+  }
+
+  .stat-item h3 {
+    font-size: 1.65rem;
+  }
+
+  .stat-item p {
+    font-size: 0.68rem;
+  }
+
+  .tagline-text {
+    font-size: clamp(1.25rem, 5vw, 1.75rem);
+  }
+
+  .cs-stats-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .cs-gallery-item {
+    flex: 0 0 72vw;
+  }
+
+  .tales-pillars {
+    grid-template-columns: 1fr;
+  }
+
+  .tales-orbit {
+    width: min(280px, 85vw);
+    height: min(280px, 85vw);
+  }
+
+  .btn {
+    min-height: 44px;
+  }
+}
+
+/* ── Touch devices ── */
+@media (hover: none) and (pointer: coarse) {
+  .film-card.has-preview:hover,
+  .crew-card:hover,
+  .workshop-card:hover,
+  .blog-card:hover,
+  .cs-story-card:hover,
+  .cs-stat-card:hover,
+  .map-pin:hover {
+    transform: none;
+    box-shadow: inherit;
+  }
+
+  .film-card:active,
+  .workshop-card:active,
+  .blog-card:active {
+    transform: scale(0.98);
+  }
+}
+
+/* ── Reduced motion ── */
+@media (prefers-reduced-motion: reduce) {
+  .awards-marquee {
+    animation: none;
+  }
+
+  .cs-press-track {
+    animation: none;
+  }
+}

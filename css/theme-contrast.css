@@ -1,0 +1,495 @@
+/* Theme contrast — light text on dark surfaces, dark text on light surfaces */
+
+:root {
+  --on-dark: #f8f4ef;
+  --on-dark-muted: rgba(248, 244, 239, 0.68);
+  --on-dark-subtle: rgba(248, 244, 239, 0.45);
+  --on-light: #1a1510;
+  --on-light-muted: rgba(26, 21, 16, 0.68);
+  --on-light-subtle: rgba(26, 21, 16, 0.45);
+  --surface-dark: #070b14;
+  --surface-light: #ffffff;
+  --surface-parchment: #f0e4cc;
+}
+
+/* ══════════════════════════════════════
+   DARK THEME
+   ══════════════════════════════════════ */
+body.theme-dark .main_content {
+  background: var(--surface-dark) !important;
+  color: var(--on-dark) !important;
+}
+
+body.theme-dark .shell-top-bar {
+  background: rgba(7, 11, 20, 0.92) !important;
+  border-bottom-color: rgba(255, 255, 255, 0.08) !important;
+  color: var(--on-dark) !important;
+}
+
+body.theme-dark .shell-top-link {
+  color: rgba(248, 244, 239, 0.85) !important;
+  border-color: rgba(255, 255, 255, 0.18) !important;
+}
+
+body.theme-dark .shell-top-link:hover {
+  color: var(--on-dark) !important;
+  background: rgba(255, 255, 255, 0.06) !important;
+  border-color: rgba(232, 200, 114, 0.35) !important;
+}
+
+body.theme-dark .shell-top-link.active {
+  color: #f4d88a !important;
+  background: rgba(232, 200, 114, 0.12) !important;
+  border-color: rgba(232, 200, 114, 0.4) !important;
+}
+
+body.theme-dark .shell-search {
+  background: rgba(255, 255, 255, 0.06) !important;
+  border-color: rgba(255, 255, 255, 0.1) !important;
+}
+
+body.theme-dark .shell-search svg {
+  color: var(--on-dark-subtle) !important;
+}
+
+body.theme-dark .shell-search input {
+  color: var(--on-dark) !important;
+}
+
+body.theme-dark .shell-search input::placeholder {
+  color: var(--on-dark-subtle) !important;
+}
+
+body.theme-dark .main_content :is(
+  h1, h2, h3, h4, h5, h6,
+  .section-heading,
+  .section-sub,
+  .page-hero-text,
+  .about-text,
+  .music-text,
+  .cs-intro-text,
+  .cs-intro-title,
+  .magic-hero-lead,
+  .magic-hero-title,
+  .crew-name,
+  .crew-role,
+  .workshop-card h3,
+  .workshop-card p,
+  .blog-card h3,
+  .blog-card p,
+  .track-name,
+  .cs-review-text,
+  .cs-review-author,
+  .cs-stat-label,
+  .cs-stat-desc,
+  .stat-item p,
+  .faq-question,
+  .faq-answer,
+  .faq-answer p,
+  .contact-info,
+  .form-label,
+  .page-section p,
+  .page-section li,
+  .tagline-text
+) {
+  color: var(--on-dark) !important;
+}
+
+body.theme-dark .main_content :is(
+  .about-text,
+  .music-text,
+  .cs-intro-text,
+  .magic-hero-lead,
+  .workshop-card p,
+  .blog-card p,
+  .track-artist,
+  .track-duration,
+  .cs-review-role,
+  .cs-stat-desc,
+  .stat-item p,
+  .faq-answer,
+  .page-hero-text,
+  .page-section .about-text,
+  .form-hint
+) {
+  color: var(--on-dark-muted) !important;
+}
+
+body.theme-dark .main_content :is(
+  .section-sub,
+  .cs-kicker,
+  .eyebrow,
+  .home-chapter-label,
+  .home-section-kicker,
+  .magic-chapter-label
+) {
+  color: #e8c872 !important;
+}
+
+body.theme-dark .main_content :is(
+  .section-heading .accent,
+  .section-heading .feel,
+  .home-section-title .accent,
+  .home-section-title .feel,
+  .cs-intro-title span,
+  .stat-item h3,
+  .cs-stat-num,
+  .cs-rating-num
+) {
+  color: #f4d88a !important;
+}
+
+body.theme-dark .main_content :is(
+  .home-chapter-title,
+  .home-section-title
+) {
+  color: #ffffff !important;
+}
+
+body.theme-dark .main_content .home-chapter-text {
+  color: rgba(255, 255, 255, 0.72) !important;
+}
+
+body.theme-dark .main_content :is(
+  .home-chapter-num,
+  .magic-chapter-num,
+  .about-chapter-num,
+  .tales-chapter-num
+) {
+  color: rgba(255, 255, 255, 0.32) !important;
+}
+
+body.theme-dark .main_content :is(
+  .about-section,
+  .music-section,
+  .crew-section,
+  .workshop-section,
+  .locations-section,
+  .awards-section,
+  .testimonials-section,
+  .contact-section,
+  .tagline-section,
+  .cs-intro,
+  .cs-stats,
+  .cs-stories,
+  .cs-tabs-section,
+  .cs-gallery,
+  .page-section,
+  .page-hero,
+  .lottie-section,
+  .trailer-section
+) {
+  background: transparent !important;
+  color: var(--on-dark) !important;
+}
+
+body.theme-dark .main_content a:not(.btn):not(.sc-nav-link):not(.glow-cta) {
+  color: #f4d88a;
+}
+
+body.theme-dark .main_content a:not(.btn):not(.sc-nav-link):not(.glow-cta):hover {
+  color: #fff;
+}
+
+body.theme-dark .main_content .btn.is-black {
+  background: rgba(255, 255, 255, 0.1) !important;
+  color: var(--on-dark) !important;
+  border: 1px solid rgba(255, 255, 255, 0.15) !important;
+}
+
+body.theme-dark .main_content .film-tab {
+  color: var(--on-dark-muted) !important;
+  border-color: rgba(255, 255, 255, 0.12) !important;
+}
+
+body.theme-dark .main_content .film-tab.active {
+  color: var(--on-light) !important;
+}
+
+body.theme-dark .main_content .cs-tab-btn {
+  color: var(--on-dark-muted) !important;
+  border-color: rgba(255, 255, 255, 0.12) !important;
+}
+
+body.theme-dark .main_content .cs-tab-btn.active {
+  color: var(--on-light) !important;
+  background: #e8c872 !important;
+}
+
+body.theme-dark .main_content .footer {
+  background: #050810 !important;
+  color: var(--on-dark) !important;
+}
+
+body.theme-dark .main_content .footer a {
+  color: var(--on-dark-muted) !important;
+}
+
+body.theme-dark .main_content .footer a:hover {
+  color: #f4d88a !important;
+}
+
+body.theme-dark .main_content .copyright {
+  color: var(--on-dark-subtle) !important;
+}
+
+/* Hero keeps light text on imagery */
+body.theme-dark .hero.wedding-hero .hero-title,
+body.theme-dark .hero.wedding-hero .hero-desc,
+body.theme-dark .hero.wedding-hero .eyebrow {
+  color: var(--on-dark) !important;
+}
+
+/* ══════════════════════════════════════
+   LIGHT SURFACES inside dark theme
+   (parchment scrolls, tab panels, gold pills)
+   ══════════════════════════════════════ */
+body.theme-dark .main_content :is(
+  .home-scroll,
+  .magic-scroll,
+  .about-scroll,
+  .cs-tab-panel,
+  .home-scroll-inner,
+  .magic-scroll-inner,
+  .about-scroll-inner
+) {
+  color: var(--on-light) !important;
+}
+
+body.theme-dark .main_content :is(
+  .home-scroll h3,
+  .magic-scroll h3,
+  .about-scroll h3,
+  .home-scroll-inner h3,
+  .magic-scroll-inner h3,
+  .about-scroll-inner h3,
+  .cs-tab-panel h3
+) {
+  color: var(--on-light) !important;
+}
+
+body.theme-dark .main_content :is(
+  .home-scroll p,
+  .magic-scroll p,
+  .about-scroll p,
+  .home-scroll-inner p,
+  .magic-scroll-inner p,
+  .about-scroll-inner p,
+  .cs-tab-panel p,
+  .cs-tab-panel li
+) {
+  color: var(--on-light-muted) !important;
+}
+
+/* Chapter I scroll — keep dark ink on parchment */
+body.theme-dark .main_content #discover .home-scroll--chapter1 :is(
+  .cs-kicker,
+  .cs-intro-text,
+  .cs-rating-card p
+) {
+  color: rgba(26, 21, 16, 0.84) !important;
+}
+
+body.theme-dark .main_content #discover .home-scroll--chapter1 .cs-kicker {
+  color: #7a5c1e !important;
+}
+
+body.theme-dark .main_content #discover .home-scroll--chapter1 .cs-rating-num {
+  color: #1a1510 !important;
+}
+
+body.theme-dark .main_content #discover .home-scroll--chapter1 .btn.is-outline {
+  color: #1a1510 !important;
+}
+
+body.theme-dark .main_content #chapter-two .home-scroll--chapter2 :is(
+  .cs-kicker,
+  .cs-tab-panel h3,
+  .cs-tab-panel p,
+  .cs-tab-panel li
+) {
+  color: rgba(26, 21, 16, 0.84) !important;
+}
+
+body.theme-dark .main_content #chapter-two .home-scroll--chapter2 .cs-kicker {
+  color: #7a5c1e !important;
+}
+
+body.theme-dark .main_content #chapter-two .home-scroll--chapter2 .cs-tab-btn {
+  color: rgba(26, 21, 16, 0.55) !important;
+}
+
+body.theme-dark .main_content #chapter-two .home-scroll--chapter2 .cs-tab-btn.active {
+  color: #1a1510 !important;
+}
+
+body.theme-dark .main_content .cs-tab-btn.active,
+body.theme-dark .main_content .sc-nav-link.active {
+  color: var(--on-light) !important;
+}
+
+/* Dream films / candid light bands on dark home */
+body.theme-dark .main_content .dream-films-stage,
+body.theme-dark .main_content .candid-panel-light {
+  color: var(--on-light) !important;
+}
+
+body.theme-dark .main_content .dream-films-stage :is(h1, h2, h3, h4, p, span),
+body.theme-dark .main_content .candid-panel-light :is(h1, h2, h3, h4, p, span) {
+  color: var(--on-light) !important;
+}
+
+/* Chapter headings stay white on dark home — including inside dream-films-stage */
+body.theme-dark .main_content .home-chapter-head .home-chapter-num {
+  color: rgba(255, 255, 255, 0.32) !important;
+}
+
+body.theme-dark .main_content .home-chapter-head .home-chapter-title,
+body.theme-dark .main_content .home-chapter-head h2.home-chapter-title {
+  color: #ffffff !important;
+}
+
+body.theme-dark .main_content .home-chapter-head .home-chapter-text {
+  color: rgba(255, 255, 255, 0.72) !important;
+}
+
+/* ══════════════════════════════════════
+   LIGHT THEME (default inner pages, film detail)
+   ══════════════════════════════════════ */
+body.theme-light .main_content {
+  background: var(--surface-light) !important;
+  color: var(--on-light) !important;
+}
+
+body.theme-light .shell-top-bar {
+  background: #fff !important;
+  border-bottom-color: rgba(0, 0, 0, 0.06) !important;
+  color: var(--on-light) !important;
+}
+
+body.theme-light .shell-search {
+  background: #f5f5f5 !important;
+  border-color: rgba(0, 0, 0, 0.08) !important;
+}
+
+body.theme-light .shell-search svg {
+  color: #999 !important;
+}
+
+body.theme-light .shell-search input {
+  color: var(--on-light) !important;
+}
+
+body.theme-light .shell-search input::placeholder {
+  color: #999 !important;
+}
+
+body.theme-light .main_content :is(
+  h1, h2, h3, h4, h5, h6,
+  .section-heading,
+  .section-sub,
+  .page-hero-text,
+  .about-text,
+  .music-text,
+  .film-detail-title,
+  .film-detail-meta
+) {
+  color: var(--on-light) !important;
+}
+
+body.theme-light .main_content :is(
+  .about-text,
+  .page-hero-text,
+  .film-detail-desc,
+  .page-section p
+) {
+  color: var(--on-light-muted) !important;
+}
+
+body.theme-light .main_content .page-hero {
+  background: #f5f0eb !important;
+  color: var(--on-light) !important;
+}
+
+body.theme-light .main_content .page-section {
+  background: #fff !important;
+  color: var(--on-light) !important;
+}
+
+body.theme-light .main_content .footer {
+  background: #111 !important;
+  color: #fff !important;
+}
+
+body.theme-light .main_content .footer :is(p, a, h4) {
+  color: rgba(255, 255, 255, 0.75) !important;
+}
+
+body.theme-light .main_content .btn.is-black {
+  background: #111 !important;
+  color: #fff !important;
+}
+
+/* ══════════════════════════════════════
+   Forms & inputs
+   ══════════════════════════════════════ */
+body.theme-dark .main_content :is(
+  input:not([type="submit"]):not([type="button"]):not([type="checkbox"]):not([type="radio"]),
+  textarea,
+  select
+) {
+  color: var(--on-dark) !important;
+  background: rgba(255, 255, 255, 0.06) !important;
+  border-color: rgba(255, 255, 255, 0.12) !important;
+}
+
+body.theme-dark .main_content :is(input, textarea)::placeholder {
+  color: var(--on-dark-subtle) !important;
+}
+
+body.theme-light .main_content :is(
+  input:not([type="submit"]):not([type="button"]),
+  textarea,
+  select
+) {
+  color: var(--on-light) !important;
+  background: #fff !important;
+  border-color: rgba(0, 0, 0, 0.12) !important;
+}
+
+body.theme-light .main_content :is(input, textarea)::placeholder {
+  color: #999 !important;
+}
+
+/* Story cards, blog, reviews on dark */
+body.theme-dark .main_content :is(
+  .cs-story-card h3,
+  .cs-story-card p,
+  .cs-review-card h4,
+  .blog-card .blog-title,
+  .blog-card .blog-excerpt,
+  .blog-meta,
+  .workshop-price,
+  .contact-section h2,
+  .contact-section h3
+) {
+  color: var(--on-dark) !important;
+}
+
+body.theme-dark .main_content :is(
+  .cs-story-card p,
+  .blog-card .blog-excerpt,
+  .blog-meta,
+  .cs-review-role
+) {
+  color: var(--on-dark-muted) !important;
+}
+
+/* Films listing (dark magic page) */
+body.theme-dark .main_content .dream-films-header :is(h1, h2, p, span) {
+  color: var(--on-dark) !important;
+}
+
+body.theme-dark .main_content .dream-films-header p {
+  color: var(--on-dark-muted) !important;
+}

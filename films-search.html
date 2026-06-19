@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Search Films | TFC Films & CO. — Tales From the Culture</title>
+  <meta name="description" content="Search the TFC Films & CO. portfolio.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=Lobster&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/pages.css">
+  <link rel="stylesheet" href="css/sidebar.css">
+  <link rel="stylesheet" href="css/sidebar-magic.css">
+  <link rel="stylesheet" href="css/theme-contrast.css">
+</head>
+<body class="inner-page" data-page="films" data-base="">
+  <div id="site-header"></div>
+
+  <section class="page-hero">
+    <div class="container">
+      <p class="section-sub">Find a Film</p>
+      <h1 class="section-heading">Search <span class="accent">Films</span></h1>
+      <p class="page-hero-text" id="searchSubtitle">Search our complete portfolio of cinematic films.</p>
+    </div>
+  </section>
+
+  <section class="page-section dark">
+    <div class="container">
+      <form class="search-form" id="searchPageForm" style="max-width:100%;margin-bottom:2rem" role="search">
+        <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="8.5" cy="8.5" r="5.5"/><path d="M13 13l4 4"/></svg>
+        <input type="search" name="q" id="searchInput" placeholder="Search by couple name or film title..." aria-label="Search films">
+      </form>
+      <div class="search-results" id="searchResults"></div>
+      <div class="search-empty" id="searchEmpty" hidden>
+        <p>No films found for "<span class="search-query" id="emptyQuery"></span>"</p>
+        <br><a href="films.html" class="btn is-outline">Browse All Films</a>
+      </div>
+    </div>
+  </section>
+
+  <div id="site-footer"></div>
+  <script src="js/films-data.js"></script>
+  <script src="js/layout.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/lenis@1.1.18/dist/lenis.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/lottie-web/5.12.2/lottie.min.js"></script>
+  <script src="js/scroll-effects.js"></script>
+  <script src="js/film-previews.js"></script>
+  <script src="js/crew-bts.js"></script>
+  <script src="js/main.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const params = new URLSearchParams(window.location.search);
+      const q = (params.get('q') || '').trim();
+      const input = document.getElementById('searchInput');
+      const results = document.getElementById('searchResults');
+      const empty = document.getElementById('searchEmpty');
+      const subtitle = document.getElementById('searchSubtitle');
+
+      if (q) input.value = q;
+
+      function runSearch(query) {
+        const term = query.toLowerCase();
+        const matches = TFC_FILMS.filter(f =>
+          f.title.toLowerCase().includes(term) || f.slug.includes(term)
+        );
+
+        if (term) subtitle.textContent = `${matches.length} result(s) for "${query}"`;
+
+        if (!matches.length) {
+          results.innerHTML = '';
+          empty.hidden = false;
+          document.getElementById('emptyQuery').textContent = query;
+          return;
+        }
+
+        empty.hidden = true;
+        results.innerHTML = matches.map(f => `
+          <a href="${f.url}" class="film-card no-video">
+            <img src="https://images.unsplash.com/photo-1519741497674-611481863552?w=600&q=80" alt="${f.title}">
+            <div class="film-card-overlay">
+              <div class="film-meta"><span>TFC Films</span><span class="dot"></span><span>View</span></div>
+              <h3 class="film-name">${f.title}</h3>
+            </div>
+          </a>
+        `).join('');
+      }
+
+      runSearch(q);
+
+      document.getElementById('searchPageForm').addEventListener('submit', (e) => {
+        e.preventDefault();
+        const val = input.value.trim();
+        history.replaceState(null, '', `?q=${encodeURIComponent(val)}`);
+        runSearch(val);
+      });
+    });
+  </script>
+</body>
+</html>

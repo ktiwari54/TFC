@@ -1,0 +1,921 @@
+/* Tales From the Culture — immersive 3D art experience */
+
+.tales-page .main_content {
+  background: #0c0a09;
+  color: #f5f0eb;
+  overflow-x: clip;
+  overflow-y: visible;
+}
+
+.tales-page .main_content .container {
+  width: 100%;
+  max-width: min(1100px, 100%);
+  box-sizing: border-box;
+}
+
+.tales-page .shell-top-bar {
+  background: rgba(12, 10, 9, 0.92);
+  border-bottom-color: rgba(255, 255, 255, 0.06);
+  backdrop-filter: blur(12px);
+}
+
+.tales-page .shell-search {
+  background: rgba(255, 255, 255, 0.06);
+  border-color: rgba(255, 255, 255, 0.08);
+}
+
+.tales-page .shell-search input {
+  color: #fff;
+}
+
+.tales-page .shell-search input::placeholder {
+  color: rgba(255, 255, 255, 0.4);
+}
+
+.tales-experience {
+  position: relative;
+  --tales-gold: #c9a86c;
+  --tales-cream: #f5f0eb;
+  --tales-deep: #0c0a09;
+  font-family: var(--font-body);
+}
+
+.tales-mesh {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.55;
+  background:
+    radial-gradient(ellipse 60% 50% at 20% 20%, rgba(196, 30, 58, 0.18) 0%, transparent 55%),
+    radial-gradient(ellipse 50% 40% at 80% 70%, rgba(201, 168, 108, 0.14) 0%, transparent 50%),
+    radial-gradient(ellipse 80% 60% at 50% 100%, rgba(90, 40, 30, 0.2) 0%, transparent 60%);
+}
+
+.tales-grain {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
+  opacity: 0.04;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* ── Hero ── */
+.tales-hero {
+  position: relative;
+  min-height: min(100vh, 900px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 5rem 2rem 4rem;
+  perspective: 1400px;
+  transform-style: preserve-3d;
+  z-index: 2;
+  overflow: hidden;
+}
+
+.tales-hero-inner {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 3rem;
+  align-items: center;
+  max-width: 1100px;
+  width: 100%;
+  transform-style: preserve-3d;
+}
+
+.tales-hero-copy {
+  transform-style: preserve-3d;
+}
+
+.tales-kicker {
+  font-size: 0.68rem;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--tales-gold);
+  margin-bottom: 1.25rem;
+  font-weight: 600;
+}
+
+.tales-hero-title {
+  font-family: "Cormorant Garamond", Georgia, serif;
+  font-size: clamp(2.8rem, 6vw, 4.8rem);
+  font-weight: 400;
+  line-height: 1.05;
+  margin-bottom: 1.5rem;
+  color: var(--tales-cream);
+}
+
+.tales-hero-title em {
+  font-style: italic;
+  color: var(--tfc-red);
+  display: block;
+}
+
+.tales-hero-lead {
+  font-size: 1.05rem;
+  line-height: 1.85;
+  color: rgba(245, 240, 235, 0.65);
+  max-width: 420px;
+  margin-bottom: 2rem;
+}
+
+.tales-scroll-hint {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-size: 0.68rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.35);
+}
+
+.tales-scroll-hint span {
+  width: 40px;
+  height: 1px;
+  background: linear-gradient(90deg, var(--tfc-red), transparent);
+  animation: talesPulseLine 2s ease-in-out infinite;
+}
+
+@keyframes talesPulseLine {
+  0%, 100% { opacity: 0.4; transform: scaleX(0.7); }
+  50% { opacity: 1; transform: scaleX(1); }
+}
+
+/* ── 3D Lens ── */
+.tales-lens-stage {
+  position: relative;
+  height: clamp(320px, 42vw, 480px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transform-style: preserve-3d;
+}
+
+.tales-lens {
+  position: relative;
+  width: clamp(260px, 32vw, 360px);
+  height: clamp(260px, 32vw, 360px);
+  transform-style: preserve-3d;
+  transform: rotateX(8deg) rotateY(-12deg);
+}
+
+.tales-lens-ring {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  border: 2px solid rgba(201, 168, 108, 0.35);
+  transform-style: preserve-3d;
+}
+
+.tales-lens-ring:nth-child(1) { transform: translateZ(0px) scale(1); }
+.tales-lens-ring:nth-child(2) { transform: translateZ(12px) scale(0.92); border-color: rgba(196, 30, 58, 0.4); }
+.tales-lens-ring:nth-child(3) { transform: translateZ(24px) scale(0.84); border-color: rgba(255, 255, 255, 0.15); }
+.tales-lens-ring:nth-child(4) { transform: translateZ(36px) scale(0.76); border-color: rgba(201, 168, 108, 0.25); }
+.tales-lens-ring:nth-child(5) { transform: translateZ(48px) scale(0.68); border-color: rgba(196, 30, 58, 0.25); }
+
+.tales-lens-glass {
+  position: absolute;
+  inset: 18%;
+  border-radius: 50%;
+  overflow: hidden;
+  transform: translateZ(60px);
+  box-shadow:
+    inset 0 0 40px rgba(0, 0, 0, 0.6),
+    0 0 60px rgba(196, 30, 58, 0.2),
+    0 20px 50px rgba(0, 0, 0, 0.5);
+  background: #111;
+}
+
+.tales-lens-glass img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0.85;
+  filter: contrast(1.1) saturate(1.15);
+}
+
+.tales-lens-glass::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background:
+    radial-gradient(circle at 30% 25%, rgba(255, 255, 255, 0.25) 0%, transparent 35%),
+    radial-gradient(circle at 70% 80%, rgba(196, 30, 58, 0.15) 0%, transparent 40%);
+  pointer-events: none;
+}
+
+.tales-lens-flare {
+  position: absolute;
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255, 220, 180, 0.35) 0%, transparent 70%);
+  top: 5%;
+  right: 10%;
+  transform: translateZ(80px);
+  animation: talesFlare 4s ease-in-out infinite;
+  pointer-events: none;
+}
+
+@keyframes talesFlare {
+  0%, 100% { opacity: 0.5; transform: translateZ(80px) scale(1); }
+  50% { opacity: 0.9; transform: translateZ(80px) scale(1.15); }
+}
+
+.tales-lens-aperture {
+  position: absolute;
+  inset: 0;
+  transform: translateZ(30px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.tales-aperture-blade {
+  position: absolute;
+  width: 50%;
+  height: 50%;
+  background: rgba(0, 0, 0, 0.55);
+  transform-origin: bottom right;
+  clip-path: polygon(0 0, 100% 0, 100% 100%);
+}
+
+.tales-aperture-blade:nth-child(1) { transform: rotate(0deg); }
+.tales-aperture-blade:nth-child(2) { transform: rotate(60deg); }
+.tales-aperture-blade:nth-child(3) { transform: rotate(120deg); }
+.tales-aperture-blade:nth-child(4) { transform: rotate(180deg); }
+.tales-aperture-blade:nth-child(5) { transform: rotate(240deg); }
+.tales-aperture-blade:nth-child(6) { transform: rotate(300deg); }
+
+/* ── Scroll chapters ── */
+.tales-experience > section {
+  position: relative;
+  isolation: isolate;
+}
+
+.tales-chapter {
+  position: relative;
+  padding: 5rem 2rem;
+  z-index: 2;
+  transform-style: preserve-3d;
+  clear: both;
+}
+
+.tales-chapter-head {
+  text-align: center;
+  max-width: 720px;
+  margin: 0 auto 2.5rem;
+  position: relative;
+  z-index: 3;
+}
+
+.tales-chapter-num {
+  font-family: "Cormorant Garamond", Georgia, serif;
+  font-size: 5rem;
+  line-height: 1;
+  color: rgba(255, 255, 255, 0.32);
+  margin-bottom: -1.5rem;
+}
+
+.tales-chapter-title {
+  font-family: "Cormorant Garamond", Georgia, serif;
+  font-size: clamp(2rem, 4vw, 3rem);
+  font-weight: 400;
+  color: var(--tales-cream);
+  margin-bottom: 1rem;
+}
+
+.tales-chapter-text {
+  color: rgba(245, 240, 235, 0.55);
+  line-height: 1.85;
+  font-size: 1.02rem;
+}
+
+/* ── Disney-style culture collage ── */
+#frames {
+  padding-bottom: 6rem;
+  overflow: visible;
+}
+
+.tales-collage {
+  position: relative;
+  max-width: min(1140px, 100%);
+  margin: 0 auto 2rem;
+  padding: 0 clamp(0.5rem, 2vw, 1.5rem);
+}
+
+.tales-collage-aurora {
+  position: absolute;
+  inset: 8% 4% 4%;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 0;
+  background:
+    radial-gradient(ellipse 55% 45% at 30% 40%, rgba(196, 30, 58, 0.14) 0%, transparent 60%),
+    radial-gradient(ellipse 50% 40% at 72% 55%, rgba(201, 168, 108, 0.16) 0%, transparent 55%),
+    radial-gradient(ellipse 70% 50% at 50% 80%, rgba(123, 94, 167, 0.1) 0%, transparent 60%);
+  filter: blur(2px);
+  animation: talesCollageGlow 8s ease-in-out infinite alternate;
+}
+
+@keyframes talesCollageGlow {
+  0% { opacity: 0.65; transform: scale(0.98); }
+  100% { opacity: 1; transform: scale(1.02); }
+}
+
+.tales-collage-dust {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.tales-collage-dust span {
+  position: absolute;
+  font-size: 0.65rem;
+  color: rgba(244, 216, 138, 0.45);
+  text-shadow: 0 0 8px rgba(244, 216, 138, 0.6);
+  animation: talesDustTwinkle 3s ease-in-out infinite;
+}
+
+.tales-collage-dust span:nth-child(1)  { left: 6%;  top: 12%; animation-delay: 0s; }
+.tales-collage-dust span:nth-child(2)  { left: 18%; top: 28%; animation-delay: 0.4s; }
+.tales-collage-dust span:nth-child(3)  { left: 42%; top: 6%;  animation-delay: 0.8s; }
+.tales-collage-dust span:nth-child(4)  { left: 68%; top: 14%; animation-delay: 1.2s; }
+.tales-collage-dust span:nth-child(5)  { left: 88%; top: 22%; animation-delay: 0.2s; }
+.tales-collage-dust span:nth-child(6)  { left: 4%;  top: 58%; animation-delay: 1.6s; }
+.tales-collage-dust span:nth-child(7)  { left: 28%; top: 72%; animation-delay: 0.6s; }
+.tales-collage-dust span:nth-child(8)  { left: 54%; top: 88%; animation-delay: 1s; }
+.tales-collage-dust span:nth-child(9)  { left: 76%; top: 68%; animation-delay: 1.4s; }
+.tales-collage-dust span:nth-child(10) { left: 92%; top: 48%; animation-delay: 0.3s; }
+
+@keyframes talesDustTwinkle {
+  0%, 100% { opacity: 0.2; transform: scale(0.8); }
+  50% { opacity: 0.9; transform: scale(1.15); }
+}
+
+.tales-frames-scene {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  grid-auto-rows: minmax(0, auto);
+  gap: 1.15rem 0.95rem;
+  height: auto;
+  min-height: 0;
+  padding: 1.25rem 0 2.5rem;
+  z-index: 2;
+}
+
+.tales-frame {
+  position: relative;
+  width: 100%;
+  transform: rotate(var(--frame-rot, 0deg));
+  transform-origin: center center;
+  cursor: pointer;
+  transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1), z-index 0s;
+  --frame-rot: 0deg;
+}
+
+.tales-frame:nth-child(odd) { margin-top: 0.35rem; }
+.tales-frame:nth-child(even) { margin-top: -0.15rem; }
+
+.tales-frame-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  transform-style: preserve-3d;
+  background: linear-gradient(165deg, #faf6f0 0%, #efe6d8 55%, #e8dcc8 100%);
+  padding: 7px 7px 26px;
+  border-radius: 4px;
+  box-shadow:
+    0 4px 0 rgba(201, 168, 108, 0.15),
+    0 22px 50px rgba(0, 0, 0, 0.5),
+    0 0 0 1px rgba(201, 168, 108, 0.25);
+}
+
+.tales-frame-inner::before {
+  content: '';
+  position: absolute;
+  inset: 7px 7px 26px;
+  border: 2px solid rgba(201, 168, 108, 0.35);
+  border-radius: 2px;
+  z-index: 2;
+  pointer-events: none;
+}
+
+.tales-frame-inner::after {
+  content: '✦';
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  font-size: 0.7rem;
+  color: rgba(244, 216, 138, 0);
+  text-shadow: 0 0 10px rgba(244, 216, 138, 0.9);
+  z-index: 4;
+  pointer-events: none;
+  transition: opacity 0.35s ease, transform 0.35s ease, color 0.35s ease;
+}
+
+.tales-frame img {
+  width: 100%;
+  aspect-ratio: 3/4;
+  object-fit: cover;
+  display: block;
+  border-radius: 1px;
+}
+
+.tales-frame--wide img { aspect-ratio: 4/3; }
+.tales-frame--tall img { aspect-ratio: 2/3; }
+.tales-frame--hero img { aspect-ratio: 5/4; }
+
+.tales-frame-label {
+  display: block;
+  margin-top: 0.45rem;
+  padding: 0 0.25rem;
+  font-family: "Cormorant Garamond", Georgia, serif;
+  font-size: 0.72rem;
+  font-style: italic;
+  letter-spacing: 0.12em;
+  text-transform: capitalize;
+  text-align: center;
+  color: rgba(90, 60, 40, 0.75);
+  z-index: 3;
+}
+
+.tales-frame--hero {
+  grid-column: span 2;
+  grid-row: span 2;
+}
+
+.tales-frame--wide {
+  grid-column: span 2;
+}
+
+.tales-frame--tall {
+  grid-row: span 2;
+}
+
+.tales-frame:hover,
+.tales-frame.is-sparkling {
+  z-index: 10;
+  transform: rotate(var(--frame-rot, 0deg)) scale(1.03) translateY(-6px);
+}
+
+.tales-frame:hover .tales-frame-inner,
+.tales-frame.is-sparkling .tales-frame-inner {
+  box-shadow:
+    0 4px 0 rgba(244, 216, 138, 0.3),
+    0 28px 60px rgba(196, 30, 58, 0.2),
+    0 0 40px rgba(244, 216, 138, 0.18),
+    0 0 0 1px rgba(244, 216, 138, 0.45);
+}
+
+.tales-frame:hover .tales-frame-inner::after,
+.tales-frame.is-sparkling .tales-frame-inner::after {
+  color: rgba(244, 216, 138, 0.95);
+  opacity: 1;
+  transform: scale(1.3) rotate(15deg);
+}
+
+.tales-frame-sparkle-burst {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 30;
+  overflow: visible;
+}
+
+.tales-frame-sparkle {
+  position: absolute;
+  font-size: 0.75rem;
+  color: #f4d88a;
+  text-shadow: 0 0 12px rgba(244, 216, 138, 0.95);
+  pointer-events: none;
+  animation: talesFrameSparkle 0.75s ease-out forwards;
+}
+
+@keyframes talesFrameSparkle {
+  0% {
+    opacity: 1;
+    transform: translate(0, 0) scale(0.4);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(var(--sx, 0), var(--sy, 0)) scale(1.2);
+  }
+}
+
+/* ── Culture pillars ── */
+#pillars {
+  padding-top: 6rem;
+  z-index: 3;
+}
+
+.tales-pillars {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 1.25rem;
+  max-width: min(1000px, 100%);
+  margin: 0 auto;
+  perspective: 1200px;
+  position: relative;
+  z-index: 2;
+}
+
+.tales-pillar {
+  background: linear-gradient(145deg, rgba(255, 255, 255, 0.06) 0%, rgba(255, 255, 255, 0.02) 100%);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+  padding: 2rem 1.5rem;
+  text-align: center;
+  transform-style: preserve-3d;
+  transition: border-color 0.4s ease, box-shadow 0.4s ease;
+}
+
+.tales-pillar:hover {
+  border-color: rgba(196, 30, 58, 0.4);
+  box-shadow: 0 20px 50px rgba(196, 30, 58, 0.12);
+}
+
+.tales-pillar-icon {
+  font-size: 1.8rem;
+  margin-bottom: 1rem;
+  display: block;
+}
+
+.tales-pillar h3 {
+  font-family: "Cormorant Garamond", Georgia, serif;
+  font-size: 1.35rem;
+  font-weight: 500;
+  color: var(--tales-cream);
+  margin-bottom: 0.65rem;
+}
+
+.tales-pillar p {
+  font-size: 0.82rem;
+  line-height: 1.7;
+  color: rgba(245, 240, 235, 0.5);
+}
+
+/* ── Orbit gallery ── */
+#orbit {
+  padding-top: 6rem;
+  z-index: 2;
+}
+
+.tales-orbit-section {
+  padding: 5rem 2rem 8rem;
+  overflow: hidden;
+}
+
+.tales-orbit-section .tales-chapter-head {
+  margin-bottom: 3rem;
+}
+
+.tales-orbit {
+  position: relative;
+  width: min(100%, 560px);
+  height: min(100%, 560px);
+  aspect-ratio: 1;
+  margin: 0 auto;
+  transform-style: preserve-3d;
+  perspective: 1400px;
+  z-index: 2;
+}
+
+.tales-orbit-optics {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.tales-orbit-ring {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  border-radius: 50%;
+  border: 1px solid rgba(201, 168, 108, 0.22);
+  transform: translate(-50%, -50%);
+  transform-origin: center center;
+}
+
+.tales-orbit-ring--outer {
+  width: 92%;
+  height: 92%;
+  border-style: dashed;
+  border-color: rgba(201, 168, 108, 0.18);
+}
+
+.tales-orbit-ring--mid {
+  width: 68%;
+  height: 68%;
+  border-color: rgba(196, 30, 58, 0.2);
+}
+
+.tales-orbit-ring--inner {
+  width: 42%;
+  height: 42%;
+  border-color: rgba(255, 255, 255, 0.12);
+}
+
+.tales-orbit-crosshair {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 88%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(201, 168, 108, 0.2), transparent);
+  transform: translate(-50%, -50%);
+}
+
+.tales-orbit-crosshair--diag {
+  transform: translate(-50%, -50%) rotate(90deg);
+}
+
+.tales-orbit-track {
+  position: absolute;
+  inset: 0;
+  transform-style: preserve-3d;
+  transform-origin: 50% 50%;
+  z-index: 3;
+}
+
+.tales-orbit-center {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  z-index: 6;
+  width: 200px;
+}
+
+.tales-orbit-lens {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 140px;
+  height: 140px;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  border: 1px solid rgba(201, 168, 108, 0.25);
+  background: radial-gradient(circle, rgba(196, 30, 58, 0.08) 0%, transparent 65%);
+  box-shadow:
+    inset 0 0 30px rgba(0, 0, 0, 0.35),
+    0 0 40px rgba(196, 30, 58, 0.12);
+  z-index: -1;
+}
+
+.tales-orbit-center h3 {
+  font-family: "Cormorant Garamond", Georgia, serif;
+  font-size: 1.6rem;
+  color: var(--tales-cream);
+  line-height: 1.3;
+}
+
+.tales-orbit-center p {
+  font-size: 0.72rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--tales-gold);
+  margin-top: 0.5rem;
+}
+
+.tales-orbit-item {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 88px;
+  height: 88px;
+  margin: -44px 0 0 -44px;
+  border-radius: 50%;
+  overflow: hidden;
+  border: 2px solid rgba(201, 168, 108, 0.45);
+  box-shadow:
+    0 12px 30px rgba(0, 0, 0, 0.45),
+    0 0 20px rgba(196, 30, 58, 0.15);
+  transform-style: preserve-3d;
+  will-change: transform;
+  transform-origin: center center;
+  transform:
+    rotate(var(--orbit-angle, 0deg))
+    translateX(var(--orbit-radius, 190px))
+    rotate(calc(-1 * var(--orbit-angle, 0deg)));
+}
+
+.tales-orbit-item img,
+.tales-orbit-item .magic-media-target {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transform-origin: center center;
+  animation: tales-orbit-counter var(--orbit-duration, 48s) linear infinite;
+}
+
+@keyframes tales-orbit-counter {
+  to { transform: rotate(-360deg); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tales-orbit-item img,
+  .tales-orbit-item .magic-media-target {
+    animation: none;
+  }
+
+  .tales-collage-aurora,
+  .tales-collage-dust span {
+    animation: none;
+  }
+}
+
+/* ── Manifesto ── */
+.tales-manifesto {
+  padding: 6rem 2rem;
+  text-align: center;
+  position: relative;
+  z-index: 4;
+  clear: both;
+}
+
+.tales-manifesto blockquote {
+  font-family: "Cormorant Garamond", Georgia, serif;
+  font-size: clamp(1.8rem, 4vw, 3.2rem);
+  font-weight: 400;
+  font-style: italic;
+  line-height: 1.45;
+  color: var(--tales-cream);
+  max-width: 900px;
+  margin: 0 auto 2rem;
+}
+
+.tales-manifesto cite {
+  font-style: normal;
+  font-size: 0.72rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--tales-gold);
+}
+
+/* ── CTA ── */
+.tales-cta {
+  padding: 5rem 2rem 8rem;
+  text-align: center;
+  position: relative;
+  z-index: 2;
+}
+
+.tales-cta-card {
+  max-width: 640px;
+  margin: 0 auto;
+  padding: 3.5rem 2.5rem;
+  border-radius: 20px;
+  background: linear-gradient(135deg, rgba(196, 30, 58, 0.12) 0%, rgba(201, 168, 108, 0.08) 100%);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  transform-style: preserve-3d;
+}
+
+.tales-cta-card h2 {
+  font-family: "Cormorant Garamond", Georgia, serif;
+  font-size: clamp(1.8rem, 3.5vw, 2.6rem);
+  font-weight: 400;
+  margin-bottom: 1rem;
+  color: var(--tales-cream);
+}
+
+.tales-cta-card p {
+  color: rgba(245, 240, 235, 0.6);
+  margin-bottom: 2rem;
+  line-height: 1.75;
+}
+
+.tales-cta-actions {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.tales-cta-actions .btn.is-outline {
+  border-color: rgba(255, 255, 255, 0.25);
+  color: #fff;
+  background: transparent;
+}
+
+.tales-cta-actions .btn.is-outline:hover {
+  border-color: var(--tfc-red);
+  color: #fff;
+}
+
+.tales-divider {
+  width: 1px;
+  height: 48px;
+  background: linear-gradient(to bottom, transparent, var(--tfc-red), transparent);
+  margin: 0 auto 1rem;
+  opacity: 0.5;
+  position: relative;
+  z-index: 2;
+}
+
+@media (max-width: 1100px) {
+  .tales-hero-inner {
+    grid-template-columns: 1fr;
+    text-align: center;
+    gap: 2rem;
+  }
+
+  .tales-hero-lead {
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .tales-scroll-hint {
+    justify-content: center;
+  }
+
+  .tales-lens-stage {
+    order: -1;
+    height: clamp(280px, 40vw, 360px);
+  }
+}
+
+@media (min-width: 1200px) {
+  .tales-frames-scene {
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 1.35rem 1.1rem;
+  }
+}
+
+@media (max-width: 991px) {
+  .tales-collage-aurora {
+    inset: 2% 0 0;
+  }
+
+  .tales-frames-scene {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1rem;
+    padding: 0.5rem 0 1.5rem;
+  }
+
+  .tales-frame--hero {
+    grid-column: span 2;
+    grid-row: span 2;
+  }
+
+  .tales-frame:nth-child(odd),
+  .tales-frame:nth-child(even) {
+    margin-top: 0;
+  }
+
+  .tales-pillars {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .tales-orbit {
+    width: 320px;
+    height: 320px;
+  }
+
+  .tales-orbit-item {
+    width: 64px;
+    height: 64px;
+    margin: -32px 0 0 -32px;
+  }
+}
+
+@media (max-width: 768px) {
+  .tales-hero-title {
+    font-size: clamp(2rem, 9vw, 3rem);
+  }
+
+  .tales-hero-lead {
+    font-size: 0.95rem;
+  }
+
+  .tales-chapter {
+    padding: 3.5rem clamp(1rem, 4vw, 1.5rem);
+  }
+}
+
+@media (max-width: 600px) {
+  .tales-pillars {
+    grid-template-columns: 1fr;
+  }
+
+  .tales-frames-scene {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .tales-frame--hero,
+  .tales-frame--wide {
+    grid-column: span 2;
+  }
+
+  .tales-lens-stage {
+    height: 260px;
+  }
+}

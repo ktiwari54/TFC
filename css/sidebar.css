@@ -1,0 +1,737 @@
+@import url('responsive.css');
+
+/* TFC — Wedding Filmer–style sidebar + main shell layout */
+
+:root {
+  --sidebar-width: 12%;
+  --sidebar-min: 88px;
+  --shell-radius: 20px;
+  --shell-margin: 1.5%;
+  --twf-cream: #f5f0eb;
+  --twf-beige: #e8dfd4;
+}
+
+body {
+  background: #000 !important;
+  color: #111;
+}
+
+body.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+
+/* ── Fixed sidebar ── */
+.sc-sidebar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: var(--sidebar-width);
+  min-width: var(--sidebar-min);
+  height: 100vh;
+  z-index: 1000;
+  background: #000;
+  display: flex;
+  flex-direction: column;
+  transition: filter 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.sc-sidebar.is-hovered {
+  filter: drop-shadow(12px 0 32px rgba(196, 30, 58, 0.15));
+}
+
+.sc-sidebar-inner {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100%;
+  padding: 1.25rem 0 1.5rem;
+}
+
+.sc-logo-wrap {
+  display: flex;
+  justify-content: center;
+  padding: 0 0.75rem 1.5rem;
+}
+
+.sc-logo {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  background: var(--tfc-red);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-heading);
+  font-size: 0.95rem;
+  letter-spacing: 0.08em;
+  color: #fff;
+  text-decoration: none;
+  transform-style: preserve-3d;
+  transform: translateZ(0);
+  transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.35);
+}
+
+.sc-logo:hover,
+.sc-logo.is-tilting {
+  transform: translateZ(28px) scale(1.08) rotateX(var(--tilt-x, 0deg)) rotateY(var(--tilt-y, 0deg));
+  box-shadow:
+    0 18px 36px rgba(196, 30, 58, 0.45),
+    0 6px 14px rgba(0, 0, 0, 0.4),
+    inset 0 1px 0 rgba(255, 255, 255, 0.25);
+}
+
+.sc-nav-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  flex: 1 1 0;
+  min-height: 0;
+  overflow-y: auto;
+  padding: 0;
+  scrollbar-width: thin;
+}
+
+.sc-nav-item {
+  list-style: none;
+}
+
+.sc-nav-link {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.65rem 0.75rem;
+  margin-right: 1rem;
+  font-size: 0.72rem;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.75);
+  text-decoration: none;
+  border-radius: 10px;
+  position: relative;
+  transform-origin: left center;
+  transform: translateX(0);
+  transition:
+    transform 0.45s cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow 0.45s cubic-bezier(0.22, 1, 0.36, 1),
+    background 0.3s ease,
+    color 0.3s ease;
+}
+
+.sc-nav-link::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.14) 0%, transparent 55%);
+  opacity: 0;
+  transition: opacity 0.35s ease;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.sc-nav-link > * {
+  position: relative;
+  z-index: 1;
+}
+
+.sc-nav-link svg {
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+  opacity: 0.7;
+  transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.3s ease;
+}
+
+.sc-nav-link:hover:not(.active),
+.sc-nav-link.is-tilting:not(.active) {
+  background: rgba(255, 255, 255, 0.1);
+  color: #fff;
+  transform: translateX(8px) scale(1.02);
+  box-shadow:
+    6px 10px 24px rgba(0, 0, 0, 0.45),
+    0 0 0 1px rgba(255, 255, 255, 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 0.12);
+}
+
+.sc-nav-link:hover:not(.active)::before,
+.sc-nav-link.is-tilting:not(.active)::before {
+  opacity: 1;
+}
+
+.sc-nav-link:hover:not(.active) svg,
+.sc-nav-link.is-tilting:not(.active) svg {
+  opacity: 1;
+  transform: scale(1.1);
+}
+
+.sc-nav-link.active {
+  background: #fff;
+  color: #111;
+  border-radius: 10px 0 0 10px;
+  margin-right: 0;
+  padding-right: 1.5rem;
+  transform: translateX(4px);
+  box-shadow: 6px 10px 28px rgba(0, 0, 0, 0.28);
+}
+
+.sc-nav-link.active:hover,
+.sc-nav-link.active.is-tilting {
+  transform: translateX(8px) scale(1.02);
+  box-shadow:
+    10px 14px 32px rgba(0, 0, 0, 0.35),
+    0 0 0 1px rgba(255, 255, 255, 0.6);
+}
+
+.sc-nav-link.active svg {
+  color: var(--tfc-red);
+  opacity: 1;
+}
+
+.sc-nav-link.active .menu-curve-wrap {
+  opacity: 1;
+}
+
+.menu-curve-wrap {
+  position: absolute;
+  right: -1px;
+  top: 0;
+  width: 30px;
+  height: 100%;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.sc-nav-link.active .menu-curve-wrap {
+  opacity: 1;
+}
+
+.menu-curve-top,
+.menu-curve-bottom {
+  position: absolute;
+  right: 0;
+  width: 30px;
+  height: 30px;
+  color: #fff;
+  overflow: hidden;
+}
+
+.menu-curve-top {
+  top: -30px;
+  transform: rotate(180deg);
+}
+
+.menu-curve-bottom {
+  bottom: -30px;
+  transform: rotate(90deg);
+}
+
+.menu-curve-top svg,
+.menu-curve-bottom svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.sc-sidebar-cta {
+  padding: 1rem 0.5rem 0.5rem 0.75rem;
+  margin-top: auto;
+  flex-shrink: 0;
+  position: sticky;
+  bottom: 0;
+  z-index: 50;
+  isolation: isolate;
+  background: linear-gradient(to top, #070b14 65%, transparent);
+}
+
+.glow-cta {
+  display: block;
+  position: relative;
+  padding: 2px;
+  border-radius: 14px;
+  overflow: hidden;
+  text-decoration: none;
+  color: inherit;
+  cursor: pointer;
+  pointer-events: auto;
+  touch-action: manipulation;
+  transition: box-shadow 0.35s ease, transform 0.35s ease;
+}
+
+.glow-cta * {
+  pointer-events: none;
+}
+
+.glow-cta:hover {
+  transform: translateX(4px);
+  box-shadow: 8px 16px 40px rgba(196, 30, 58, 0.35);
+}
+
+.glow-cta-ring {
+  position: absolute;
+  inset: -50%;
+  background: conic-gradient(from 0deg, rgba(196, 30, 58, 0.9), transparent 70deg, transparent 290deg, rgba(196, 30, 58, 0.9));
+  animation: borderSpin 4s linear infinite;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.glow-cta-inner {
+  position: relative;
+  background: #1a1a1a;
+  border-radius: 12px;
+  padding: 1rem;
+  z-index: 2;
+}
+
+.glow-cta-inner .btn {
+  display: inline-flex;
+  width: 100%;
+  justify-content: center;
+  position: relative;
+  z-index: 5;
+}
+
+.glow-cta-inner h4 {
+  font-family: var(--font-display);
+  font-size: 1rem;
+  line-height: 1.35;
+  color: #fff;
+  margin-bottom: 0.75rem;
+}
+
+/* ── Main shell (white rounded card) ── */
+.main-shell {
+  margin-left: var(--sidebar-width);
+  min-height: 100vh;
+  padding: var(--shell-margin) var(--shell-margin) var(--shell-margin) 0;
+}
+
+.main_content {
+  background: #fff;
+  border-radius: var(--shell-radius);
+  overflow-x: clip;
+  overflow-y: visible;
+  color: #111;
+  min-height: calc(100vh - 3%);
+  position: relative;
+}
+
+.main_content .container {
+  width: 100%;
+  max-width: min(1400px, 100%);
+  box-sizing: border-box;
+}
+
+/* ── Top bar inside shell ── */
+.shell-top-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1.25rem 1.5rem;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+  background: #fff;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.shell-search {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex: 1;
+  max-width: 420px;
+  background: #f5f5f5;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  border-radius: 50px;
+  padding: 0.55rem 1.15rem;
+}
+
+.shell-search svg {
+  width: 15px;
+  height: 15px;
+  color: #999;
+}
+
+.shell-search input {
+  flex: 1;
+  border: none;
+  background: none;
+  outline: none;
+  font-size: 0.82rem;
+  color: #111;
+}
+
+.shell-search input::placeholder {
+  color: #999;
+}
+
+.shell-top-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  text-decoration: none;
+  color: #111;
+  padding: 0.65rem 1.25rem;
+  border-radius: 999px;
+  border: 1px solid rgba(0, 0, 0, 0.12);
+  background: transparent;
+  transition: color 0.2s ease, background 0.2s ease, border-color 0.2s ease;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.shell-top-link:hover {
+  background: rgba(0, 0, 0, 0.05);
+}
+
+.shell-top-link.active {
+  color: var(--tfc-red);
+  background: rgba(196, 30, 58, 0.08);
+}
+
+.shell-top-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  flex-shrink: 0;
+  margin-left: auto;
+}
+
+/* Wedding-themed buttons in light shell */
+.main_content .btn.is-black {
+  background: #111;
+  color: #fff;
+  border: none;
+}
+
+.main_content .btn {
+  background: var(--tfc-red);
+}
+
+/* ── Hero with video ── */
+.section-hero-banner {
+  padding: 0 1.25rem;
+}
+
+.hero.wedding-hero {
+  margin-top: 0;
+  border-radius: 16px;
+  overflow: hidden;
+  height: 85vh;
+  min-height: 520px;
+  position: relative;
+}
+
+.hero.wedding-hero .hero-slide {
+  border-radius: 16px;
+}
+
+.homepage-banner-video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: 1;
+}
+
+.hero-banner-image {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: 0;
+}
+
+.hero.wedding-hero .hero-overlay {
+  background: linear-gradient(
+    to top,
+    rgba(0, 0, 0, 0.85) 0%,
+    rgba(0, 0, 0, 0.35) 45%,
+    rgba(0, 0, 0, 0.15) 100%
+  );
+  z-index: 2;
+}
+
+.hero.wedding-hero .hero-content {
+  z-index: 4;
+}
+
+.hero.wedding-hero .hero-title {
+  color: #fff;
+  font-family: var(--font-display);
+}
+
+.hero.wedding-hero .eyebrow {
+  font-family: var(--font-body);
+  letter-spacing: 0.15em;
+  color: var(--twf-beige);
+}
+
+.hero.wedding-hero .hero-desc {
+  color: rgba(255, 255, 255, 0.75);
+}
+
+.sufi-deco {
+  position: absolute;
+  right: 2rem;
+  bottom: 35%;
+  width: 5rem;
+  opacity: 0.5;
+  z-index: 3;
+  animation: floatSufi 6s ease-in-out infinite;
+}
+
+@keyframes floatSufi {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  50% { transform: translateY(-12px) rotate(5deg); }
+}
+
+/* ── Scroll reveal / 3D ── */
+.reveal-3d {
+  transform-style: preserve-3d;
+  will-change: transform, opacity;
+}
+
+.parallax-wrap {
+  transform-style: preserve-3d;
+  perspective: 1200px;
+}
+
+.parallax-layer {
+  will-change: transform;
+}
+
+/* ── Lottie sections ── */
+.lottie-section {
+  padding: 4rem 2rem;
+  text-align: center;
+  background: var(--twf-cream);
+}
+
+.lottie-box {
+  max-width: 600px;
+  margin: 0 auto 1.5rem;
+  min-height: 120px;
+}
+
+.lottie-divider {
+  height: 4px;
+  background: var(--tfc-red);
+  max-width: 0;
+  margin: 0 auto;
+  transition: max-width 1.2s ease 0.3s;
+}
+
+.lottie-divider.visible {
+  max-width: 140px;
+}
+
+/* Light sections inside white shell */
+.main_content .tagline-section {
+  background: var(--twf-cream);
+}
+
+.main_content .tagline-text {
+  color: #111;
+}
+
+/* Wedding-hall scroll journey */
+.wedding-journey {
+  /* lightweight scroll — no persistent 3D context */
+}
+
+.wedding-journey > section {
+  position: relative;
+}
+
+.wedding-journey > section::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: radial-gradient(ellipse 80% 50% at 50% 0%, rgba(245, 240, 235, 0.45) 0%, transparent 70%);
+  opacity: calc(0.3 + var(--scroll-progress, 0) * 0.4);
+  z-index: 0;
+}
+
+.wedding-journey .trailer-section {
+  background: linear-gradient(180deg, var(--twf-cream) 0%, #fff 40%, var(--twf-cream) 100%);
+  background-size: 100% 200%;
+}
+
+.main_content .music-section,
+.main_content .workshop-section,
+.main_content .locations-section,
+.main_content .awards-section {
+  background: #fff;
+  color: #111;
+}
+
+.main_content .wedding-journey .trailer-section,
+.main_content .trailer-section {
+  background: linear-gradient(180deg, var(--twf-cream) 0%, #fff 50%, var(--twf-cream) 100%);
+  background-size: 100% 200%;
+  color: #111;
+}
+
+.main_content .about-section,
+.main_content .crew-section,
+.main_content .testimonials-section,
+.main_content .contact-section {
+  background: #fafafa;
+  color: #111;
+}
+
+.main_content .section-heading {
+  color: #111;
+}
+
+.main_content .about-text,
+.main_content .music-text,
+.main_content .hero-desc {
+  color: rgba(0, 0, 0, 0.65);
+}
+
+.main_content .film-tab {
+  color: #666;
+  border-color: rgba(0, 0, 0, 0.1);
+}
+
+.main_content .film-tab.active {
+  color: #fff;
+  background: var(--tfc-red);
+  border-color: var(--tfc-red);
+}
+
+.main_content .footer {
+  background: #111;
+  color: #fff;
+  border-radius: 0 0 var(--shell-radius) var(--shell-radius);
+}
+
+/* Mobile sidebar */
+.sc-menu-btn {
+  display: none;
+  position: fixed;
+  bottom: 1.5rem;
+  left: 1.5rem;
+  z-index: 1001;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: var(--tfc-red);
+  color: #fff;
+  border: none;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Override legacy top-nav layout */
+body.shell-layout .navbar,
+body.shell-layout .top-bar {
+  display: none !important;
+}
+
+body.shell-layout.inner-page {
+  padding-top: 0 !important;
+}
+
+body.shell-layout .hero,
+body.shell-layout .hero.wedding-hero,
+body.shell-layout .page-hero,
+body.shell-layout .film-detail-hero {
+  margin-top: 0 !important;
+}
+
+body.shell-layout .inner-page .page-hero {
+  padding-top: 2.5rem;
+}
+
+.main_content .page-hero {
+  background: var(--twf-cream);
+  color: #111;
+  padding: 3rem 0 2.5rem;
+}
+
+.main_content .page-section.dark,
+.main_content .page-section.alt {
+  background: #fff;
+  color: #111;
+}
+
+.main_content .page-section .section-heading,
+.main_content .page-hero .section-heading {
+  color: #111;
+}
+
+.main_content .page-hero-text,
+.main_content .page-section .about-text {
+  color: rgba(0, 0, 0, 0.65);
+}
+
+.hero-banner-image {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: 0;
+}
+
+.hero-media:has(.homepage-banner-video) .hero-banner-image {
+  z-index: 0;
+  opacity: 0.15;
+}
+
+@keyframes borderSpin {
+  to { transform: rotate(360deg); }
+}
+
+@media (max-width: 991px) {
+  .sc-sidebar {
+    transform: translateX(-100%);
+    transition: transform 0.4s ease;
+    width: 260px;
+    min-width: 260px;
+    perspective: none;
+    filter: none;
+  }
+
+  .sc-sidebar.open {
+    transform: translateX(0);
+  }
+
+  .sc-nav-link:hover:not(.active),
+  .sc-nav-link.is-tilting:not(.active),
+  .sc-nav-link.active:hover,
+  .sc-nav-link.active.is-tilting,
+  .sc-logo:hover,
+  .sc-logo.is-tilting,
+  .glow-cta:hover {
+    transform: none;
+    box-shadow: none;
+  }
+
+  .main-shell {
+    margin-left: 0;
+    padding: 0.5rem;
+  }
+
+  .sc-menu-btn {
+    display: flex;
+  }
+
+  .hero.wedding-hero {
+    height: 70vh;
+  }
+}
