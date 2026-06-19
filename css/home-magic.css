@@ -966,6 +966,7 @@ body.home-reveal-all .home-scroll-reveal {
 /* ── Who We Are — split layout with photo collage ── */
 .home-page .about-section {
   padding: clamp(2.5rem, 6vw, 4.5rem) 0;
+  overflow: visible;
 }
 
 .home-page .about-section .container {
@@ -984,7 +985,8 @@ body.home-reveal-all .home-scroll-reveal {
   width: 100%;
   max-width: 520px;
   margin-inline: auto;
-  padding: 0 0 2.5rem 1.5rem;
+  padding: 0 0 clamp(2rem, 5vw, 2.75rem) clamp(0.75rem, 3vw, 1.5rem);
+  min-height: 0;
 }
 
 .home-page .about-photo {
@@ -995,7 +997,15 @@ body.home-reveal-all .home-scroll-reveal {
   box-shadow: 0 24px 50px rgba(0, 0, 0, 0.4);
 }
 
-.home-page .about-photo img {
+/* Collage figures must not inherit full-size magic-media stretch */
+.home-page .about-visual .about-photo.magic-media {
+  width: auto;
+  height: auto;
+  max-width: none;
+}
+
+.home-page .about-photo img,
+.home-page .about-photo.magic-media > img {
   display: block;
   width: 100%;
   height: 100%;
@@ -1003,8 +1013,10 @@ body.home-reveal-all .home-scroll-reveal {
 }
 
 .home-page .about-photo--main {
+  position: relative;
+  z-index: 1;
   aspect-ratio: 4 / 5;
-  width: 88%;
+  width: min(88%, 420px);
 }
 
 .home-page .about-photo--main img {
@@ -1013,10 +1025,12 @@ body.home-reveal-all .home-scroll-reveal {
 
 .home-page .about-photo--accent {
   position: absolute;
+  left: auto;
   right: 0;
   bottom: 0;
-  width: 48%;
+  width: min(48%, 220px);
   aspect-ratio: 4 / 5;
+  height: auto;
   z-index: 2;
   box-shadow: 0 18px 40px rgba(0, 0, 0, 0.5);
 }
@@ -1091,7 +1105,7 @@ body.home-reveal-all .home-scroll-reveal {
   display: block;
 }
 
-.home-page .magic-media {
+.home-page .magic-media:not(.about-photo) {
   width: 100%;
   height: 100%;
 }
@@ -1423,7 +1437,7 @@ body.home-reveal-all .home-scroll-reveal {
   }
 
   .home-page .about-photo--accent {
-    width: 44%;
+    width: min(44%, 180px);
   }
 
   .home-page .about-stats {

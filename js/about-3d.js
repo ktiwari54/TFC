@@ -278,30 +278,34 @@ function initAboutConstellation() {
   const orbs = gsap.utils.toArray('.about-stat-orb');
   if (!orbs.length) return;
 
-  const radius = window.innerWidth < 992 ? 120 : 250;
-  const state = { rotation: 0 };
+  if (aboutIsMobile) {
+    gsap.set(orbs, { clearProps: 'transform' });
+  } else {
+    const radius = 270;
+    const state = { rotation: 0 };
 
-  function placeOrbs(deg) {
-    orbs.forEach((orb, i) => {
-      const angle = ((i / orbs.length) * 360 + deg) * (Math.PI / 180);
-      gsap.set(orb, {
-        x: Math.cos(angle) * radius,
-        y: Math.sin(angle) * radius,
-        z: Math.sin(angle) * 60,
-        rotateY: Math.cos(angle) * 18,
+    function placeOrbs(deg) {
+      orbs.forEach((orb, i) => {
+        const angle = ((i / orbs.length) * 360 + deg) * (Math.PI / 180);
+        gsap.set(orb, {
+          x: Math.cos(angle) * radius,
+          y: Math.sin(angle) * radius,
+          z: Math.sin(angle) * 60,
+          rotateY: Math.cos(angle) * 18,
+        });
       });
+    }
+
+    placeOrbs(0);
+
+    gsap.to(state, {
+      rotation: 360,
+      duration: 35,
+      ease: 'none',
+      repeat: -1,
+      onUpdate: () => placeOrbs(state.rotation),
     });
   }
-
-  placeOrbs(0);
-
-  gsap.to(state, {
-    rotation: 360,
-    duration: 35,
-    ease: 'none',
-    repeat: -1,
-    onUpdate: () => placeOrbs(state.rotation),
-  });
 
   gsap.from('.about-constellation-center', {
     scale: 0.4,
