@@ -295,7 +295,14 @@
   }
 
   .hero-content {
-    padding-bottom: 2rem;
+    padding-bottom: 3.25rem;
+  }
+
+  .home-scroll-hint {
+    bottom: 0.65rem;
+    font-size: 0.58rem;
+    letter-spacing: 0.14em;
+    pointer-events: none;
   }
 
   .hero-desc {

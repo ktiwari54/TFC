@@ -412,6 +412,16 @@ body.lenis.lenis-smooth {
   border: none;
 }
 
+.main_content .btn.is-black:hover {
+  background: #2a2a2a;
+  transform: translateY(-1px);
+}
+
+.main_content .btn:hover {
+  background: var(--tfc-red-dark);
+  transform: translateY(-1px);
+}
+
 .main_content .btn {
   background: var(--tfc-red);
 }
