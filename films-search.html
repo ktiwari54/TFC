@@ -41,6 +41,7 @@
 
   <div id="site-footer"></div>
   <script src="js/films-data.js"></script>
+  <script src="js/films-images.js"></script>
   <script src="js/layout.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/lenis@1.1.18/dist/lenis.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
@@ -77,9 +78,10 @@
         }
 
         empty.hidden = true;
+        const fallbackImg = 'https://images.unsplash.com/photo-1519741497674-611481863552?w=600&q=80';
         results.innerHTML = matches.map(f => `
           <a href="${f.url}" class="film-card no-video">
-            <img src="https://images.unsplash.com/photo-1519741497674-611481863552?w=600&q=80" alt="${f.title}">
+            <img src="${(window.TFC_FILM_IMAGES && window.TFC_FILM_IMAGES[f.slug]) || fallbackImg}" alt="${f.title}">
             <div class="film-card-overlay">
               <div class="film-meta"><span>TFC Films</span><span class="dot"></span><span>View</span></div>
               <h3 class="film-name">${f.title}</h3>

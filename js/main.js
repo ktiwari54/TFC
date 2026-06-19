@@ -461,9 +461,26 @@ function initContactForm() {
   const form = document.getElementById('contactForm');
   form.addEventListener('submit', (e) => {
     e.preventDefault();
+    const data = new FormData(form);
+    const name = data.get('name') || '';
+    const subject = encodeURIComponent(`TFC Enquiry from ${name}`);
+    const body = encodeURIComponent(
+      [
+        `Name: ${name}`,
+        `Email: ${data.get('email') || ''}`,
+        `Phone: ${data.get('phone') || ''}`,
+        `Event Date: ${data.get('date') || ''}`,
+        `Location: ${data.get('location') || ''}`,
+        '',
+        String(data.get('message') || ''),
+      ].join('\n')
+    );
+
+    window.location.href = `mailto:hello@tfcfilms.co?subject=${subject}&body=${body}`;
+
     const btn = form.querySelector('button[type="submit"]');
     const original = btn.innerHTML;
-    btn.textContent = "Sent! We'll be in touch.";
+    btn.textContent = "Opening your email app...";
     btn.style.background = '#2d6a2d';
     setTimeout(() => {
       btn.innerHTML = original;
