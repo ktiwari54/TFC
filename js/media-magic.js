@@ -11,6 +11,7 @@
     '.about-book-page',
     '.magic-orb-core',
     '.about-image',
+    '.about-photo',
     '.music-visual',
     '.cs-gallery-item',
     '.cs-story-card',
@@ -177,6 +178,7 @@
       '.cs-gallery-item',
       '.cs-story-card',
       '.about-image',
+    '.about-photo',
       '.hero-media',
     ];
 
