@@ -26,6 +26,8 @@ function initCsGalleryDrag() {
     let isDown = false;
     let startX = 0;
     let scrollLeft = 0;
+    let rafId = 0;
+    let pendingX = 0;
 
     row.addEventListener('mousedown', (e) => {
       isDown = true;
@@ -38,15 +40,21 @@ function initCsGalleryDrag() {
       row.addEventListener(ev, () => {
         isDown = false;
         row.classList.remove('is-dragging');
+        if (rafId) cancelAnimationFrame(rafId);
+        rafId = 0;
       });
     });
 
     row.addEventListener('mousemove', (e) => {
       if (!isDown) return;
       e.preventDefault();
-      const x = e.pageX - row.offsetLeft;
-      row.scrollLeft = scrollLeft - (x - startX) * 1.3;
-    });
+      pendingX = e.pageX - row.offsetLeft;
+      if (rafId) return;
+      rafId = requestAnimationFrame(() => {
+        row.scrollLeft = scrollLeft - (pendingX - startX) * 1.3;
+        rafId = 0;
+      });
+    }, { passive: false });
   });
 }
 

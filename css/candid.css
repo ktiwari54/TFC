@@ -126,6 +126,10 @@
   transform: scale(1.08);
 }
 
+.home-page .cs-gallery .cs-gallery-item:hover img {
+  transform: none;
+}
+
 .cs-gallery-item.tall {
   flex-basis: clamp(220px, 24vw, 300px);
   aspect-ratio: 2/3;

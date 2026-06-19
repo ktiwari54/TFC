@@ -501,24 +501,34 @@ body.home-dream-scroll .home-stars {
   background: rgba(232, 200, 114, 0.08);
 }
 
-/* ── Gallery ── */
+/* ── Gallery (performance-tuned collage strip) ── */
 .home-page .cs-gallery {
   background: transparent;
   padding: 0;
   position: relative;
   z-index: 2;
+  contain: layout style paint;
+  content-visibility: auto;
+  contain-intrinsic-size: auto 280px;
+  isolation: isolate;
 }
 
 .home-page .cs-gallery-track {
   padding: 0.75rem 4vw 0.5rem;
+  overscroll-behavior: contain;
+  transform: translateZ(0);
+  -webkit-overflow-scrolling: touch;
 }
 
 .home-page .cs-gallery-item {
   border: 2px solid rgba(232, 200, 114, 0.2);
-  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.45);
-  transition: border-color 0.4s ease;
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.32);
+  transition: border-color 0.35s ease;
   display: block;
   overflow: hidden;
+  contain: strict;
+  content-visibility: auto;
+  contain-intrinsic-size: auto 280px;
 }
 
 .home-page .cs-gallery-item img {
@@ -527,10 +537,17 @@ body.home-dream-scroll .home-stars {
   object-fit: cover;
   object-position: center center;
   display: block;
+  transform: translateZ(0);
+  backface-visibility: hidden;
 }
 
-.home-page .cs-gallery-item:hover {
+.home-page .cs-gallery.is-gallery-ready .cs-gallery-item:hover {
   border-color: rgba(232, 200, 114, 0.5);
+}
+
+.home-page .cs-gallery.is-gallery-ready .cs-gallery-item:hover img {
+  transform: scale(1.04);
+  transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 /* ── Tabs ── */

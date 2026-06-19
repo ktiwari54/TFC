@@ -63,14 +63,27 @@ function activeHeroSlide() {
   return document.querySelector('#heroSlider .hero-slide.active');
 }
 
+const HOME_HEAVY_SECTIONS = new Set([
+  'discover',
+  'chapter-two',
+  'films',
+  'hero',
+]);
+
+function isHomeHeavySection(section) {
+  if (!section) return true;
+  if (section.classList.contains('shell-top-bar')) return true;
+  if (section.classList.contains('section-hero-banner')) return true;
+  if (section.classList.contains('cs-gallery')) return true;
+  if (section.classList.contains('dream-films')) return true;
+  if (section.id && HOME_HEAVY_SECTIONS.has(section.id)) return true;
+  return false;
+}
+
 function initHomeSectionDreamFlow() {
   const sections = gsap.utils.toArray(
     '.home-experience > section, .home-page .main_content > section'
-  ).filter((section) => (
-    !section.classList.contains('shell-top-bar')
-    && !section.classList.contains('section-hero-banner')
-    && section.id !== 'hero'
-  ));
+  ).filter((section) => !isHomeHeavySection(section));
 
   sections.forEach((section) => {
     gsap.fromTo(section,
@@ -209,15 +222,16 @@ function initChapterScroll(scroll, options = {}) {
     transformPerspective: 900,
   });
 
+  const isChapterOne = scroll.classList.contains('home-scroll--chapter1');
   let unrolled = false;
   const tl = gsap.timeline({
     scrollTrigger: {
       trigger: scroll,
       start: 'top 92%',
-      end: 'top 42%',
-      scrub: homeIsMobile ? 0.85 : 1.5,
+      end: isChapterOne ? 'top 58%' : 'top 42%',
+      scrub: isChapterOne ? (homeIsMobile ? 0.55 : 0.9) : (homeIsMobile ? 0.85 : 1.5),
       onUpdate: (self) => {
-        if (!unrolled && self.progress > 0.72) {
+        if (!unrolled && self.progress > (isChapterOne ? 0.55 : 0.72)) {
           unrolled = true;
           if (onUnrolled) onUnrolled();
         }
@@ -272,7 +286,11 @@ function initChapterOneScroll() {
     reveals: Array.from(reveals),
     prepareTypewriters: () => prepareTypewriters(scroll),
     onUnrolled: () => {
-      runTypewriterSequence(typeEls, () => revealScrollExtras(Array.from(reveals)));
+      typeEls.forEach((el) => {
+        el.textContent = el.dataset.typewriter || '';
+        el.classList.remove('is-typing');
+      });
+      revealScrollExtras(Array.from(reveals));
     },
   });
 }
@@ -360,21 +378,26 @@ function typewriterEl(el, onComplete, isActive) {
 }
 
 function initHomeGallery() {
-  const track = document.querySelector('.home-page .cs-gallery-track');
-  if (!track) return;
+  const gallery = document.querySelector('.home-page .cs-gallery');
+  const track = gallery?.querySelector('.cs-gallery-track');
+  if (!gallery || !track) return;
 
-  gsap.from(track.children, {
-    x: 40,
-    opacity: 0,
-    stagger: 0.06,
-    ease: 'none',
-    scrollTrigger: {
-      trigger: track,
-      start: 'top 92%',
-      end: 'top 55%',
-      scrub: 1.1,
-    },
-  });
+  gallery.classList.add('is-gallery-ready');
+
+  gsap.fromTo(track,
+    { opacity: 0, y: 16 },
+    {
+      opacity: 1,
+      y: 0,
+      duration: 0.9,
+      ease: 'power2.out',
+      scrollTrigger: {
+        trigger: gallery,
+        start: 'top 90%',
+        once: true,
+      },
+    }
+  );
 }
 
 function initHomeStats() {
