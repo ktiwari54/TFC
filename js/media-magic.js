@@ -29,7 +29,9 @@
 
     window.addEventListener('load', () => {
       fixStuckMedia();
-      if (typeof ScrollTrigger !== 'undefined') ScrollTrigger.refresh();
+      if (typeof ScrollTrigger !== 'undefined' && !document.body.classList.contains('home-page')) {
+        ScrollTrigger.refresh();
+      }
       setTimeout(fixStuckMedia, 400);
     });
   });

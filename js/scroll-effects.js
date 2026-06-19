@@ -23,7 +23,9 @@
         bindLenisScrollTrigger(lenis);
       }
 
-      initParallax(prefs);
+      if (!document.body.classList.contains('home-page')) {
+        initParallax(prefs);
+      }
 
       if (document.body.dataset.page === 'home' && !document.body.classList.contains('home-page') && !prefs.reduced) {
         initWeddingHallScroll(prefs);
@@ -47,14 +49,13 @@
 
     const isHome = document.body.classList.contains('home-page');
     const lenis = new Lenis({
-      lerp: isHome ? 0.05 : 0.08,
-      duration: isHome ? 2 : 1.25,
-      wheelMultiplier: isHome ? 0.72 : 0.85,
+      lerp: isHome ? 0.085 : 0.08,
+      duration: isHome ? 1.35 : 1.25,
+      wheelMultiplier: isHome ? 0.9 : 0.85,
       smoothWheel: true,
-      smoothTouch: isHome && prefs.mobile,
-      touchMultiplier: isHome ? 1.15 : 1,
+      smoothTouch: false,
+      touchMultiplier: 1,
       autoRaf: false,
-      syncTouch: isHome,
     });
 
     window.TFC_LENIS = lenis;
@@ -81,8 +82,6 @@
   }
 
   function bindLenisScrollTrigger(lenis) {
-    const isHome = document.body.classList.contains('home-page');
-
     ScrollTrigger.scrollerProxy(document.documentElement, {
       scrollTop(value) {
         if (arguments.length) {
@@ -102,14 +101,11 @@
 
     lenis.on('scroll', ScrollTrigger.update);
 
-    gsap.ticker.lagSmoothing(0);
-    gsap.ticker.add((time) => {
-      lenis.raf(time * 1000);
-    });
-
-    if (isHome) {
-      ScrollTrigger.defaults({ scrub: 1.2 });
+    function raf(time) {
+      lenis.raf(time);
+      requestAnimationFrame(raf);
     }
+    requestAnimationFrame(raf);
 
     ScrollTrigger.addEventListener('refresh', () => lenis.resize());
   }

@@ -140,7 +140,7 @@
       section.appendChild(bar);
     }
 
-    if (header) {
+    if (header && !isHome) {
       gsap.from(header.children.length ? header.children : header, {
         y: 50,
         opacity: 0,

@@ -52,23 +52,69 @@
   --home-deep: #070b14;
 }
 
-body.home-dream-scroll .home-experience > section,
-body.home-dream-scroll .home-page .main_content > section {
-  backface-visibility: hidden;
-  transform: translateZ(0);
+/* ── Lite scroll mode: CSS reveals, no scroll-scrub JS ── */
+body.home-scroll-lite .home-mesh,
+body.home-scroll-lite .home-grain {
+  position: absolute;
+  inset: 0;
 }
 
-body.home-dream-scroll .home-chapter,
-body.home-dream-scroll .home-scroll,
-body.home-dream-scroll .lottie-section {
-  will-change: transform, opacity;
+body.home-scroll-lite .home-stars {
+  position: absolute;
+  inset: 0;
 }
 
-body.home-dream-scroll .home-mesh,
-body.home-dream-scroll .home-grain,
-body.home-dream-scroll .home-stars {
-  transform: translateZ(0);
-  contain: strict;
+body.home-scroll-lite .home-reveal:not(.is-revealed) {
+  opacity: 0;
+  transform: translate3d(0, 28px, 0);
+}
+
+body.home-scroll-lite .home-reveal.is-revealed,
+body.home-scroll-lite .home-scroll-reveal.is-revealed {
+  opacity: 1;
+  transform: translate3d(0, 0, 0);
+}
+
+body.home-scroll-lite .home-reveal,
+body.home-scroll-lite .home-scroll-reveal {
+  transition:
+    opacity 0.85s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.85s cubic-bezier(0.22, 1, 0.36, 1);
+  will-change: auto;
+}
+
+body.home-scroll-lite .home-scroll--chapter1,
+body.home-scroll-lite .home-scroll--chapter2 {
+  opacity: 1;
+  transform: none;
+  clip-path: none;
+}
+
+body.home-scroll-lite .home-chapter-head .home-chapter-num,
+body.home-scroll-lite .home-chapter-head .home-chapter-title,
+body.home-scroll-lite .home-chapter-head .home-chapter-text,
+body.home-scroll-lite .home-section-head > * {
+  transition:
+    opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+body.home-scroll-lite .home-chapter-head:not(.is-revealed) > *,
+body.home-scroll-lite .home-section-head:not(.is-revealed) > * {
+  opacity: 0;
+  transform: translate3d(0, 18px, 0);
+}
+
+body.home-scroll-lite .home-chapter-head.is-revealed > *,
+body.home-scroll-lite .home-section-head.is-revealed > * {
+  opacity: 1;
+  transform: translate3d(0, 0, 0);
+}
+
+body.home-reveal-all .home-reveal,
+body.home-reveal-all .home-scroll-reveal {
+  opacity: 1 !important;
+  transform: none !important;
 }
 
 .home-mesh {
