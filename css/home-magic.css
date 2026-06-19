@@ -52,6 +52,25 @@
   --home-deep: #070b14;
 }
 
+body.home-dream-scroll .home-experience > section,
+body.home-dream-scroll .home-page .main_content > section {
+  backface-visibility: hidden;
+  transform: translateZ(0);
+}
+
+body.home-dream-scroll .home-chapter,
+body.home-dream-scroll .home-scroll,
+body.home-dream-scroll .lottie-section {
+  will-change: transform, opacity;
+}
+
+body.home-dream-scroll .home-mesh,
+body.home-dream-scroll .home-grain,
+body.home-dream-scroll .home-stars {
+  transform: translateZ(0);
+  contain: strict;
+}
+
 .home-mesh {
   position: fixed;
   inset: 0;
