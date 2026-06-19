@@ -1,26 +1,42 @@
-/* Home — smooth scroll first, light reveals (no scrub) */
+/* Home — scroll unroll + typewriter chapters, light reveals elsewhere */
 let homeIsMobile = false;
 
 document.addEventListener('DOMContentLoaded', () => {
   if (!document.body.classList.contains('home-page')) return;
+
+  homeIsMobile = window.matchMedia('(max-width: 991px)').matches;
+
   if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
     document.body.classList.add('home-scroll-lite', 'home-reveal-all');
     initHomeChapterStatic();
+    initHomeImages();
     return;
   }
 
-  homeIsMobile = window.matchMedia('(max-width: 991px)').matches;
+  if (typeof gsap === 'undefined' || typeof ScrollTrigger === 'undefined') {
+    document.body.classList.add('home-scroll-lite', 'home-reveal-all');
+    initHomeChapterStatic();
+    initHomeImages();
+    return;
+  }
+
   document.body.classList.add('home-scroll-lite');
+
+  gsap.registerPlugin(ScrollTrigger);
+  ScrollTrigger.config({ limitCallbacks: true });
 
   initHomeStars();
   initHomeHero();
-  initHomeChapterStatic();
-  initHomeRevealObserver();
+  initChapterOneScroll();
+  initChapterTwoScroll();
   initHomeGallery();
   initHomeDreamFilms();
-  initHomeTabFlip();
+  initHomeRevealObserver();
   initHomeHoverCards();
+  initHomeTabFlip();
   initHomeImages();
+
+  requestAnimationFrame(() => ScrollTrigger.refresh());
 });
 
 function initHomeTabFlip() {
@@ -29,11 +45,9 @@ function initHomeTabFlip() {
 
   nav.querySelectorAll('.cs-tab-btn').forEach((btn) => {
     btn.addEventListener('click', () => {
-      const panel = document.querySelector('#chapter-two .cs-tab-panel.active');
-      if (!panel) return;
-      panel.querySelectorAll('.home-typewriter').forEach((el) => {
-        el.textContent = el.dataset.typewriter || '';
-        el.classList.remove('is-typing');
+      requestAnimationFrame(() => {
+        const panel = document.querySelector('#chapter-two .cs-tab-panel.active');
+        if (panel) window.chapterTwoTypePanel?.(panel);
       });
     });
   });
@@ -102,6 +116,191 @@ function initHomeChapterStatic() {
   });
 }
 
+function initChapterScroll(scroll, options = {}) {
+  const {
+    onUnrolled,
+    reveals = [],
+    prepareTypewriters,
+  } = options;
+
+  const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  if (reduced) {
+    scroll.querySelectorAll('.home-typewriter').forEach((el) => {
+      const text = el.dataset.typewriter;
+      if (text) el.textContent = text;
+    });
+    reveals.forEach((el) => { el.style.opacity = '1'; });
+    gsap.set(scroll, { scaleY: 1, rotateX: 0, opacity: 1, clipPath: 'inset(0% 0% 0% 0%)' });
+    if (onUnrolled) onUnrolled();
+    return;
+  }
+
+  if (prepareTypewriters) prepareTypewriters();
+  if (reveals.length) gsap.set(reveals, { opacity: 0, y: 14 });
+
+  gsap.set(scroll, {
+    scaleY: 0.04,
+    rotateX: 26,
+    opacity: 0.35,
+    clipPath: 'inset(0% 0% 100% 0%)',
+    transformOrigin: 'top center',
+    transformPerspective: 1100,
+  });
+
+  const tl = gsap.timeline({
+    scrollTrigger: {
+      trigger: scroll,
+      start: 'top 86%',
+      toggleActions: 'play none none none',
+    },
+  });
+
+  tl.to(scroll, {
+    scaleY: 1,
+    rotateX: 0,
+    opacity: 1,
+    clipPath: 'inset(0% 0% 0% 0%)',
+    duration: 1.35,
+    ease: 'power2.inOut',
+  });
+
+  tl.call(() => {
+    if (onUnrolled) onUnrolled();
+  }, null, '+=0.15');
+}
+
+function prepareTypewriters(root, clearAll = true) {
+  const panels = root.querySelectorAll('.cs-tab-panel');
+  const scope = panels.length ? panels : [root];
+
+  scope.forEach((panel) => {
+    const isActive = !panel.classList.contains('cs-tab-panel') || panel.classList.contains('active');
+    panel.querySelectorAll('.home-typewriter').forEach((el) => {
+      if (clearAll || isActive) {
+        el.textContent = '';
+        el.classList.remove('is-typing');
+        el.setAttribute('aria-label', el.dataset.typewriter || '');
+      }
+    });
+  });
+}
+
+function revealScrollExtras(reveals) {
+  if (!reveals.length) return;
+  gsap.to(reveals, {
+    opacity: 1,
+    y: 0,
+    duration: 0.55,
+    stagger: 0.12,
+    ease: 'power2.out',
+  });
+}
+
+function initChapterOneScroll() {
+  const section = document.getElementById('discover');
+  const scroll = section?.querySelector('.home-scroll--chapter1');
+  if (!section || !scroll) return;
+
+  const typeEls = scroll.querySelectorAll('.home-typewriter');
+  const reveals = Array.from(scroll.querySelectorAll('.home-scroll-reveal'));
+
+  initChapterScroll(scroll, {
+    prepareTypewriters: () => {
+      typeEls.forEach((el) => {
+        el.textContent = '';
+        el.classList.remove('is-typing');
+        el.setAttribute('aria-label', el.dataset.typewriter || '');
+      });
+      if (reveals.length) gsap.set(reveals, { opacity: 0, y: 14 });
+    },
+    onUnrolled: () => {
+      runTypewriterSequence(typeEls, () => revealScrollExtras(reveals));
+    },
+  });
+}
+
+function initChapterTwoScroll() {
+  const section = document.getElementById('chapter-two');
+  const scroll = section?.querySelector('.home-scroll--chapter2');
+  if (!section || !scroll) return;
+
+  const tabNav = scroll.querySelector('.cs-tab-nav');
+  let scrollOpened = false;
+  let typeGen = 0;
+
+  function typePanel(panel) {
+    if (!panel) return;
+    typeGen += 1;
+    const gen = typeGen;
+
+    prepareTypewriters(panel, false);
+    const typeEls = panel.querySelectorAll('.home-typewriter');
+    runTypewriterSequence(typeEls, () => {}, () => gen === typeGen);
+  }
+
+  window.chapterTwoTypePanel = (panel) => {
+    if (!scrollOpened) return;
+    typePanel(panel);
+  };
+
+  initChapterScroll(scroll, {
+    reveals: tabNav ? [tabNav] : [],
+    prepareTypewriters: () => prepareTypewriters(scroll),
+    onUnrolled: () => {
+      scrollOpened = true;
+      revealScrollExtras(tabNav ? [tabNav] : []);
+      const active = section.querySelector('.cs-tab-panel.active');
+      if (active) typePanel(active);
+    },
+  });
+}
+
+function runTypewriterSequence(elements, onComplete, shouldContinue) {
+  const list = Array.from(elements);
+  let index = 0;
+  const canContinue = shouldContinue || (() => true);
+
+  function next() {
+    if (!canContinue()) return;
+    if (index >= list.length) {
+      if (onComplete) onComplete();
+      return;
+    }
+    const el = list[index++];
+    typewriterEl(el, next, canContinue);
+  }
+
+  next();
+}
+
+function typewriterEl(el, onComplete, shouldContinue = () => true) {
+  const full = el.dataset.typewriter || '';
+  const speed = parseInt(el.dataset.typeSpeed || '30', 10);
+  const delay = parseInt(el.dataset.typeDelay || '0', 10);
+  let i = 0;
+
+  el.textContent = '';
+  el.classList.add('is-typing');
+
+  const tick = () => {
+    if (!shouldContinue()) {
+      el.classList.remove('is-typing');
+      return;
+    }
+    if (i > full.length) {
+      el.classList.remove('is-typing');
+      if (onComplete) onComplete();
+      return;
+    }
+    el.textContent = full.slice(0, i);
+    i += 1;
+    setTimeout(tick, i === 1 ? delay : speed);
+  };
+
+  tick();
+}
+
 function initHomeRevealObserver() {
   const targets = document.querySelectorAll(`
     .home-experience > section,
@@ -135,7 +334,7 @@ function initHomeRevealObserver() {
     if (el.classList.contains('shell-top-bar')) return;
     if (el.classList.contains('section-hero-banner')) return;
     if (el.classList.contains('dream-films')) return;
-    if (el.id === 'hero' || el.id === 'films') return;
+    if (el.id === 'hero' || el.id === 'films' || el.id === 'discover' || el.id === 'chapter-two') return;
     el.classList.add('home-reveal');
     observer.observe(el);
   });

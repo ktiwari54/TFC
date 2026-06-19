@@ -83,11 +83,11 @@ body.home-scroll-lite .home-scroll-reveal {
   will-change: auto;
 }
 
-body.home-scroll-lite .home-scroll--chapter1,
-body.home-scroll-lite .home-scroll--chapter2 {
-  opacity: 1;
-  transform: none;
-  clip-path: none;
+body.home-reveal-all .home-scroll--chapter1,
+body.home-reveal-all .home-scroll--chapter2 {
+  opacity: 1 !important;
+  transform: none !important;
+  clip-path: none !important;
 }
 
 body.home-scroll-lite .home-chapter-head .home-chapter-num,
