@@ -73,10 +73,12 @@ async function checkPassword(pw) {
   if (!pw) return false;
 
   // Try DB users first
-  const { data: users } = await supabase
+  const { data: users, error: dbErr } = await supabase
     .from('admin_users')
     .select('password_hash')
     .limit(10);
+
+  if (dbErr) console.error('[auth] DB error:', dbErr.message);
 
   if (users && users.length > 0) {
     for (const user of users) {
