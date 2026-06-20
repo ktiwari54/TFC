@@ -3,6 +3,10 @@
   "cleanUrls": true,
   "trailingSlash": false,
   "rewrites": [
+    { "source": "/api/login", "destination": "/api/login.js" },
+    { "source": "/api/session", "destination": "/api/session.js" },
+    { "source": "/api/content", "destination": "/api/content.js" },
+    { "source": "/api/upload", "destination": "/api/upload.js" },
     { "source": "/admin", "destination": "/admin/index.html" }
   ],
   "headers": [
