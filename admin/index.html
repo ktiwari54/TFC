@@ -2,11 +2,136 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta http-equiv="refresh" content="0;url=/?edit=1">
-  <title>Redirecting to Live Editor…</title>
-  <script>location.replace('/?edit=1');</script>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TFC CMS — Admin</title>
+  <link rel="icon" href="../images/tfc-logo.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="admin.css">
 </head>
-<body>
-  <p>Opening live editor… <a href="/?edit=1">Click here</a> if not redirected.</p>
+<body class="cms-admin">
+
+  <!-- Login overlay -->
+  <div class="cms-login" id="cmsLogin">
+    <div class="cms-login-card">
+      <img src="../images/tfc-logo.svg" alt="TFC" class="cms-login-logo">
+      <h1>TFC Admin</h1>
+      <p>Sign in to manage your website</p>
+      <form id="loginForm">
+        <div class="cms-field">
+          <label for="loginPwd">Password</label>
+          <input type="password" id="loginPwd" placeholder="Enter password" autocomplete="current-password">
+        </div>
+        <button type="submit" class="cms-btn cms-btn--primary" id="loginBtn">Sign In</button>
+        <p class="cms-login-error" id="loginErr"></p>
+      </form>
+    </div>
+  </div>
+
+  <!-- Main CMS shell -->
+  <div class="cms-shell" id="cmsShell" hidden>
+
+    <!-- Sidebar -->
+    <aside class="cms-sidebar" id="cmsSidebar">
+      <div class="cms-sidebar-head">
+        <img src="../images/tfc-logo.svg" alt="TFC" class="cms-sidebar-logo">
+        <div>
+          <div class="cms-sidebar-brand">TFC CMS</div>
+          <div class="cms-sidebar-sub">Content Manager</div>
+        </div>
+      </div>
+
+      <div class="cms-sidebar-search">
+        <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="8.5" cy="8.5" r="5"/><path d="M13 13l3.5 3.5"/></svg>
+        <input type="search" id="pageSearch" placeholder="Search pages…" autocomplete="off">
+      </div>
+
+      <nav class="cms-nav" id="cmsNav">
+        <div class="cms-nav-group">
+          <div class="cms-nav-label">Main Pages</div>
+          <ul id="mainPageList"></ul>
+        </div>
+        <div class="cms-nav-group" id="filmsGroup">
+          <div class="cms-nav-label cms-nav-label--toggle" id="filmsToggle">
+            <span>Films</span>
+            <span class="cms-nav-count" id="filmsCount"></span>
+            <svg class="cms-nav-chevron" viewBox="0 0 20 20" fill="currentColor"><path d="M5 8l5 5 5-5"/></svg>
+          </div>
+          <ul id="filmPageList" class="is-open"></ul>
+        </div>
+      </nav>
+
+      <div class="cms-sidebar-foot">
+        <button class="cms-btn cms-btn--ghost cms-btn--sm" id="logoutBtn">Sign out</button>
+      </div>
+    </aside>
+
+    <!-- Main area -->
+    <main class="cms-main">
+
+      <!-- Top bar -->
+      <header class="cms-topbar">
+        <div class="cms-topbar-left">
+          <button class="cms-sidebar-toggle" id="sidebarToggle" aria-label="Toggle sidebar">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12h18M3 6h18M3 18h18"/></svg>
+          </button>
+          <div class="cms-breadcrumb" id="breadPage">Select a page to preview</div>
+        </div>
+        <div class="cms-topbar-right">
+          <span class="cms-status" id="cmsStatus"></span>
+          <button class="cms-btn cms-btn--ghost cms-btn--sm" id="refreshBtn" title="Reload page" hidden>
+            <svg viewBox="0 0 20 20" fill="currentColor"><path d="M4 10a6 6 0 016-6 6 6 0 014.24 1.76L16 4v4h-4l1.42-1.42A4 4 0 106 10H4z"/></svg>
+            Reload
+          </button>
+          <button class="cms-btn cms-btn--ghost cms-btn--sm" id="openTabBtn" title="Open in new tab" hidden>
+            <svg viewBox="0 0 20 20" fill="currentColor"><path d="M11 3h6v6l-2-2-5 5-1.41-1.41 5-5L11 3zM4 5h5v2H6v7h7v-3h2v5H4V5z"/></svg>
+            New tab
+          </button>
+          <button class="cms-btn cms-btn--primary cms-btn--sm" id="editModeBtn" hidden>
+            <svg viewBox="0 0 20 20" fill="currentColor"><path d="M13.59 3l3.41 3.41-9 9H4.5v-3.5l9.09-8.91z"/></svg>
+            Edit Page
+          </button>
+        </div>
+      </header>
+
+      <!-- Welcome screen -->
+      <div class="cms-welcome" id="cmsWelcome">
+        <div class="cms-welcome-inner">
+          <img src="../images/tfc-logo.svg" alt="TFC" class="cms-welcome-logo">
+          <h2>Welcome to TFC CMS</h2>
+          <p>Select a page from the sidebar to preview and edit it.</p>
+          <div class="cms-welcome-stats">
+            <div class="cms-stat"><span id="statPages">11</span><label>Main Pages</label></div>
+            <div class="cms-stat"><span id="statFilms">102</span><label>Film Pages</label></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Preview frame -->
+      <div class="cms-preview-wrap" id="cmsPreviewWrap" hidden>
+        <div class="cms-preview-bar">
+          <div class="cms-device-btns">
+            <button class="cms-device-btn is-active" data-width="" title="Desktop">
+              <svg viewBox="0 0 20 20" fill="currentColor"><rect x="2" y="3" width="16" height="11" rx="1"/><path d="M6 17h8M10 14v3"/></svg>
+            </button>
+            <button class="cms-device-btn" data-width="768" title="Tablet">
+              <svg viewBox="0 0 20 20" fill="currentColor"><rect x="4" y="2" width="12" height="16" rx="1"/><circle cx="10" cy="16.5" r="0.8"/></svg>
+            </button>
+            <button class="cms-device-btn" data-width="390" title="Mobile">
+              <svg viewBox="0 0 20 20" fill="currentColor"><rect x="6" y="1" width="8" height="15" rx="1.5"/><circle cx="10" cy="14.5" r="0.7"/></svg>
+            </button>
+          </div>
+          <div class="cms-url-bar" id="cmsUrlBar"></div>
+          <div class="cms-edit-indicator" id="editIndicator" hidden>
+            <span class="cms-dot"></span> Editing
+          </div>
+        </div>
+        <div class="cms-frame-wrap" id="cmsFrameWrap">
+          <iframe id="cmsFrame" title="Page preview" sandbox="allow-same-origin allow-scripts allow-forms allow-popups allow-modals allow-top-navigation-by-user-activation"></iframe>
+        </div>
+      </div>
+
+    </main>
+  </div>
+
+  <script src="admin.js"></script>
 </body>
 </html>
