@@ -1,10 +1,8 @@
 /**
- * Load CMS content from /content/*.json and populate window globals.
- * Falls back to legacy JS files if fetch fails.
+ * Load CMS content from /api/content (Supabase) with fallback to static files.
  */
 (function () {
   const base = document.body?.dataset?.base || '';
-  const cacheBust = `?v=${Date.now()}`;
 
   function filmsToLegacy(data) {
     if (!data) return;
@@ -27,17 +25,31 @@
     window.TFC_CONTENT_FILMS = data;
   }
 
-  async function loadJson(path) {
-    const res = await fetch(`${base}${path}${cacheBust}`);
-    if (!res.ok) throw new Error(`Failed ${path}`);
+  async function loadFromApi(name) {
+    const res = await fetch(`${base}/api/content?file=${name}`, { credentials: 'include' });
+    if (!res.ok) throw new Error(`API ${name} ${res.status}`);
     return res.json();
+  }
+
+  async function loadFromStatic(name) {
+    const res = await fetch(`${base}content/${name}?v=${Date.now()}`);
+    if (!res.ok) throw new Error(`Static ${name} ${res.status}`);
+    return res.json();
+  }
+
+  async function loadJson(name) {
+    try {
+      return await loadFromApi(name);
+    } catch {
+      return loadFromStatic(name);
+    }
   }
 
   window.TFC_loadContent = async function TFC_loadContent() {
     try {
       const [films, homepage] = await Promise.all([
-        loadJson('content/films.json'),
-        loadJson('content/homepage.json'),
+        loadJson('films.json'),
+        loadJson('homepage.json'),
       ]);
       filmsToLegacy(films);
       window.TFC_CONTENT_HOMEPAGE = homepage;
@@ -45,7 +57,7 @@
       document.dispatchEvent(new CustomEvent('tfc:content-ready', { detail: { films, homepage } }));
       return { films, homepage };
     } catch (err) {
-      console.warn('[TFC CMS] Using legacy JS content fallback', err);
+      console.warn('[TFC CMS] Content load failed', err);
       window.TFC_CONTENT_READY = false;
       return null;
     }
