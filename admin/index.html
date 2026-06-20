@@ -8,6 +8,7 @@
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    [hidden] { display: none !important; }
     :root {
       --gold: #c9a84c; --gold2: #f0d080; --bg: #0b0b0d; --s1: #141417;
       --s2: #1c1c22; --s3: #242430; --border: rgba(255,255,255,.07);
@@ -57,7 +58,7 @@
 
     /* ── Sidebar ── */
     #sidebar {
-      width:240px; flex-shrink:0;
+      width:260px; flex-shrink:0;
       background:var(--s1); border-right:1px solid var(--border);
       display:flex; flex-direction:column; overflow:hidden;
       transition:width .25s;
