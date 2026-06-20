@@ -1,4 +1,5 @@
 const crypto = require('crypto');
+const { supabase } = require('./db');
 
 const COOKIE_NAME = 'tfc_cms_session';
 const MAX_AGE_MS = 12 * 60 * 60 * 1000;
@@ -68,6 +69,37 @@ function requireAuth(req, res) {
   return session;
 }
 
+async function checkPassword(pw) {
+  if (!pw) return false;
+
+  // Try DB users first
+  const { data: users } = await supabase
+    .from('admin_users')
+    .select('password_hash')
+    .limit(10);
+
+  if (users && users.length > 0) {
+    for (const user of users) {
+      const hash = crypto.createHash('sha256').update(pw).digest('hex');
+      const a = Buffer.from(hash);
+      const b = Buffer.from(user.password_hash);
+      if (a.length === b.length && crypto.timingSafeEqual(a, b)) return true;
+    }
+    return false;
+  }
+
+  // Fallback: env var password
+  const expected = process.env.ADMIN_PASSWORD;
+  if (!expected) return false;
+  const a = Buffer.from(pw);
+  const b = Buffer.from(expected);
+  if (a.length !== b.length) {
+    crypto.timingSafeEqual(Buffer.alloc(b.length), b);
+    return false;
+  }
+  return crypto.timingSafeEqual(a, b);
+}
+
 module.exports = {
   COOKIE_NAME,
   signToken,
@@ -76,15 +108,5 @@ module.exports = {
   setSessionCookie,
   clearSessionCookie,
   requireAuth,
-  checkPassword: (pw) => {
-    const expected = process.env.ADMIN_PASSWORD;
-    if (!pw || !expected) return false;
-    const a = Buffer.from(pw);
-    const b = Buffer.from(expected);
-    if (a.length !== b.length) {
-      crypto.timingSafeEqual(Buffer.alloc(b.length), b);
-      return false;
-    }
-    return crypto.timingSafeEqual(a, b);
-  },
+  checkPassword,
 };

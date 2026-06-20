@@ -12,7 +12,8 @@
     "backup": "node scripts/build-backup-manifest.js && powershell -ExecutionPolicy Bypass -File backup.ps1",
     "migrate:content": "node scripts/migrate-content.js",
     "dev": "node server.js",
-    "dev:cms": "node server.js"
+    "dev:cms": "node server.js",
+    "seed": "node scripts/seed-db.js"
   },
   "devDependencies": {
     "dotenv": "^17.4.2",
@@ -29,5 +30,8 @@
   "bugs": {
     "url": "https://github.com/ktiwari54/TFC/issues"
   },
-  "homepage": "https://github.com/ktiwari54/TFC#readme"
+  "homepage": "https://github.com/ktiwari54/TFC#readme",
+  "dependencies": {
+    "@supabase/supabase-js": "^2.108.2"
+  }
 }

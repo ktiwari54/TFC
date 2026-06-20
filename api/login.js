@@ -30,7 +30,7 @@ module.exports = async (req, res) => {
   let data = {};
   try { data = JSON.parse(body || '{}'); } catch { /* empty */ }
 
-  if (!checkPassword(data.password)) {
+  if (!await checkPassword(data.password)) {
     res.statusCode = 401;
     res.setHeader('Content-Type', 'application/json');
     return res.end(JSON.stringify({ error: 'Invalid password' }));

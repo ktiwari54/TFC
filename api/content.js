@@ -26,7 +26,7 @@ module.exports = async (req, res) => {
 
   if (req.method === 'GET') {
     try {
-      const data = readContent(name);
+      const data = await readContent(name);
       res.setHeader('Content-Type', 'application/json');
       res.end(JSON.stringify(data));
     } catch (e) {
