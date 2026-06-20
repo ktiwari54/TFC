@@ -15,6 +15,7 @@
     "dev:cms": "node server.js"
   },
   "devDependencies": {
+    "dotenv": "^17.4.2",
     "playwright": "^1.52.0"
   },
   "repository": {

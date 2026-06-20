@@ -1,7 +1,8 @@
 /**
  * TFC local dev server with CMS API
- * Run: ADMIN_PASSWORD=yourpass node server.js
+ * Copy .env.example to .env, fill in values, then run: node server.js
  */
+require('dotenv').config();
 const http = require('http');
 const fs = require('fs');
 const path = require('path');
