@@ -75,7 +75,7 @@ module.exports = async (req, res) => {
   }
 
   try {
-    const url = saveUpload(folder, filename, fileBuffer);
+    const url = await saveUpload(folder, filename, fileBuffer);
     res.setHeader('Content-Type', 'application/json');
     res.end(JSON.stringify({ ok: true, url }));
   } catch (e) {
