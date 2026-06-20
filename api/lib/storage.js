@@ -131,15 +131,28 @@ async function writeContent(name, data) {
   if (name === 'homepage.json') return writeHomepage(data);
 }
 
-// ---------- File uploads (unchanged — local/vercel filesystem) ----------
+// ---------- File uploads — Supabase Storage ----------
 
-function saveUpload(folder, filename, buffer) {
-  const safeName = filename.replace(/[^a-zA-Z0-9._-]/g, '_');
-  const dir = path.join(ROOT, 'uploads', folder);
-  fs.mkdirSync(dir, { recursive: true });
-  const dest = path.join(dir, safeName);
-  fs.writeFileSync(dest, buffer);
-  return `/uploads/${folder}/${safeName}`;
+async function saveUpload(folder, filename, buffer) {
+  const safeName = `${Date.now()}-${filename.replace(/[^a-zA-Z0-9._-]/g, '_')}`;
+  const storagePath = `${folder}/${safeName}`;
+  const ext = safeName.split('.').pop().toLowerCase();
+  const mime = ext === 'mp4' ? 'video/mp4'
+    : ext === 'webm' ? 'video/webm'
+    : ext === 'mov' ? 'video/quicktime'
+    : ext === 'png' ? 'image/png'
+    : ext === 'gif' ? 'image/gif'
+    : ext === 'webp' ? 'image/webp'
+    : 'image/jpeg';
+
+  const { error } = await supabase.storage
+    .from('uploads')
+    .upload(storagePath, buffer, { contentType: mime, upsert: false });
+
+  if (error) throw new Error(error.message);
+
+  const { data } = supabase.storage.from('uploads').getPublicUrl(storagePath);
+  return data.publicUrl;
 }
 
 module.exports = { readContent, writeContent, saveUpload, ALLOWED };

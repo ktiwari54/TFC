@@ -3,14 +3,14 @@
   const page = document.body.dataset.page || '';
 
   const navItems = [
-    { id: 'home', href: 'index.html', label: 'Home', icon: 'home' },
-    { id: 'films', href: 'films.html', label: 'Films', icon: 'films' },
-    { id: 'tales', href: 'tales-from-the-culture.html', label: 'Tales', icon: 'tales' },
-    { id: 'about', href: 'about-us.html', label: 'About', icon: 'about' },
-    { id: 'crew', href: 'crew.html', label: 'Crew', icon: 'crew' },
-    { id: 'workshop', href: 'workshop.html', label: 'Workshop', icon: 'workshop' },
-    { id: 'blog', href: 'blogs.html', label: 'Blog', icon: 'blog' },
-    { id: 'contact', href: 'contact.html', label: 'Contact', icon: 'contact' },
+    { id: 'home', href: '', label: 'Home', icon: 'home' },
+    { id: 'films', href: 'films', label: 'Films', icon: 'films' },
+    { id: 'tales', href: 'tales-from-the-culture', label: 'Tales', icon: 'tales' },
+    { id: 'about', href: 'about-us', label: 'About', icon: 'about' },
+    { id: 'crew', href: 'crew', label: 'Crew', icon: 'crew' },
+    { id: 'workshop', href: 'workshop', label: 'Workshop', icon: 'workshop' },
+    { id: 'blog', href: 'blogs', label: 'Blog', icon: 'blog' },
+    { id: 'contact', href: 'contact', label: 'Contact', icon: 'contact' },
   ];
 
   const icons = {
@@ -43,7 +43,7 @@
   }
 
   const headerNav = [
-    { id: 'pricing', href: 'pricing.html', label: 'Pricing' },
+    { id: 'pricing', href: 'pricing', label: 'Pricing' },
   ];
 
   function headerNavLink(item) {
@@ -53,14 +53,14 @@
 
   const shellTopBar = `
   <div class="shell-top-bar">
-    <form class="shell-search" action="${base}films-search.html" method="get" role="search">
+    <form class="shell-search" action="${base}films-search" method="get" role="search">
       <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="8.5" cy="8.5" r="5.5"/><path d="M13 13l4 4"/></svg>
       <input type="search" name="q" placeholder="Search a film here" aria-label="Search films">
     </form>
     <div class="shell-top-actions">
       ${headerNav.map(headerNavLink).join('')}
-      <a href="${base}faqs.html" class="btn is-black">FAQs</a>
-      <a href="${base}contact.html" class="btn">Enquire
+      <a href="${base}faqs" class="btn is-black">FAQs</a>
+      <a href="${base}contact" class="btn">Enquire
         <svg viewBox="0 0 14 12" fill="currentColor"><path d="M8.2 0.3L13.3 5.4C13.6 5.7 13.6 6.3 13.3 6.6L8.2 11.7C7.9 12 7.4 12 7.1 11.7C6.8 11.3 6.8 10.8 7.1 10.5L10.8 6.8H1.7C1.3 6.8 0.9 6.4 0.9 6C0.9 5.6 1.3 5.2 1.7 5.2H10.8L7.1 1.5C6.8 1.2 6.8 0.7 7.1 0.3C7.4 0 7.9 0 8.2 0.3Z"/></svg>
       </a>
     </div>
@@ -72,13 +72,13 @@
     <div class="sc-sidebar-sparkles" aria-hidden="true"></div>
     <div class="sc-sidebar-inner">
       <div class="sc-logo-wrap">
-        <a href="${base}index.html" class="sc-logo" title="TFC Films &amp; CO. — Tales From the Culture">
+        <a href="${base}" class="sc-logo" title="TFC Films &amp; CO. — Tales From the Culture">
           <img src="${base}images/tfc-logo.svg" alt="TFC — Tales From the Culture" class="sc-logo-img" width="56" height="56">
         </a>
       </div>
       <ul class="sc-nav-list">${navItems.map(navLink).join('')}</ul>
       <div class="sc-sidebar-cta">
-        <a href="${base}contact.html" class="glow-cta" aria-label="Enquire about your story">
+        <a href="${base}contact" class="glow-cta" aria-label="Enquire about your story">
           <div class="glow-cta-ring" aria-hidden="true"></div>
           <div class="glow-cta-inner">
             <h4>We'd love to<br>hear your story!</h4>
@@ -105,19 +105,19 @@
         <div class="footer-col">
           <h4>Explore</h4>
           <ul>
-            <li><a href="${base}films.html">Films</a></li>
-            <li><a href="${base}tales-from-the-culture.html">Tales From the Culture</a></li>
-            <li><a href="${base}about-us.html">About Us</a></li>
-            <li><a href="${base}crew.html">Crew</a></li>
-            <li><a href="${base}workshop.html">Workshops</a></li>
+            <li><a href="${base}films">Films</a></li>
+            <li><a href="${base}tales-from-the-culture">Tales From the Culture</a></li>
+            <li><a href="${base}about-us">About Us</a></li>
+            <li><a href="${base}crew">Crew</a></li>
+            <li><a href="${base}workshop">Workshops</a></li>
           </ul>
         </div>
         <div class="footer-col">
           <h4>Resources</h4>
           <ul>
-            <li><a href="${base}blogs.html">Blog</a></li>
-            <li><a href="${base}faqs.html">FAQs</a></li>
-            <li><a href="${base}films-search.html">Search Films</a></li>
+            <li><a href="${base}blogs">Blog</a></li>
+            <li><a href="${base}faqs">FAQs</a></li>
+            <li><a href="${base}films-search">Search Films</a></li>
           </ul>
         </div>
         <div class="footer-col">
@@ -125,7 +125,7 @@
           <ul>
             <li><a href="mailto:hello@tfcfilms.co">hello@tfcfilms.co</a></li>
             <li><a href="tel:+919876543210">+91 98765 43210</a></li>
-            <li><a href="${base}contact.html">Enquire</a></li>
+            <li><a href="${base}contact">Enquire</a></li>
           </ul>
         </div>
       </div>

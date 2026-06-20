@@ -1,352 +1,289 @@
-const API = '/api';
-let filmsData = null;
-let homepageData = null;
-let selectedFilmIdx = 0;
-let homeTab = 'tagline';
+(function () {
+  const API = '/api';
+  const SITE = location.origin;
 
-const $ = (sel) => document.querySelector(sel);
-const esc = (s) => String(s ?? '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
-const toast = (msg, isError = false) => {
-  const el = $('#toast');
-  el.textContent = msg;
-  el.classList.toggle('is-error', isError);
-  el.classList.remove('hidden');
-  setTimeout(() => el.classList.add('hidden'), 3000);
-};
+  const MAIN_PAGES = [
+    { label: 'Home', path: '/', icon: '🏠' },
+    { label: 'Films', path: '/films', icon: '🎬' },
+    { label: 'Tales From the Culture', path: '/tales-from-the-culture', icon: '✨' },
+    { label: 'About Us', path: '/about-us', icon: '👥' },
+    { label: 'Crew', path: '/crew', icon: '🎥' },
+    { label: 'Workshop', path: '/workshop', icon: '🎓' },
+    { label: 'Blog', path: '/blogs', icon: '📝' },
+    { label: 'FAQs', path: '/faqs', icon: '❓' },
+    { label: 'Pricing', path: '/pricing', icon: '💰' },
+    { label: 'Contact', path: '/contact', icon: '📩' },
+    { label: 'Film Search', path: '/films-search', icon: '🔍' },
+  ];
 
-async function api(path, opts = {}) {
-  const res = await fetch(`${API}${path}`, { credentials: 'include', ...opts });
-  const data = await res.json().catch(() => ({}));
-  if (!res.ok) throw new Error(data.error || res.statusText);
-  return data;
-}
+  const FILM_SLUGS = [
+    'a-walk-to-remember---ruchi-arsh','aashi-vedant','aayush-suman','aditi-jay',
+    'aditi-siddharth','aisha-mustafa','aishwarya-avaneesh','akansha-avinay',
+    'akshima-kush','all-you-need-is-love','alvira-saad','amrita-navraj',
+    'amy-armaan','anisha-amit','anita-colm','anjali-keshav','anjena-vick',
+    'ankush-chinmaya','antara-mohit','anushka-virat','apoorva-kshitij',
+    'arpita-kunal','arya-federico','aslesha-sushant','ayushi-shitiz',
+    'bipasha-karan','darshinee-vishal','deepika-ranveer','dhrisha-arun',
+    'dia-vaibhav','dia-vaibhav-3','divine-intervention','entwined','faith',
+    'faiz-fajr','gayatri-vallabh','gopalika-dhruv','gurveen-jasmin','heartbeats',
+    'ishita-danny','ivy-raphael','jasprit-and-sanjana','kamakshi-justin',
+    'kanika-ritik','karishma-namir','kasha-ever-after','katrina-vicky',
+    'kiara-sidharth','leena-chirag','mahek-jay','mallika-rahul','manal-nadim',
+    'mausam-piyush','meera-meeraj','milan-sai-suraj','moksha-aamir','monsoon-love',
+    'natasha-varun','nayanthara-vignesh','nikita-varun','nikki-vishal','nurture',
+    'payal-dhruveer','pernia-sahil','poojitha-harish','prerna-innayat','priya-akshay',
+    'pv-sindhu-datta','radhika-anant','radhika-yashovardhan','rajkumar-patralekha',
+    'rakul-jackky','renu-shivam','riccha-andrew','ridhi-raj','riya-parth',
+    'roma-jaskaran','rukmani-arun','saanchi-shahaan','sabina-steve','sana-sameer',
+    'sanaya-amir','saumitra-sharmin','shaana-uraaz','sheena-jay','shibani-farhan',
+    'shilpa-deepak','shloka-akash','simran-vishal','sneha-navak','sriharshini-sai-teja',
+    'sumedha-harsh','tanisha-sardin','tanishka-randhir','the-inseparables','tina-madhav',
+    'tuisha-gaurav','varsha-harshit','varsha-saravana','vipasha-cj','yashraj-alpana','zana-james'
+  ];
 
-async function checkAuth() {
-  try {
-    const { authed } = await api('/session');
-    if (authed) {
-      showApp();
-      await loadAll();
-    } else {
-      showLogin();
+  function slugToLabel(slug) {
+    return slug.replace(/---/g, ' & ').replace(/-/g, ' ')
+      .replace(/\b\w/g, c => c.toUpperCase());
+  }
+
+  // State
+  let currentPath = null;
+  let editMode = false;
+  let deviceWidth = '';
+
+  // Elements
+  const loginEl = document.getElementById('cmsLogin');
+  const shellEl = document.getElementById('cmsShell');
+  const loginForm = document.getElementById('loginForm');
+  const loginPwd = document.getElementById('loginPwd');
+  const loginBtn = document.getElementById('loginBtn');
+  const loginErr = document.getElementById('loginErr');
+  const logoutBtn = document.getElementById('logoutBtn');
+  const mainList = document.getElementById('mainPageList');
+  const filmList = document.getElementById('filmPageList');
+  const filmsCount = document.getElementById('filmsCount');
+  const filmsToggle = document.getElementById('filmsToggle');
+  const pageSearch = document.getElementById('pageSearch');
+  const breadPage = document.getElementById('breadPage');
+  const editModeBtn = document.getElementById('editModeBtn');
+  const openTabBtn = document.getElementById('openTabBtn');
+  const refreshBtn = document.getElementById('refreshBtn');
+  const cmsFrame = document.getElementById('cmsFrame');
+  const cmsFrameWrap = document.getElementById('cmsFrameWrap');
+  const cmsWelcome = document.getElementById('cmsWelcome');
+  const cmsPreviewWrap = document.getElementById('cmsPreviewWrap');
+  const cmsUrlBar = document.getElementById('cmsUrlBar');
+  const editIndicator = document.getElementById('editIndicator');
+  const cmsStatus = document.getElementById('cmsStatus');
+  const sidebarToggle = document.getElementById('sidebarToggle');
+
+  // ── Auth ──────────────────────────────────────────────────────
+
+  async function checkSession() {
+    try {
+      const res = await fetch(`${API}/session`, { credentials: 'include' });
+      const d = await res.json();
+      return d.authed;
+    } catch { return false; }
+  }
+
+  async function doLogin(pwd) {
+    loginBtn.disabled = true;
+    loginBtn.textContent = 'Signing in…';
+    loginErr.textContent = '';
+    try {
+      const res = await fetch(`${API}/login`, {
+        method: 'POST', credentials: 'include',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ password: pwd }),
+      });
+      const d = await res.json();
+      if (!res.ok) throw new Error(d.error || 'Login failed');
+      showShell();
+    } catch (e) {
+      loginErr.textContent = e.message;
+      loginBtn.disabled = false;
+      loginBtn.textContent = 'Sign In';
     }
-  } catch {
-    showLogin();
   }
-}
 
-function showLogin() {
-  $('#loginView').classList.remove('hidden');
-  $('#appView').classList.add('hidden');
-}
+  async function doLogout() {
+    await fetch(`${API}/logout`, { method: 'POST', credentials: 'include' }).catch(() => {});
+    location.reload();
+  }
 
-function showApp() {
-  $('#loginView').classList.add('hidden');
-  $('#appView').classList.remove('hidden');
-}
+  // ── Shell ─────────────────────────────────────────────────────
 
-async function loadAll() {
-  [filmsData, homepageData] = await Promise.all([
-    api('/content?file=films.json'),
-    api('/content?file=homepage.json'),
-  ]);
-  renderFilmList();
-  renderFilmEditor();
-  renderHomeEditor();
-}
+  function showShell() {
+    loginEl.remove();
+    shellEl.hidden = false;
+    buildNav();
+  }
 
-$('#loginForm').addEventListener('submit', async (e) => {
-  e.preventDefault();
-  const password = $('#password').value;
-  try {
-    await api('/login', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ password }),
+  // ── Navigation ────────────────────────────────────────────────
+
+  function buildNav() {
+    // Main pages
+    mainList.innerHTML = '';
+    MAIN_PAGES.forEach(pg => {
+      const li = document.createElement('li');
+      li.className = 'cms-nav-item';
+      const a = document.createElement('a');
+      a.href = '#';
+      a.dataset.path = pg.path;
+      a.innerHTML = `<span>${pg.icon}</span> ${pg.label}`;
+      a.addEventListener('click', e => { e.preventDefault(); loadPage(pg.path, pg.label); });
+      li.appendChild(a);
+      mainList.appendChild(li);
     });
-    showApp();
-    await loadAll();
-  } catch (err) {
-    $('#loginError').textContent = err.message;
-    $('#loginError').classList.remove('hidden');
+
+    // Films
+    filmsCount.textContent = FILM_SLUGS.length;
+    filmList.innerHTML = '';
+    FILM_SLUGS.forEach(slug => {
+      const label = slugToLabel(slug);
+      const li = document.createElement('li');
+      li.className = 'cms-nav-item';
+      const a = document.createElement('a');
+      a.href = '#';
+      a.dataset.path = `/films/${slug}`;
+      a.innerHTML = `<span>🎞️</span> ${label}`;
+      a.addEventListener('click', e => { e.preventDefault(); loadPage(`/films/${slug}`, label); });
+      li.appendChild(a);
+      filmList.appendChild(li);
+    });
+
+    // Films toggle
+    filmsToggle.addEventListener('click', () => {
+      filmList.classList.toggle('is-hidden');
+      filmsToggle.classList.toggle('is-collapsed');
+    });
   }
-});
 
-$('#logoutBtn').addEventListener('click', async () => {
-  await api('/login', { method: 'DELETE' }).catch(() => {});
-  showLogin();
-});
+  // ── Search ────────────────────────────────────────────────────
 
-document.querySelectorAll('.nav-btn[data-view]').forEach((btn) => {
-  btn.addEventListener('click', () => {
-    document.querySelectorAll('.nav-btn[data-view]').forEach((b) => b.classList.remove('active'));
-    btn.classList.add('active');
-    const view = btn.dataset.view;
-    $('#viewTitle').textContent = view === 'films' ? 'Films' : 'Homepage';
-    $('#filmsView').classList.toggle('hidden', view !== 'films');
-    $('#homepageView').classList.toggle('hidden', view !== 'homepage');
+  pageSearch.addEventListener('input', () => {
+    const q = pageSearch.value.trim().toLowerCase();
+    document.querySelectorAll('.cms-nav-item').forEach(li => {
+      const text = li.textContent.toLowerCase();
+      li.hidden = q && !text.includes(q);
+    });
+    // Show films group if any film matches
+    if (q) {
+      filmList.classList.remove('is-hidden');
+      filmsToggle.classList.remove('is-collapsed');
+    }
   });
-});
 
-function renderFilmList() {
-  const list = $('#filmList');
-  list.innerHTML = filmsData.allFilms.map((f, i) => `
-    <button class="film-item${i === selectedFilmIdx ? ' active' : ''}" data-idx="${i}">
-      ${esc(f.displayName || f.title)}
-    </button>`).join('');
-  list.querySelectorAll('.film-item').forEach((btn) => {
+  // ── Load page ─────────────────────────────────────────────────
+
+  function loadPage(path, label) {
+    currentPath = path;
+    editMode = false;
+
+    // Update nav active state
+    document.querySelectorAll('.cms-nav-item a').forEach(a => {
+      a.classList.toggle('is-active', a.dataset.path === path);
+    });
+
+    // Update breadcrumb
+    breadPage.innerHTML = `<strong>${label}</strong>`;
+
+    // Show buttons
+    editModeBtn.hidden = false;
+    openTabBtn.hidden = false;
+    refreshBtn.hidden = false;
+    editModeBtn.textContent = '✏️ Edit Page';
+    editModeBtn.style.background = '';
+
+    // Reset edit indicator
+    editIndicator.hidden = true;
+
+    // Show preview wrap
+    cmsWelcome.hidden = true;
+    cmsPreviewWrap.hidden = false;
+
+    // Load in iframe (preview mode)
+    const url = `${SITE}${path}`;
+    cmsUrlBar.textContent = url;
+    openTabBtn.onclick = () => window.open(url, '_blank');
+    cmsFrame.src = url;
+    setStatus('Loading…');
+    cmsFrame.onload = () => setStatus('');
+  }
+
+  // ── Edit mode ─────────────────────────────────────────────────
+
+  editModeBtn.addEventListener('click', () => {
+    if (!currentPath) return;
+    editMode = !editMode;
+
+    if (editMode) {
+      const editUrl = `${SITE}${currentPath}?edit=1`;
+      cmsUrlBar.textContent = editUrl + ' [EDIT MODE]';
+      cmsFrame.src = editUrl;
+      editIndicator.hidden = false;
+      editModeBtn.innerHTML = '👁️ Preview';
+      editModeBtn.style.background = 'rgba(201,168,76,.2)';
+      setStatus('Edit mode — click any text, image, or video on the page');
+    } else {
+      const previewUrl = `${SITE}${currentPath}`;
+      cmsUrlBar.textContent = previewUrl;
+      cmsFrame.src = previewUrl;
+      editIndicator.hidden = true;
+      editModeBtn.innerHTML = '✏️ Edit Page';
+      editModeBtn.style.background = '';
+      setStatus('');
+    }
+  });
+
+  refreshBtn.addEventListener('click', () => {
+    if (cmsFrame.src) { cmsFrame.src = cmsFrame.src; setStatus('Reloading…'); }
+  });
+
+  // ── Device preview ────────────────────────────────────────────
+
+  document.querySelectorAll('.cms-device-btn').forEach(btn => {
     btn.addEventListener('click', () => {
-      selectedFilmIdx = Number(btn.dataset.idx);
-      renderFilmList();
-      renderFilmEditor();
+      document.querySelectorAll('.cms-device-btn').forEach(b => b.classList.remove('is-active'));
+      btn.classList.add('is-active');
+      deviceWidth = btn.dataset.width;
+      if (deviceWidth) {
+        cmsFrame.style.width = deviceWidth + 'px';
+        cmsFrameWrap.classList.add('is-device');
+      } else {
+        cmsFrame.style.width = '100%';
+        cmsFrameWrap.classList.remove('is-device');
+      }
     });
   });
-}
 
-async function uploadFile(file, folder) {
-  const fd = new FormData();
-  fd.append('file', file);
-  fd.append('folder', folder);
-  const res = await fetch(`${API}/upload`, { method: 'POST', body: fd, credentials: 'include' });
-  const data = await res.json();
-  if (!res.ok) throw new Error(data.error || 'Upload failed');
-  return data.url;
-}
+  // ── Sidebar toggle ────────────────────────────────────────────
 
-function categoryChecks(film) {
-  const cats = ['recents', 'favourites', 'classics', 'celebrities', 'international'];
-  return cats.map((c) => `
-    <label><input type="checkbox" data-cat="${c}" ${film.categories?.includes(c) ? 'checked' : ''}> ${c}</label>
-  `).join('');
-}
-
-function renderFilmEditor() {
-  const f = filmsData.allFilms[selectedFilmIdx];
-  if (!f) return;
-  const el = $('#filmEditor');
-  el.innerHTML = `
-    <h3>${esc(f.displayName || f.title)}</h3>
-    ${f.image ? `<img class="preview-img" src="${esc(f.image)}" alt="">` : ''}
-    <div class="grid-2">
-      <div>
-        <label>Display Name</label>
-        <input data-f="displayName" value="${esc(f.displayName)}">
-      </div>
-      <div>
-        <label>Title (list)</label>
-        <input data-f="title" value="${esc(f.title)}">
-      </div>
-      <div>
-        <label>Date</label>
-        <input data-f="date" value="${esc(f.date)}">
-      </div>
-      <div>
-        <label>Location</label>
-        <input data-f="location" value="${esc(f.location)}">
-      </div>
-    </div>
-    <label>Poster Image URL</label>
-    <input data-f="image" value="${esc(f.image)}">
-    <label>Upload Poster</label>
-    <input type="file" accept="image/*" id="filmPosterUpload">
-    <label>Preview Video URL</label>
-    <input data-f="previewVideo" value="${esc(f.previewVideo)}">
-    <label>Upload Preview Video</label>
-    <input type="file" accept="video/*" id="filmVideoUpload">
-    <label>Categories (homepage carousel tabs)</label>
-    <div class="checks" id="filmCats">${categoryChecks(f)}</div>
-  `;
-
-  el.querySelectorAll('[data-f]').forEach((input) => {
-    input.addEventListener('input', () => { f[input.dataset.f] = input.value; });
+  sidebarToggle.addEventListener('click', () => {
+    shellEl.classList.toggle('sidebar-collapsed');
   });
-  el.querySelectorAll('[data-cat]').forEach((cb) => {
-    cb.addEventListener('change', () => {
-      f.categories = [...el.querySelectorAll('[data-cat]:checked')].map((c) => c.dataset.cat);
-      syncCategories(f);
-    });
+
+  // ── Logout ────────────────────────────────────────────────────
+
+  logoutBtn.addEventListener('click', doLogout);
+
+  // ── Login form ────────────────────────────────────────────────
+
+  loginForm.addEventListener('submit', e => {
+    e.preventDefault();
+    if (loginPwd.value) doLogin(loginPwd.value);
   });
-  $('#filmPosterUpload')?.addEventListener('change', async (ev) => {
-    const file = ev.target.files[0];
-    if (!file) return;
-    try {
-      f.image = await uploadFile(file, 'images');
-      toast('Poster uploaded');
-      renderFilmEditor();
-    } catch (err) { toast(err.message, true); }
-  });
-  $('#filmVideoUpload')?.addEventListener('change', async (ev) => {
-    const file = ev.target.files[0];
-    if (!file) return;
-    try {
-      f.previewVideo = await uploadFile(file, 'videos');
-      toast('Video uploaded');
-      renderFilmEditor();
-    } catch (err) { toast(err.message, true); }
-  });
-}
 
-function filmToCategoryEntry(film) {
-  return {
-    slug: film.slug,
-    name: film.displayName || film.title,
-    date: film.date,
-    location: film.location,
-    image: film.image,
-    previewVideo: film.previewVideo,
-  };
-}
+  // ── Status ────────────────────────────────────────────────────
 
-function rebuildCategories() {
-  const cats = ['recents', 'favourites', 'classics', 'celebrities', 'international'];
-  filmsData.categories = {};
-  cats.forEach((c) => { filmsData.categories[c] = []; });
-  filmsData.allFilms.forEach((film) => {
-    (film.categories || []).forEach((cat) => {
-      if (!filmsData.categories[cat]) filmsData.categories[cat] = [];
-      filmsData.categories[cat].push(filmToCategoryEntry(film));
-    });
-  });
-}
+  function setStatus(msg) { cmsStatus.textContent = msg; }
 
-function syncCategories(film) {
-  Object.keys(filmsData.categories).forEach((cat) => {
-    filmsData.categories[cat] = filmsData.categories[cat].filter((x) => x.slug !== film.slug);
-  });
-  (film.categories || []).forEach((cat) => {
-    if (!filmsData.categories[cat]) filmsData.categories[cat] = [];
-    filmsData.categories[cat].push(filmToCategoryEntry(film));
-  });
-}
+  // ── Boot ─────────────────────────────────────────────────────
 
-$('#saveFilmsBtn').addEventListener('click', async () => {
-  rebuildCategories();
-  try {
-    await api('/content?file=films.json', {
-      method: 'PUT',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(filmsData),
-    });
-    toast('Films saved!');
-  } catch (err) { toast(err.message, true); }
-});
-
-document.querySelectorAll('#homeTabs .tab-btn').forEach((btn) => {
-  btn.addEventListener('click', () => {
-    document.querySelectorAll('#homeTabs .tab-btn').forEach((b) => b.classList.remove('active'));
-    btn.classList.add('active');
-    homeTab = btn.dataset.tab;
-    renderHomeEditor();
-  });
-});
-
-function renderHomeEditor() {
-  const el = $('#homeEditor');
-  const h = homepageData;
-  if (homeTab === 'tagline') {
-    el.innerHTML = `
-      <div class="panel">
-        <label>Tagline (HTML allowed for &lt;em&gt;)</label>
-        <input data-h="tagline.text" value="${esc(h.tagline?.text)}">
-      </div>`;
-  } else if (homeTab === 'hero') {
-    el.innerHTML = h.heroSlides.map((slide, i) => `
-      <div class="panel" data-slide="${i}">
-        <h3>Slide ${i + 1}</h3>
-        <div class="grid-2">
-          <div><label>Title</label><input data-s="title" value="${esc(slide.title)}"></div>
-          <div><label>Slug</label><input data-s="slug" value="${esc(slide.slug)}"></div>
-          <div><label>Location</label><input data-s="location" value="${esc(slide.location)}"></div>
-          <div><label>Date</label><input data-s="date" value="${esc(slide.date)}"></div>
-        </div>
-        <label>Description</label>
-        <textarea data-s="description">${esc(slide.description)}</textarea>
-        <label>Image URL</label>
-        <input data-s="image" value="${esc(slide.image)}">
-        <label>Video URL</label>
-        <input data-s="video" value="${esc(slide.video)}">
-      </div>`).join('');
-    el.querySelectorAll('.panel[data-slide]').forEach((panel) => {
-      const i = Number(panel.dataset.slide);
-      panel.querySelectorAll('[data-s]').forEach((input) => {
-        input.addEventListener('input', () => { h.heroSlides[i][input.dataset.s] = input.value; });
-      });
-    });
-  } else if (homeTab === 'about') {
-    const a = h.aboutTeaser || {};
-    el.innerHTML = `
-      <div class="panel">
-        <label>Kicker</label><input data-a="kicker" value="${esc(a.kicker)}">
-        <label>Title</label><input data-a="title" value="${esc(a.title)}">
-        <label>Title Accent (italic part)</label><input data-a="titleAccent" value="${esc(a.titleAccent)}">
-        <label>Body</label><textarea data-a="body">${esc(a.body)}</textarea>
-        <label>Main Image URL</label><input data-a="images.main" value="${esc(a.images?.main)}">
-        <label>Accent Image URL</label><input data-a="images.accent" value="${esc(a.images?.accent)}">
-        <label>CTA Text</label><input data-a="ctaText" value="${esc(a.ctaText)}">
-      </div>`;
-    el.querySelectorAll('[data-a]').forEach((input) => {
-      input.addEventListener('input', () => {
-        const key = input.dataset.a;
-        if (key.includes('.')) {
-          const [p, c] = key.split('.');
-          if (!h.aboutTeaser[p]) h.aboutTeaser[p] = {};
-          h.aboutTeaser[p][c] = input.value;
-        } else {
-          h.aboutTeaser[key] = input.value;
-        }
-      });
-    });
-  } else if (homeTab === 'gallery') {
-    el.innerHTML = h.gallery.map((item, i) => `
-      <div class="panel" data-g="${i}">
-        <label>Image URL</label><input data-gf="src" value="${esc(item.src)}">
-        <label>Alt text</label><input data-gf="alt" value="${esc(item.alt)}">
-        <label>Style class (tall / wide)</label><input data-gf="class" value="${esc(item.class)}">
-      </div>`).join('');
-    el.querySelectorAll('[data-g]').forEach((panel) => {
-      const i = Number(panel.dataset.g);
-      panel.querySelectorAll('[data-gf]').forEach((input) => {
-        input.addEventListener('input', () => { h.gallery[i][input.dataset.gf] = input.value; });
-      });
-    });
-  } else if (homeTab === 'stats') {
-    el.innerHTML = h.stats.map((s, i) => `
-      <div class="panel" data-st="${i}">
-        <div class="grid-2">
-          <div><label>Count</label><input data-stf="count" type="number" value="${esc(s.count)}"></div>
-          <div><label>Suffix (+)</label><input data-stf="suffix" value="${esc(s.suffix)}"></div>
-          <div><label>Label</label><input data-stf="label" value="${esc(s.label)}"></div>
-          <div><label>Description</label><input data-stf="description" value="${esc(s.description)}"></div>
-        </div>
-      </div>`).join('');
-    el.querySelectorAll('[data-st]').forEach((panel) => {
-      const i = Number(panel.dataset.st);
-      panel.querySelectorAll('[data-stf]').forEach((input) => {
-        input.addEventListener('input', () => {
-          h.stats[i][input.dataset.stf] = input.dataset.stf === 'count' ? Number(input.value) : input.value;
-        });
-      });
-    });
-  }
-
-  el.querySelectorAll('[data-h]').forEach((input) => {
-    input.addEventListener('input', () => {
-      const [a, b] = input.dataset.h.split('.');
-      if (!h[a]) h[a] = {};
-      h[a][b] = input.value;
-    });
-  });
-}
-
-$('#saveHomeBtn').addEventListener('click', async () => {
-  try {
-    await api('/content?file=homepage.json', {
-      method: 'PUT',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(homepageData),
-    });
-    toast('Homepage saved!');
-  } catch (err) { toast(err.message, true); }
-});
-
-checkAuth();
+  (async () => {
+    const authed = await checkSession();
+    if (authed) showShell();
+    else loginPwd.focus();
+  })();
+})();
