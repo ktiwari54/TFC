@@ -2,7 +2,8 @@ const { checkPassword, signToken, setSessionCookie, clearSessionCookie } = requi
 
 module.exports = async (req, res) => {
   const allowedOrigin = process.env.ALLOWED_ORIGIN || 'https://tfc-mauve.vercel.app';
-  if (req.headers.origin === allowedOrigin) {
+  const origin = req.headers.origin || "";
+  if (!origin || origin === allowedOrigin) {
     res.setHeader('Access-Control-Allow-Origin', allowedOrigin);
     res.setHeader('Access-Control-Allow-Credentials', 'true');
   }
