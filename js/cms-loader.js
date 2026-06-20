@@ -40,7 +40,7 @@
                 <svg class="eyebrow-icon" viewBox="0 0 12 7" fill="currentColor"><path d="M0 6.5V0.5L12 3.875L0 6.5Z"/></svg>
                 <span class="eyebrow" data-cms-path="heroSlides.${i}.date" data-cms-type="text">${esc(slide.date)}</span>
               </div>
-              <a href="films/${esc(slide.slug)}.html"><h1 class="hero-title" data-cms-path="heroSlides.${i}.title" data-cms-type="text">${esc(slide.title)}</h1></a>
+              <h1 class="hero-title" data-cms-path="heroSlides.${i}.title" data-cms-type="text">${esc(slide.title)}</h1>
               <p class="hero-desc" data-cms-path="heroSlides.${i}.description" data-cms-type="text">${esc(slide.description)}</p>
               <div class="hero-actions">
                 <button class="play-btn" data-video="${esc(slide.video || '')}" aria-label="Play film">
