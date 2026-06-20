@@ -39,6 +39,7 @@ module.exports = async (req, res) => {
   }
 
   if (!passwordOk) {
+    await new Promise(r => setTimeout(r, 1500)); // slow brute-force
     res.statusCode = 401;
     res.setHeader('Content-Type', 'application/json');
     return res.end(JSON.stringify({ error: 'Invalid password' }));
