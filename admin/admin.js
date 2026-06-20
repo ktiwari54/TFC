@@ -5,6 +5,7 @@ let selectedFilmIdx = 0;
 let homeTab = 'tagline';
 
 const $ = (sel) => document.querySelector(sel);
+const esc = (s) => String(s ?? '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 const toast = (msg, isError = false) => {
   const el = $('#toast');
   el.textContent = msg;
@@ -91,7 +92,7 @@ function renderFilmList() {
   const list = $('#filmList');
   list.innerHTML = filmsData.allFilms.map((f, i) => `
     <button class="film-item${i === selectedFilmIdx ? ' active' : ''}" data-idx="${i}">
-      ${f.displayName || f.title}
+      ${esc(f.displayName || f.title)}
     </button>`).join('');
   list.querySelectorAll('.film-item').forEach((btn) => {
     btn.addEventListener('click', () => {
@@ -124,32 +125,32 @@ function renderFilmEditor() {
   if (!f) return;
   const el = $('#filmEditor');
   el.innerHTML = `
-    <h3>${f.displayName || f.title}</h3>
-    ${f.image ? `<img class="preview-img" src="${f.image}" alt="">` : ''}
+    <h3>${esc(f.displayName || f.title)}</h3>
+    ${f.image ? `<img class="preview-img" src="${esc(f.image)}" alt="">` : ''}
     <div class="grid-2">
       <div>
         <label>Display Name</label>
-        <input data-f="displayName" value="${f.displayName || ''}">
+        <input data-f="displayName" value="${esc(f.displayName)}">
       </div>
       <div>
         <label>Title (list)</label>
-        <input data-f="title" value="${f.title || ''}">
+        <input data-f="title" value="${esc(f.title)}">
       </div>
       <div>
         <label>Date</label>
-        <input data-f="date" value="${f.date || ''}">
+        <input data-f="date" value="${esc(f.date)}">
       </div>
       <div>
         <label>Location</label>
-        <input data-f="location" value="${f.location || ''}">
+        <input data-f="location" value="${esc(f.location)}">
       </div>
     </div>
     <label>Poster Image URL</label>
-    <input data-f="image" value="${f.image || ''}">
+    <input data-f="image" value="${esc(f.image)}">
     <label>Upload Poster</label>
     <input type="file" accept="image/*" id="filmPosterUpload">
     <label>Preview Video URL</label>
-    <input data-f="previewVideo" value="${f.previewVideo || ''}">
+    <input data-f="previewVideo" value="${esc(f.previewVideo)}">
     <label>Upload Preview Video</label>
     <input type="file" accept="video/*" id="filmVideoUpload">
     <label>Categories (homepage carousel tabs)</label>
@@ -246,24 +247,24 @@ function renderHomeEditor() {
     el.innerHTML = `
       <div class="panel">
         <label>Tagline (HTML allowed for &lt;em&gt;)</label>
-        <input data-h="tagline.text" value="${h.tagline?.text || ''}">
+        <input data-h="tagline.text" value="${esc(h.tagline?.text)}">
       </div>`;
   } else if (homeTab === 'hero') {
     el.innerHTML = h.heroSlides.map((slide, i) => `
       <div class="panel" data-slide="${i}">
         <h3>Slide ${i + 1}</h3>
         <div class="grid-2">
-          <div><label>Title</label><input data-s="title" value="${slide.title || ''}"></div>
-          <div><label>Slug</label><input data-s="slug" value="${slide.slug || ''}"></div>
-          <div><label>Location</label><input data-s="location" value="${slide.location || ''}"></div>
-          <div><label>Date</label><input data-s="date" value="${slide.date || ''}"></div>
+          <div><label>Title</label><input data-s="title" value="${esc(slide.title)}"></div>
+          <div><label>Slug</label><input data-s="slug" value="${esc(slide.slug)}"></div>
+          <div><label>Location</label><input data-s="location" value="${esc(slide.location)}"></div>
+          <div><label>Date</label><input data-s="date" value="${esc(slide.date)}"></div>
         </div>
         <label>Description</label>
-        <textarea data-s="description">${slide.description || ''}</textarea>
+        <textarea data-s="description">${esc(slide.description)}</textarea>
         <label>Image URL</label>
-        <input data-s="image" value="${slide.image || ''}">
+        <input data-s="image" value="${esc(slide.image)}">
         <label>Video URL</label>
-        <input data-s="video" value="${slide.video || ''}">
+        <input data-s="video" value="${esc(slide.video)}">
       </div>`).join('');
     el.querySelectorAll('.panel[data-slide]').forEach((panel) => {
       const i = Number(panel.dataset.slide);
@@ -275,13 +276,13 @@ function renderHomeEditor() {
     const a = h.aboutTeaser || {};
     el.innerHTML = `
       <div class="panel">
-        <label>Kicker</label><input data-a="kicker" value="${a.kicker || ''}">
-        <label>Title</label><input data-a="title" value="${a.title || ''}">
-        <label>Title Accent (italic part)</label><input data-a="titleAccent" value="${a.titleAccent || ''}">
-        <label>Body</label><textarea data-a="body">${a.body || ''}</textarea>
-        <label>Main Image URL</label><input data-a="images.main" value="${a.images?.main || ''}">
-        <label>Accent Image URL</label><input data-a="images.accent" value="${a.images?.accent || ''}">
-        <label>CTA Text</label><input data-a="ctaText" value="${a.ctaText || ''}">
+        <label>Kicker</label><input data-a="kicker" value="${esc(a.kicker)}">
+        <label>Title</label><input data-a="title" value="${esc(a.title)}">
+        <label>Title Accent (italic part)</label><input data-a="titleAccent" value="${esc(a.titleAccent)}">
+        <label>Body</label><textarea data-a="body">${esc(a.body)}</textarea>
+        <label>Main Image URL</label><input data-a="images.main" value="${esc(a.images?.main)}">
+        <label>Accent Image URL</label><input data-a="images.accent" value="${esc(a.images?.accent)}">
+        <label>CTA Text</label><input data-a="ctaText" value="${esc(a.ctaText)}">
       </div>`;
     el.querySelectorAll('[data-a]').forEach((input) => {
       input.addEventListener('input', () => {
@@ -298,9 +299,9 @@ function renderHomeEditor() {
   } else if (homeTab === 'gallery') {
     el.innerHTML = h.gallery.map((item, i) => `
       <div class="panel" data-g="${i}">
-        <label>Image URL</label><input data-gf="src" value="${item.src || ''}">
-        <label>Alt text</label><input data-gf="alt" value="${item.alt || ''}">
-        <label>Style class (tall / wide)</label><input data-gf="class" value="${item.class || ''}">
+        <label>Image URL</label><input data-gf="src" value="${esc(item.src)}">
+        <label>Alt text</label><input data-gf="alt" value="${esc(item.alt)}">
+        <label>Style class (tall / wide)</label><input data-gf="class" value="${esc(item.class)}">
       </div>`).join('');
     el.querySelectorAll('[data-g]').forEach((panel) => {
       const i = Number(panel.dataset.g);
@@ -312,10 +313,10 @@ function renderHomeEditor() {
     el.innerHTML = h.stats.map((s, i) => `
       <div class="panel" data-st="${i}">
         <div class="grid-2">
-          <div><label>Count</label><input data-stf="count" type="number" value="${s.count}"></div>
-          <div><label>Suffix (+)</label><input data-stf="suffix" value="${s.suffix || ''}"></div>
-          <div><label>Label</label><input data-stf="label" value="${s.label || ''}"></div>
-          <div><label>Description</label><input data-stf="description" value="${s.description || ''}"></div>
+          <div><label>Count</label><input data-stf="count" type="number" value="${esc(s.count)}"></div>
+          <div><label>Suffix (+)</label><input data-stf="suffix" value="${esc(s.suffix)}"></div>
+          <div><label>Label</label><input data-stf="label" value="${esc(s.label)}"></div>
+          <div><label>Description</label><input data-stf="description" value="${esc(s.description)}"></div>
         </div>
       </div>`).join('');
     el.querySelectorAll('[data-st]').forEach((panel) => {

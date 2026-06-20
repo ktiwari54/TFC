@@ -4,7 +4,9 @@ const COOKIE_NAME = 'tfc_cms_session';
 const MAX_AGE_MS = 12 * 60 * 60 * 1000;
 
 function getSecret() {
-  return process.env.JWT_SECRET || process.env.ADMIN_PASSWORD || 'tfc-dev-secret-change-me';
+  const secret = process.env.JWT_SECRET || process.env.ADMIN_PASSWORD;
+  if (!secret) throw new Error('JWT_SECRET or ADMIN_PASSWORD must be set');
+  return secret;
 }
 
 function signToken() {
@@ -19,7 +21,7 @@ function verifyToken(token) {
   const [payload, sig] = token.split('.');
   if (!payload || !sig) return false;
   const expected = crypto.createHmac('sha256', getSecret()).update(payload).digest('base64url');
-  if (sig !== expected) return false;
+  if (!crypto.timingSafeEqual(Buffer.from(sig), Buffer.from(expected))) return false;
   try {
     const data = JSON.parse(Buffer.from(payload, 'base64url').toString());
     return data.exp && data.exp > Date.now();
@@ -74,5 +76,15 @@ module.exports = {
   setSessionCookie,
   clearSessionCookie,
   requireAuth,
-  checkPassword: (pw) => pw && pw === process.env.ADMIN_PASSWORD,
+  checkPassword: (pw) => {
+    const expected = process.env.ADMIN_PASSWORD;
+    if (!pw || !expected) return false;
+    const a = Buffer.from(pw);
+    const b = Buffer.from(expected);
+    if (a.length !== b.length) {
+      crypto.timingSafeEqual(Buffer.alloc(b.length), b);
+      return false;
+    }
+    return crypto.timingSafeEqual(a, b);
+  },
 };
