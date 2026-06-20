@@ -146,12 +146,12 @@ async function saveUpload(folder, filename, buffer) {
     : 'image/jpeg';
 
   const { error } = await supabase.storage
-    .from('uploads')
+    .from('upload')
     .upload(storagePath, buffer, { contentType: mime, upsert: false });
 
   if (error) throw new Error(error.message);
 
-  const { data } = supabase.storage.from('uploads').getPublicUrl(storagePath);
+  const { data } = supabase.storage.from('upload').getPublicUrl(storagePath);
   return data.publicUrl;
 }
 
