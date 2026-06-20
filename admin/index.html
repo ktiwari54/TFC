@@ -3,135 +3,348 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>TFC CMS — Admin</title>
+  <title>TFC Admin</title>
   <link rel="icon" href="../images/tfc-logo.svg" type="image/svg+xml">
-  <link rel="stylesheet" href="admin.css">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --gold: #c9a84c; --gold2: #f0d080; --bg: #0b0b0d; --s1: #141417;
+      --s2: #1c1c22; --s3: #242430; --border: rgba(255,255,255,.07);
+      --text: #ede8e0; --muted: #666; --danger: #e05c5c; --r: 10px;
+    }
+    html,body { height:100%; overflow:hidden; font-family:'DM Sans',system-ui,sans-serif; background:var(--bg); color:var(--text); font-size:14px; }
+
+    /* ── Login ── */
+    #loginScreen {
+      position:fixed; inset:0; display:flex; align-items:center; justify-content:center;
+      background: radial-gradient(ellipse at 60% 40%, #1a1408 0%, #0b0b0d 70%);
+      z-index:100;
+    }
+    .login-card {
+      width:380px; padding:2.5rem;
+      background: linear-gradient(145deg, #18180f, #0f0f12);
+      border:1px solid rgba(201,168,76,.2); border-radius:20px;
+      box-shadow: 0 0 80px rgba(201,168,76,.07), 0 24px 60px rgba(0,0,0,.6);
+    }
+    .login-logo { width:52px; height:52px; display:block; margin:0 auto 1.2rem; }
+    .login-card h1 { text-align:center; font-size:1.5rem; font-weight:700; margin-bottom:.3rem; }
+    .login-card p  { text-align:center; color:var(--muted); font-size:.875rem; margin-bottom:2rem; }
+    .field { margin-bottom:1rem; }
+    .field label { display:block; font-size:.72rem; font-weight:600; text-transform:uppercase; letter-spacing:.06em; color:var(--muted); margin-bottom:.45rem; }
+    .field input {
+      width:100%; padding:.7rem 1rem;
+      background:rgba(255,255,255,.04); border:1px solid var(--border);
+      border-radius:8px; color:var(--text); font-family:inherit; font-size:.9rem; outline:none;
+      transition:border-color .2s, box-shadow .2s;
+    }
+    .field input:focus { border-color:var(--gold); box-shadow:0 0 0 3px rgba(201,168,76,.1); }
+    .btn-primary {
+      width:100%; padding:.75rem; margin-top:.5rem;
+      background:linear-gradient(135deg, var(--gold), #a07830);
+      border:none; border-radius:8px; color:#0b0b0d;
+      font-family:inherit; font-size:.9rem; font-weight:700;
+      cursor:pointer; transition:opacity .15s, transform .1s; letter-spacing:.02em;
+    }
+    .btn-primary:hover { opacity:.9; }
+    .btn-primary:active { transform:scale(.99); }
+    .btn-primary:disabled { opacity:.4; cursor:not-allowed; }
+    #loginErr { text-align:center; color:var(--danger); font-size:.8rem; min-height:1.1rem; margin-top:.75rem; }
+
+    /* ── Shell ── */
+    #shell { display:flex; height:100vh; overflow:hidden; }
+    #shell[hidden] { display:none; }
+
+    /* ── Sidebar ── */
+    #sidebar {
+      width:240px; flex-shrink:0;
+      background:var(--s1); border-right:1px solid var(--border);
+      display:flex; flex-direction:column; overflow:hidden;
+      transition:width .25s;
+    }
+    .shell.collapsed #sidebar { width:0; }
+    .sb-head {
+      display:flex; align-items:center; gap:.7rem;
+      padding:.85rem 1rem; border-bottom:1px solid var(--border); flex-shrink:0;
+    }
+    .sb-head img { width:32px; height:32px; }
+    .sb-brand { font-weight:700; font-size:.9rem; color:var(--gold); line-height:1.2; }
+    .sb-sub { font-size:.68rem; color:var(--muted); }
+
+    .sb-search {
+      display:flex; align-items:center; gap:.5rem;
+      padding:.55rem .85rem; border-bottom:1px solid var(--border); flex-shrink:0;
+    }
+    .sb-search svg { width:14px; height:14px; color:var(--muted); flex-shrink:0; }
+    .sb-search input { flex:1; background:none; border:none; outline:none; color:var(--text); font-family:inherit; font-size:.83rem; }
+    .sb-search input::placeholder { color:var(--muted); }
+
+    .sb-nav { flex:1; overflow-y:auto; padding:.4rem 0 1rem; }
+    .sb-nav::-webkit-scrollbar { width:3px; }
+    .sb-nav::-webkit-scrollbar-thumb { background:var(--border); border-radius:2px; }
+
+    .sb-section { margin-bottom:.1rem; }
+    .sb-section-hd {
+      display:flex; align-items:center; gap:.4rem;
+      padding:.5rem .9rem .25rem; cursor:pointer; user-select:none;
+    }
+    .sb-section-hd span { font-size:.65rem; font-weight:700; text-transform:uppercase; letter-spacing:.07em; color:var(--muted); flex:1; }
+    .sb-section-hd:hover span { color:var(--text); }
+    .sb-badge { background:var(--s3); border-radius:20px; padding:0 .4rem; font-size:.62rem; font-weight:700; color:var(--muted); }
+    .sb-chevron { width:12px; height:12px; color:var(--muted); transition:transform .2s; }
+    .sb-section.collapsed .sb-chevron { transform:rotate(-90deg); }
+    .sb-section.collapsed ul { display:none; }
+
+    .sb-nav ul { list-style:none; }
+    .sb-nav li a {
+      display:flex; align-items:center; gap:.5rem;
+      padding:.38rem .85rem; margin:0 .35rem;
+      color:var(--muted); text-decoration:none; border-radius:6px;
+      font-size:.83rem; transition:all .1s; cursor:pointer;
+    }
+    .sb-nav li a .pg-icon { font-size:.9rem; flex-shrink:0; }
+    .sb-nav li a:hover { background:var(--s2); color:var(--text); }
+    .sb-nav li a.active { background:rgba(201,168,76,.1); color:var(--gold); font-weight:600; }
+    .sb-nav li[hidden] { display:none; }
+
+    .sb-foot { padding:.75rem; border-top:1px solid var(--border); flex-shrink:0; }
+    .btn-ghost {
+      display:flex; align-items:center; justify-content:center; gap:.4rem; width:100%;
+      padding:.45rem; background:none; border:1px solid var(--border); border-radius:7px;
+      color:var(--muted); font-family:inherit; font-size:.8rem; font-weight:500; cursor:pointer;
+      transition:all .15s;
+    }
+    .btn-ghost:hover { border-color:var(--gold); color:var(--gold); background:rgba(201,168,76,.06); }
+
+    /* ── Main ── */
+    #main { flex:1; display:flex; flex-direction:column; overflow:hidden; min-width:0; }
+
+    /* ── Topbar ── */
+    #topbar {
+      height:50px; display:flex; align-items:center; justify-content:space-between;
+      padding:0 1rem; border-bottom:1px solid var(--border);
+      background:var(--s1); flex-shrink:0; gap:.5rem;
+    }
+    .tb-left { display:flex; align-items:center; gap:.6rem; min-width:0; }
+    .tb-right { display:flex; align-items:center; gap:.4rem; flex-shrink:0; }
+    .btn-icon {
+      background:none; border:none; cursor:pointer; color:var(--muted);
+      width:32px; height:32px; display:flex; align-items:center; justify-content:center;
+      border-radius:6px; transition:all .15s;
+    }
+    .btn-icon svg { width:18px; height:18px; }
+    .btn-icon:hover { background:var(--s2); color:var(--text); }
+    #breadcrumb { font-size:.85rem; color:var(--muted); overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+    #breadcrumb strong { color:var(--text); }
+    .tb-action {
+      display:inline-flex; align-items:center; gap:.35rem;
+      padding:.35rem .75rem; border-radius:7px;
+      font-family:inherit; font-size:.8rem; font-weight:600; cursor:pointer;
+      border:1px solid var(--border); background:none; color:var(--text);
+      transition:all .15s; white-space:nowrap;
+    }
+    .tb-action svg { width:13px; height:13px; }
+    .tb-action:hover { border-color:var(--gold); color:var(--gold); background:rgba(201,168,76,.06); }
+    .tb-action.primary { background:var(--gold); border-color:var(--gold); color:#0b0b0d; }
+    .tb-action.primary:hover { background:var(--gold2); border-color:var(--gold2); }
+    .tb-action[hidden] { display:none; }
+    .edit-pill {
+      display:flex; align-items:center; gap:.35rem;
+      padding:.25rem .65rem; border-radius:20px;
+      background:rgba(201,168,76,.1); border:1px solid rgba(201,168,76,.25);
+      font-size:.72rem; font-weight:600; color:var(--gold);
+    }
+    .edit-pill[hidden] { display:none; }
+    .dot { width:6px; height:6px; border-radius:50%; background:var(--gold); animation:pulse 1.5s infinite; }
+    @keyframes pulse { 0%,100%{opacity:1}50%{opacity:.3} }
+
+    /* ── Welcome ── */
+    #welcome {
+      flex:1; display:flex; align-items:center; justify-content:center; padding:2rem;
+    }
+    .welcome-inner { text-align:center; max-width:420px; }
+    .welcome-inner img { width:60px; height:60px; opacity:.5; margin-bottom:1.5rem; }
+    .welcome-inner h2 { font-size:1.4rem; font-weight:700; margin-bottom:.5rem; }
+    .welcome-inner p { color:var(--muted); margin-bottom:2rem; line-height:1.6; }
+    .stats { display:flex; gap:2.5rem; justify-content:center; }
+    .stat span { display:block; font-size:2.2rem; font-weight:800; color:var(--gold); line-height:1; }
+    .stat label { font-size:.72rem; color:var(--muted); margin-top:.3rem; display:block; }
+    .quick-links { display:flex; flex-wrap:wrap; gap:.5rem; justify-content:center; margin-top:2rem; }
+    .quick-link {
+      padding:.4rem .9rem; border-radius:20px; border:1px solid var(--border);
+      color:var(--muted); font-size:.8rem; cursor:pointer; background:none;
+      font-family:inherit; transition:all .15s;
+    }
+    .quick-link:hover { border-color:var(--gold); color:var(--gold); background:rgba(201,168,76,.06); }
+
+    /* ── Preview ── */
+    #previewWrap { flex:1; display:flex; flex-direction:column; overflow:hidden; }
+    #previewWrap[hidden] { display:none; }
+
+    .preview-bar {
+      display:flex; align-items:center; gap:.6rem;
+      padding:.45rem .85rem; background:var(--s2); border-bottom:1px solid var(--border); flex-shrink:0;
+    }
+    .dev-btns { display:flex; gap:.2rem; }
+    .dev-btn {
+      width:28px; height:28px; border-radius:6px; border:1px solid var(--border);
+      background:none; color:var(--muted); cursor:pointer; display:flex; align-items:center; justify-content:center;
+      transition:all .12s;
+    }
+    .dev-btn svg { width:14px; height:14px; }
+    .dev-btn:hover,.dev-btn.on { border-color:var(--gold); color:var(--gold); background:rgba(201,168,76,.07); }
+    .url-bar {
+      flex:1; background:var(--s1); border:1px solid var(--border); border-radius:6px;
+      padding:.28rem .7rem; font-size:.75rem; color:var(--muted); font-family:monospace;
+      overflow:hidden; text-overflow:ellipsis; white-space:nowrap;
+    }
+    .frame-wrap {
+      flex:1; overflow:auto; background:#0d0d0f;
+      display:flex; align-items:flex-start; justify-content:center;
+    }
+    .frame-wrap.device { padding:1.5rem 0; }
+    #previewFrame {
+      width:100%; height:100%; border:none; background:#fff; display:block;
+      transition:width .25s, box-shadow .25s;
+    }
+    .frame-wrap.device #previewFrame {
+      border-radius:10px; box-shadow:0 10px 50px rgba(0,0,0,.7);
+      height:calc(100vh - 50px - 46px - 3rem);
+    }
+    .frame-loader {
+      position:absolute; top:50%; left:50%; transform:translate(-50%,-50%);
+      color:var(--muted); font-size:.85rem; pointer-events:none;
+    }
+  </style>
 </head>
-<body class="cms-admin">
+<body>
 
-  <!-- Login overlay -->
-  <div class="cms-login" id="cmsLogin">
-    <div class="cms-login-card">
-      <img src="../images/tfc-logo.svg" alt="TFC" class="cms-login-logo">
-      <h1>TFC Admin</h1>
-      <p>Sign in to manage your website</p>
-      <form id="loginForm">
-        <div class="cms-field">
-          <label for="loginPwd">Password</label>
-          <input type="password" id="loginPwd" placeholder="Enter password" autocomplete="current-password">
-        </div>
-        <button type="submit" class="cms-btn cms-btn--primary" id="loginBtn">Sign In</button>
-        <p class="cms-login-error" id="loginErr"></p>
-      </form>
+<!-- Login -->
+<div id="loginScreen">
+  <div class="login-card">
+    <img src="../images/tfc-logo.svg" alt="TFC" class="login-logo">
+    <h1>TFC Admin</h1>
+    <p>Sign in to manage your website</p>
+    <form id="loginForm" autocomplete="on">
+      <div class="field">
+        <label for="pwd">Password</label>
+        <input type="password" id="pwd" name="password" placeholder="Enter your password" autocomplete="current-password" autofocus>
+      </div>
+      <button type="submit" class="btn-primary" id="loginBtn">Sign In</button>
+    </form>
+    <p id="loginErr"></p>
+  </div>
+</div>
+
+<!-- Shell -->
+<div id="shell" hidden>
+
+  <!-- Sidebar -->
+  <aside id="sidebar">
+    <div class="sb-head">
+      <img src="../images/tfc-logo.svg" alt="TFC">
+      <div>
+        <div class="sb-brand">TFC CMS</div>
+        <div class="sb-sub">Content Manager</div>
+      </div>
     </div>
-  </div>
 
-  <!-- Main CMS shell -->
-  <div class="cms-shell" id="cmsShell" hidden>
+    <div class="sb-search">
+      <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="8.5" cy="8.5" r="5"/><path d="M13 13l3.5 3.5"/></svg>
+      <input type="search" id="search" placeholder="Search pages…" autocomplete="off">
+    </div>
 
-    <!-- Sidebar -->
-    <aside class="cms-sidebar" id="cmsSidebar">
-      <div class="cms-sidebar-head">
-        <img src="../images/tfc-logo.svg" alt="TFC" class="cms-sidebar-logo">
-        <div>
-          <div class="cms-sidebar-brand">TFC CMS</div>
-          <div class="cms-sidebar-sub">Content Manager</div>
+    <nav class="sb-nav" id="nav">
+      <div class="sb-section" id="mainSection">
+        <div class="sb-section-hd" data-section="mainSection">
+          <span>Main Pages</span>
+          <svg class="sb-chevron" viewBox="0 0 20 20" fill="currentColor"><path d="M5 8l5 5 5-5"/></svg>
         </div>
+        <ul id="mainList"></ul>
       </div>
-
-      <div class="cms-sidebar-search">
-        <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="8.5" cy="8.5" r="5"/><path d="M13 13l3.5 3.5"/></svg>
-        <input type="search" id="pageSearch" placeholder="Search pages…" autocomplete="off">
-      </div>
-
-      <nav class="cms-nav" id="cmsNav">
-        <div class="cms-nav-group">
-          <div class="cms-nav-label">Main Pages</div>
-          <ul id="mainPageList"></ul>
+      <div class="sb-section" id="filmsSection">
+        <div class="sb-section-hd" data-section="filmsSection">
+          <span>Films</span>
+          <span class="sb-badge" id="filmsBadge">102</span>
+          <svg class="sb-chevron" viewBox="0 0 20 20" fill="currentColor"><path d="M5 8l5 5 5-5"/></svg>
         </div>
-        <div class="cms-nav-group" id="filmsGroup">
-          <div class="cms-nav-label cms-nav-label--toggle" id="filmsToggle">
-            <span>Films</span>
-            <span class="cms-nav-count" id="filmsCount"></span>
-            <svg class="cms-nav-chevron" viewBox="0 0 20 20" fill="currentColor"><path d="M5 8l5 5 5-5"/></svg>
-          </div>
-          <ul id="filmPageList" class="is-open"></ul>
-        </div>
-      </nav>
-
-      <div class="cms-sidebar-foot">
-        <button class="cms-btn cms-btn--ghost cms-btn--sm" id="logoutBtn">Sign out</button>
+        <ul id="filmList"></ul>
       </div>
-    </aside>
+    </nav>
 
-    <!-- Main area -->
-    <main class="cms-main">
+    <div class="sb-foot">
+      <button class="btn-ghost" id="logoutBtn">
+        <svg viewBox="0 0 20 20" fill="currentColor"><path d="M13 3h4v14h-4v-2h2V5h-2V3zm-2 3l4 4-4 4v-3H5V9h6V6z"/></svg>
+        Sign out
+      </button>
+    </div>
+  </aside>
 
-      <!-- Top bar -->
-      <header class="cms-topbar">
-        <div class="cms-topbar-left">
-          <button class="cms-sidebar-toggle" id="sidebarToggle" aria-label="Toggle sidebar">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12h18M3 6h18M3 18h18"/></svg>
+  <!-- Main -->
+  <main id="main">
+    <header id="topbar">
+      <div class="tb-left">
+        <button class="btn-icon" id="sidebarBtn" title="Toggle sidebar">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12h18M3 6h18M3 18h18"/></svg>
+        </button>
+        <div id="breadcrumb">Select a page to preview</div>
+      </div>
+      <div class="tb-right">
+        <div class="edit-pill" id="editPill" hidden><span class="dot"></span>Editing</div>
+        <button class="tb-action" id="reloadBtn" hidden title="Reload preview">
+          <svg viewBox="0 0 20 20" fill="currentColor"><path d="M4 10a6 6 0 016-6 6 6 0 014.24 1.76L16 4v4h-4l1.42-1.42A4 4 0 106 10H4z"/></svg>
+          Reload
+        </button>
+        <button class="tb-action" id="newTabBtn" hidden>
+          <svg viewBox="0 0 20 20" fill="currentColor"><path d="M11 3h6v6l-2-2-5 5-1.41-1.41 5-5L11 3zM4 5h5v2H6v7h7v-3h2v5H4V5z"/></svg>
+          Open tab
+        </button>
+        <button class="tb-action primary" id="editBtn" hidden>
+          <svg viewBox="0 0 20 20" fill="currentColor"><path d="M13.59 3l3.41 3.41-9 9H4.5v-3.5l9.09-8.91z"/></svg>
+          Edit Page
+        </button>
+      </div>
+    </header>
+
+    <!-- Welcome -->
+    <div id="welcome">
+      <div class="welcome-inner">
+        <img src="../images/tfc-logo.svg" alt="">
+        <h2>Welcome to TFC Admin</h2>
+        <p>Browse, preview, and edit every page on your website from one place.</p>
+        <div class="stats">
+          <div class="stat"><span>11</span><label>Main Pages</label></div>
+          <div class="stat"><span>102</span><label>Film Pages</label></div>
+        </div>
+        <div class="quick-links" id="quickLinks"></div>
+      </div>
+    </div>
+
+    <!-- Preview -->
+    <div id="previewWrap" hidden>
+      <div class="preview-bar">
+        <div class="dev-btns">
+          <button class="dev-btn on" data-w="" title="Desktop">
+            <svg viewBox="0 0 20 20" fill="currentColor"><rect x="2" y="3" width="16" height="11" rx="1"/><path d="M6 17h8M10 14v3"/></svg>
           </button>
-          <div class="cms-breadcrumb" id="breadPage">Select a page to preview</div>
-        </div>
-        <div class="cms-topbar-right">
-          <span class="cms-status" id="cmsStatus"></span>
-          <button class="cms-btn cms-btn--ghost cms-btn--sm" id="refreshBtn" title="Reload page" hidden>
-            <svg viewBox="0 0 20 20" fill="currentColor"><path d="M4 10a6 6 0 016-6 6 6 0 014.24 1.76L16 4v4h-4l1.42-1.42A4 4 0 106 10H4z"/></svg>
-            Reload
+          <button class="dev-btn" data-w="768" title="Tablet">
+            <svg viewBox="0 0 20 20" fill="currentColor"><rect x="4" y="2" width="12" height="16" rx="1"/><circle cx="10" cy="16.5" r=".8"/></svg>
           </button>
-          <button class="cms-btn cms-btn--ghost cms-btn--sm" id="openTabBtn" title="Open in new tab" hidden>
-            <svg viewBox="0 0 20 20" fill="currentColor"><path d="M11 3h6v6l-2-2-5 5-1.41-1.41 5-5L11 3zM4 5h5v2H6v7h7v-3h2v5H4V5z"/></svg>
-            New tab
-          </button>
-          <button class="cms-btn cms-btn--primary cms-btn--sm" id="editModeBtn" hidden>
-            <svg viewBox="0 0 20 20" fill="currentColor"><path d="M13.59 3l3.41 3.41-9 9H4.5v-3.5l9.09-8.91z"/></svg>
-            Edit Page
+          <button class="dev-btn" data-w="390" title="Mobile">
+            <svg viewBox="0 0 20 20" fill="currentColor"><rect x="6" y="1" width="8" height="15" rx="1.5"/><circle cx="10" cy="14.5" r=".7"/></svg>
           </button>
         </div>
-      </header>
-
-      <!-- Welcome screen -->
-      <div class="cms-welcome" id="cmsWelcome">
-        <div class="cms-welcome-inner">
-          <img src="../images/tfc-logo.svg" alt="TFC" class="cms-welcome-logo">
-          <h2>Welcome to TFC CMS</h2>
-          <p>Select a page from the sidebar to preview and edit it.</p>
-          <div class="cms-welcome-stats">
-            <div class="cms-stat"><span id="statPages">11</span><label>Main Pages</label></div>
-            <div class="cms-stat"><span id="statFilms">102</span><label>Film Pages</label></div>
-          </div>
-        </div>
+        <div class="url-bar" id="urlBar"></div>
       </div>
-
-      <!-- Preview frame -->
-      <div class="cms-preview-wrap" id="cmsPreviewWrap" hidden>
-        <div class="cms-preview-bar">
-          <div class="cms-device-btns">
-            <button class="cms-device-btn is-active" data-width="" title="Desktop">
-              <svg viewBox="0 0 20 20" fill="currentColor"><rect x="2" y="3" width="16" height="11" rx="1"/><path d="M6 17h8M10 14v3"/></svg>
-            </button>
-            <button class="cms-device-btn" data-width="768" title="Tablet">
-              <svg viewBox="0 0 20 20" fill="currentColor"><rect x="4" y="2" width="12" height="16" rx="1"/><circle cx="10" cy="16.5" r="0.8"/></svg>
-            </button>
-            <button class="cms-device-btn" data-width="390" title="Mobile">
-              <svg viewBox="0 0 20 20" fill="currentColor"><rect x="6" y="1" width="8" height="15" rx="1.5"/><circle cx="10" cy="14.5" r="0.7"/></svg>
-            </button>
-          </div>
-          <div class="cms-url-bar" id="cmsUrlBar"></div>
-          <div class="cms-edit-indicator" id="editIndicator" hidden>
-            <span class="cms-dot"></span> Editing
-          </div>
-        </div>
-        <div class="cms-frame-wrap" id="cmsFrameWrap">
-          <iframe id="cmsFrame" title="Page preview" sandbox="allow-same-origin allow-scripts allow-forms allow-popups allow-modals allow-top-navigation-by-user-activation"></iframe>
-        </div>
+      <div class="frame-wrap" id="frameWrap">
+        <iframe id="previewFrame" title="Page preview"
+          sandbox="allow-same-origin allow-scripts allow-forms allow-popups allow-modals allow-top-navigation-by-user-activation">
+        </iframe>
       </div>
+    </div>
+  </main>
+</div>
 
-    </main>
-  </div>
-
-  <script src="admin.js"></script>
+<script src="admin.js"></script>
 </body>
 </html>
