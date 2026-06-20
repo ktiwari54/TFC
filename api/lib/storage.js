@@ -1,65 +1,137 @@
 const fs = require('fs');
 const path = require('path');
+const { supabase } = require('./db');
 
 const ROOT = path.join(__dirname, '..', '..');
 const ALLOWED = new Set(['homepage.json', 'films.json']);
 
-function resolveContentPath(name) {
-  if (!ALLOWED.has(name)) throw new Error('Invalid content file');
-  return path.join(ROOT, 'content', name);
+// ---------- Films ----------
+
+async function readFilms() {
+  const { data, error } = await supabase
+    .from('films')
+    .select('*')
+    .order('sort_order', { ascending: true });
+  if (error) throw new Error(error.message);
+
+  const allFilms = data.map(dbToFilm);
+  const categories = buildCategories(allFilms);
+  return { allFilms, categories, assets: await getAssets() };
 }
 
-function readContent(name) {
-  const file = resolveContentPath(name);
-  if (!fs.existsSync(file)) throw new Error('Not found');
-  return JSON.parse(fs.readFileSync(file, 'utf8'));
-}
-
-async function writeContentGithub(name, data) {
-  const token = process.env.GITHUB_TOKEN;
-  if (!token) throw new Error('GITHUB_TOKEN required for saves on Vercel');
-  const repo = process.env.GITHUB_REPO || 'ktiwari54/TFC';
-  const [owner, repoName] = repo.split('/');
-  const filePath = `content/${name}`;
-  const content = Buffer.from(JSON.stringify(data, null, 2)).toString('base64');
-  const apiBase = `https://api.github.com/repos/${owner}/${repoName}/contents/${filePath}`;
-
-  const getRes = await fetch(apiBase, {
-    headers: { Authorization: `Bearer ${token}`, Accept: 'application/vnd.github+json' },
-  });
-  const existing = getRes.ok ? await getRes.json() : null;
-
-  const putRes = await fetch(apiBase, {
-    method: 'PUT',
-    headers: {
-      Authorization: `Bearer ${token}`,
-      Accept: 'application/vnd.github+json',
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({
-      message: `CMS: update ${name}`,
-      content,
-      sha: existing?.sha,
-    }),
-  });
-  if (!putRes.ok) {
-    const err = await putRes.json().catch(() => ({}));
-    throw new Error(err.message || 'GitHub save failed');
+async function writeFilms(payload) {
+  const films = payload.allFilms || [];
+  for (let i = 0; i < films.length; i++) {
+    const film = films[i];
+    const row = filmToDb(film, i);
+    const { error } = await supabase
+      .from('films')
+      .upsert(row, { onConflict: 'slug' });
+    if (error) throw new Error(error.message);
+  }
+  // Remove films no longer in the list
+  const slugs = films.map((f) => f.slug).filter(Boolean);
+  if (slugs.length > 0) {
+    await supabase.from('films').delete().not('slug', 'in', `(${slugs.map((s) => `"${s}"`).join(',')})`);
   }
 }
 
-function writeContentLocal(name, data) {
-  const file = resolveContentPath(name);
-  fs.mkdirSync(path.dirname(file), { recursive: true });
-  fs.writeFileSync(file, JSON.stringify(data, null, 2), 'utf8');
+function dbToFilm(row) {
+  return {
+    slug: row.slug,
+    displayName: row.display_name,
+    title: row.title,
+    date: row.date,
+    location: row.location,
+    image: row.image,
+    previewVideo: row.preview_video,
+    categories: row.categories || [],
+  };
+}
+
+function filmToDb(film, index) {
+  return {
+    slug: film.slug,
+    display_name: film.displayName || null,
+    title: film.title || film.displayName || '',
+    date: film.date || null,
+    location: film.location || null,
+    image: film.image || null,
+    preview_video: film.previewVideo || null,
+    categories: film.categories || [],
+    sort_order: index,
+  };
+}
+
+function buildCategories(allFilms) {
+  const cats = ['recents', 'favourites', 'classics', 'celebrities', 'international'];
+  const result = {};
+  cats.forEach((c) => { result[c] = []; });
+  allFilms.forEach((film) => {
+    (film.categories || []).forEach((cat) => {
+      if (!result[cat]) result[cat] = [];
+      result[cat].push({
+        slug: film.slug,
+        name: film.displayName || film.title,
+        date: film.date,
+        location: film.location,
+        image: film.image,
+        previewVideo: film.previewVideo,
+      });
+    });
+  });
+  return result;
+}
+
+// ---------- Homepage ----------
+
+async function readHomepage() {
+  const { data, error } = await supabase
+    .from('homepage_content')
+    .select('key, data');
+  if (error) throw new Error(error.message);
+
+  const result = {};
+  (data || []).forEach(({ key, data: val }) => { result[key] = val; });
+  return result;
+}
+
+async function writeHomepage(payload) {
+  const keys = Object.keys(payload);
+  for (const key of keys) {
+    const { error } = await supabase
+      .from('homepage_content')
+      .upsert({ key, data: payload[key] }, { onConflict: 'key' });
+    if (error) throw new Error(error.message);
+  }
+}
+
+// ---------- Assets (stored as homepage_content row) ----------
+
+async function getAssets() {
+  const { data } = await supabase
+    .from('homepage_content')
+    .select('data')
+    .eq('key', 'assets')
+    .single();
+  return data?.data || {};
+}
+
+// ---------- Unified read/write (used by content API) ----------
+
+async function readContent(name) {
+  if (!ALLOWED.has(name)) throw new Error('Invalid content file');
+  if (name === 'films.json') return readFilms();
+  if (name === 'homepage.json') return readHomepage();
 }
 
 async function writeContent(name, data) {
-  if (process.env.VERCEL || process.env.GITHUB_TOKEN) {
-    return writeContentGithub(name, data);
-  }
-  return writeContentLocal(name, data);
+  if (!ALLOWED.has(name)) throw new Error('Invalid content file');
+  if (name === 'films.json') return writeFilms(data);
+  if (name === 'homepage.json') return writeHomepage(data);
 }
+
+// ---------- File uploads (unchanged — local/vercel filesystem) ----------
 
 function saveUpload(folder, filename, buffer) {
   const safeName = filename.replace(/[^a-zA-Z0-9._-]/g, '_');

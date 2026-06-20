@@ -1,7 +1,8 @@
 /**
  * TFC local dev server with CMS API
- * Run: ADMIN_PASSWORD=yourpass node server.js
+ * Copy .env.example to .env, fill in values, then run: node server.js
  */
+require('dotenv').config();
 const http = require('http');
 const fs = require('fs');
 const path = require('path');
@@ -36,7 +37,13 @@ const MIME = {
 };
 
 function serveStatic(filePath, res) {
-  if (!filePath.startsWith(ROOT) || !fs.existsSync(filePath) || fs.statSync(filePath).isDirectory()) {
+  if (!fs.existsSync(filePath) || fs.statSync(filePath).isDirectory()) {
+    res.statusCode = 404;
+    res.end('Not found');
+    return;
+  }
+  const real = fs.realpathSync(filePath);
+  if (!real.startsWith(ROOT + path.sep) && real !== ROOT) {
     res.statusCode = 404;
     res.end('Not found');
     return;

@@ -2,8 +2,11 @@ const { requireAuth } = require('./lib/auth');
 const { readContent, writeContent, ALLOWED } = require('./lib/storage');
 
 module.exports = async (req, res) => {
-  res.setHeader('Access-Control-Allow-Origin', req.headers.origin || '*');
-  res.setHeader('Access-Control-Allow-Credentials', 'true');
+  const allowedOrigin = process.env.ALLOWED_ORIGIN || 'https://tfc-mauve.vercel.app';
+  if (req.headers.origin === allowedOrigin) {
+    res.setHeader('Access-Control-Allow-Origin', allowedOrigin);
+    res.setHeader('Access-Control-Allow-Credentials', 'true');
+  }
   res.setHeader('Access-Control-Allow-Methods', 'GET, PUT, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
 
@@ -23,7 +26,7 @@ module.exports = async (req, res) => {
 
   if (req.method === 'GET') {
     try {
-      const data = readContent(name);
+      const data = await readContent(name);
       res.setHeader('Content-Type', 'application/json');
       res.end(JSON.stringify(data));
     } catch (e) {
@@ -37,7 +40,18 @@ module.exports = async (req, res) => {
   if (req.method === 'PUT') {
     if (!requireAuth(req, res)) return;
     let body = '';
-    for await (const chunk of req) body += chunk;
+    let bodySize = 0;
+    const MAX_BODY = 1 * 1024 * 1024; // 1 MB
+    for await (const chunk of req) {
+      bodySize += chunk.length;
+      if (bodySize > MAX_BODY) {
+        res.statusCode = 413;
+        res.setHeader('Content-Type', 'application/json');
+        res.end(JSON.stringify({ error: 'Payload too large' }));
+        return;
+      }
+      body += chunk;
+    }
     try {
       const data = JSON.parse(body);
       await writeContent(name, data);
