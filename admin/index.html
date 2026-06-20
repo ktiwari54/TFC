@@ -2,65 +2,11 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>TFC Content Editor</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="admin.css">
+  <meta http-equiv="refresh" content="0;url=/?edit=1">
+  <title>Redirecting to Live Editor…</title>
+  <script>location.replace('/?edit=1');</script>
 </head>
 <body>
-  <div id="loginView" class="login-wrap">
-    <div class="login-card">
-      <h1>TFC Editor</h1>
-      <p>Sign in to update films and homepage content.</p>
-      <form id="loginForm">
-        <label for="password">Password</label>
-        <input type="password" id="password" name="password" required autocomplete="current-password" placeholder="Enter admin password">
-        <button type="submit" class="btn">Sign In</button>
-      </form>
-      <p id="loginError" class="hidden" style="color:#f0a0a0;margin-top:1rem;"></p>
-    </div>
-  </div>
-
-  <div id="appView" class="app hidden">
-    <aside class="sidebar">
-      <h2>TFC CMS</h2>
-      <button class="nav-btn active" data-view="films">Films</button>
-      <button class="nav-btn" data-view="homepage">Homepage</button>
-      <button class="nav-btn" id="logoutBtn" style="margin-top:2rem;color:#f0a0a0;">Logout</button>
-    </aside>
-
-    <main class="main">
-      <div class="topbar">
-        <h1 id="viewTitle">Films</h1>
-        <a href="/" class="btn is-ghost is-small" target="_blank">View Site ↗</a>
-      </div>
-
-      <div id="filmsView">
-        <div class="editor-layout">
-          <div class="film-list" id="filmList"></div>
-          <div id="filmEditor" class="panel">
-            <p style="color:var(--muted)">Select a film to edit.</p>
-          </div>
-        </div>
-        <button class="btn" id="saveFilmsBtn" style="margin-top:1rem;">Save All Films</button>
-      </div>
-
-      <div id="homepageView" class="hidden">
-        <div class="tabs" id="homeTabs">
-          <button class="tab-btn active" data-tab="tagline">Tagline</button>
-          <button class="tab-btn" data-tab="hero">Hero Slides</button>
-          <button class="tab-btn" data-tab="about">Who We Are</button>
-          <button class="tab-btn" data-tab="gallery">Gallery</button>
-          <button class="tab-btn" data-tab="stats">Stats</button>
-        </div>
-        <div id="homeEditor"></div>
-        <button class="btn" id="saveHomeBtn" style="margin-top:1rem;">Save Homepage</button>
-      </div>
-    </main>
-  </div>
-
-  <div id="toast" class="toast hidden"></div>
-  <script src="admin.js"></script>
+  <p>Opening live editor… <a href="/?edit=1">Click here</a> if not redirected.</p>
 </body>
 </html>

@@ -133,5 +133,23 @@
     ],
     "ctaText": "Work With Us",
     "ctaLink": "contact.html"
+  },
+  "chapters": {
+    "chapter1": {
+      "title": "Where Every Love Story Becomes Magic",
+      "text": "Step into a world where cinema meets culture — and every celebration is framed like a fairytale."
+    },
+    "chapter2": {
+      "title": "Unroll the Story",
+      "text": "Four enchanted scrolls — each revealing a chapter of who we are and what we create."
+    },
+    "chapter3": {
+      "title": "A Kingdom of Stories",
+      "text": "Numbers that shimmer — each one a tale told, a culture honoured, a dream captured on film."
+    },
+    "chapter4": {
+      "title": "Watch the Magic Unfold",
+      "text": "Fairytale films from across the world — scroll through our enchanted carousel of love stories."
+    }
   }
 }

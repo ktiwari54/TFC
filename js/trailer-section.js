@@ -54,7 +54,7 @@ function trailerItemHtml(film, assets) {
   const previewAttr = preview ? ` data-preview="${preview}"` : '';
 
   return `
-    <article class="trailer-item dream-card film-card"${previewAttr} data-video="">
+    <article class="trailer-item dream-card film-card"${previewAttr} data-video="" data-cms-film="${film.slug}">
       <div class="dream-card-glow" aria-hidden="true"></div>
       <div class="trailer-item-wrap dream-card-inner">
         <span class="dream-badge">✦ A TFC Tale</span>
@@ -62,11 +62,11 @@ function trailerItemHtml(film, assets) {
         <a href="${href}" class="trailer-content-wrap">
           <div class="text-wrapper">
             <div class="trailer-subtitle">
-              <span class="wedding-location">${film.date}</span>
+              <span class="wedding-location" data-cms-film="${film.slug}" data-cms-field="date">${film.date}</span>
               <img class="trailer-arrow" src="${assets.arrow || ''}" alt="" width="10">
-              <span class="wedding-location">${film.location}</span>
+              <span class="wedding-location" data-cms-film="${film.slug}" data-cms-field="location">${film.location}</span>
             </div>
-            <h2 class="trailer-name film-name">${film.name}</h2>
+            <h2 class="trailer-name film-name" data-cms-film="${film.slug}" data-cms-field="displayName">${film.name}</h2>
           </div>
         </a>
         <div class="slider-play-button">
@@ -76,7 +76,7 @@ function trailerItemHtml(film, assets) {
         </div>
         <img class="trailer-sufi" src="${assets.sufi || ''}" alt="" aria-hidden="true" width="72">
         <div class="trailer-media film-card-media">
-          <img class="trailer-image film-card-poster" src="${film.image}" alt="${film.name}" width="420" height="560" loading="lazy" decoding="async">
+          <img class="trailer-image film-card-poster" src="${film.image}" alt="${film.name}" width="420" height="560" loading="lazy" decoding="async" data-cms-film="${film.slug}" data-cms-field="image" data-cms-type="image">
         </div>
       </div>
     </article>`;

@@ -1,0 +1,300 @@
+/* TFC Live Visual Editor */
+body.tfc-visual-edit {
+  padding-top: 56px !important;
+}
+
+body.tfc-visual-edit .tfc-cms-target {
+  cursor: text;
+  transition: box-shadow 0.2s, outline 0.2s;
+}
+
+body.tfc-visual-edit .tfc-cms-target:hover {
+  outline: 2px dashed rgba(232, 200, 114, 0.75);
+  outline-offset: 4px;
+}
+
+body.tfc-visual-edit .tfc-cms-target.is-editing {
+  outline: 2px solid #e8c872;
+  outline-offset: 4px;
+  box-shadow: 0 0 0 6px rgba(232, 200, 114, 0.15);
+}
+
+body.tfc-visual-edit .tfc-cms-media {
+  cursor: pointer;
+  position: relative;
+}
+
+body.tfc-visual-edit .tfc-cms-media::after {
+  content: "✎ Change";
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  background: rgba(0, 0, 0, 0.45);
+  color: #fff;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  opacity: 0;
+  transition: opacity 0.2s;
+  border-radius: inherit;
+  pointer-events: none;
+}
+
+body.tfc-visual-edit .tfc-cms-media:hover::after {
+  opacity: 1;
+}
+
+body.tfc-visual-edit a.tfc-cms-target {
+  cursor: text;
+}
+
+body.tfc-visual-edit a:has(.tfc-cms-target),
+body.tfc-visual-edit a:has([contenteditable="true"]) {
+  pointer-events: none;
+}
+
+body.tfc-visual-edit a .tfc-cms-target,
+body.tfc-visual-edit a [contenteditable="true"] {
+  pointer-events: auto;
+}
+
+/* Toolbar */
+.tfc-ve-toolbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 100000;
+  height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0 1.25rem;
+  background: rgba(12, 12, 16, 0.92);
+  backdrop-filter: blur(16px);
+  border-bottom: 1px solid rgba(232, 200, 114, 0.25);
+  font-family: "DM Sans", system-ui, sans-serif;
+  color: #f4f0eb;
+}
+
+.tfc-ve-brand {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.tfc-ve-brand span {
+  color: #e8c872;
+}
+
+.tfc-ve-pill {
+  font-size: 0.68rem;
+  padding: 0.25rem 0.6rem;
+  border-radius: 999px;
+  background: rgba(196, 30, 58, 0.2);
+  border: 1px solid rgba(196, 30, 58, 0.4);
+  color: #ffb8c4;
+  animation: tfcVePulse 2s ease-in-out infinite;
+}
+
+@keyframes tfcVePulse {
+  0%, 100% { opacity: 0.85; }
+  50% { opacity: 1; }
+}
+
+.tfc-ve-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.tfc-ve-btn {
+  border: none;
+  border-radius: 999px;
+  padding: 0.5rem 1.1rem;
+  font-family: inherit;
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: transform 0.15s, filter 0.15s;
+}
+
+.tfc-ve-btn:hover { transform: translateY(-1px); }
+
+.tfc-ve-btn--ghost {
+  background: transparent;
+  color: rgba(244, 240, 235, 0.7);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.tfc-ve-btn--publish {
+  background: linear-gradient(135deg, #e8c872, #c9a84a);
+  color: #1a1208;
+  box-shadow: 0 4px 20px rgba(232, 200, 114, 0.35);
+}
+
+.tfc-ve-btn--publish.is-dirty {
+  animation: tfcVeGlow 1.5s ease-in-out infinite;
+}
+
+@keyframes tfcVeGlow {
+  0%, 100% { box-shadow: 0 4px 20px rgba(232, 200, 114, 0.35); }
+  50% { box-shadow: 0 4px 28px rgba(232, 200, 114, 0.65); }
+}
+
+.tfc-ve-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* Login overlay */
+.tfc-ve-login {
+  position: fixed;
+  inset: 0;
+  z-index: 100001;
+  background: rgba(8, 8, 12, 0.88);
+  backdrop-filter: blur(12px);
+  display: grid;
+  place-items: center;
+  padding: 2rem;
+}
+
+.tfc-ve-login-card {
+  width: min(420px, 100%);
+  background: linear-gradient(160deg, #1a1a24, #12121a);
+  border: 1px solid rgba(232, 200, 114, 0.2);
+  border-radius: 16px;
+  padding: 2rem;
+  text-align: center;
+  color: #f4f0eb;
+}
+
+.tfc-ve-login-card h2 {
+  margin: 0 0 0.5rem;
+  font-family: "Cormorant Garamond", Georgia, serif;
+  font-size: 1.75rem;
+  font-weight: 400;
+}
+
+.tfc-ve-login-card p {
+  color: rgba(244, 240, 235, 0.55);
+  margin: 0 0 1.5rem;
+  font-size: 0.9rem;
+}
+
+.tfc-ve-login-card input {
+  width: 100%;
+  background: #0f0f14;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  padding: 0.85rem 1rem;
+  color: #fff;
+  font: inherit;
+  margin-bottom: 1rem;
+}
+
+/* Media panel */
+.tfc-ve-panel {
+  position: fixed;
+  z-index: 100002;
+  width: min(360px, calc(100vw - 2rem));
+  background: rgba(18, 18, 24, 0.96);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(232, 200, 114, 0.3);
+  border-radius: 14px;
+  padding: 1.25rem;
+  color: #f4f0eb;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.5);
+  font-family: "DM Sans", system-ui, sans-serif;
+}
+
+.tfc-ve-panel h4 {
+  margin: 0 0 1rem;
+  font-size: 0.72rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #e8c872;
+}
+
+.tfc-ve-panel label {
+  display: block;
+  font-size: 0.7rem;
+  color: rgba(244, 240, 235, 0.5);
+  margin-bottom: 0.35rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.tfc-ve-panel input[type="text"],
+.tfc-ve-panel input[type="url"] {
+  width: 100%;
+  background: #0f0f14;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  padding: 0.65rem 0.8rem;
+  color: #fff;
+  font: inherit;
+  margin-bottom: 0.85rem;
+}
+
+.tfc-ve-panel-preview {
+  width: 100%;
+  max-height: 160px;
+  object-fit: cover;
+  border-radius: 8px;
+  margin-bottom: 0.85rem;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.tfc-ve-panel-actions {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+}
+
+.tfc-ve-toast {
+  position: fixed;
+  bottom: 1.5rem;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 100003;
+  background: rgba(20, 50, 32, 0.95);
+  border: 1px solid #3d7a52;
+  color: #b8f0c8;
+  padding: 0.75rem 1.5rem;
+  border-radius: 999px;
+  font-family: "DM Sans", sans-serif;
+  font-size: 0.88rem;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.4);
+}
+
+.tfc-ve-toast.is-error {
+  background: rgba(50, 20, 20, 0.95);
+  border-color: #7a3d3d;
+  color: #f0b8b8;
+}
+
+.tfc-ve-hint {
+  position: fixed;
+  bottom: 1.25rem;
+  right: 1.25rem;
+  z-index: 99999;
+  background: rgba(12, 12, 16, 0.9);
+  border: 1px solid rgba(232, 200, 114, 0.2);
+  border-radius: 10px;
+  padding: 0.65rem 1rem;
+  font-size: 0.75rem;
+  color: rgba(244, 240, 235, 0.6);
+  font-family: "DM Sans", sans-serif;
+  pointer-events: none;
+}

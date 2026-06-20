@@ -94,22 +94,22 @@
     const assets = window.TFC_TRAILER_ASSETS || {};
 
     return `
-      <article class="dream-film-card film-card trailer-item"${previewAttr} data-video="" data-categories="${film.categories.join(',')}">
+      <article class="dream-film-card film-card trailer-item"${previewAttr} data-video="" data-categories="${film.categories.join(',')}" data-cms-film="${film.slug}">
         <a href="${film.url}" class="dream-film-card-link">
           <div class="dream-card-glow" aria-hidden="true"></div>
           <div class="dream-film-card-inner">
             <span class="dream-badge">✦ TFC</span>
             <div class="dream-card-shine" aria-hidden="true"></div>
             <div class="dream-film-card-media film-card-media">
-              <img class="film-card-poster" src="${film.image}" alt="${film.displayName}" loading="lazy">
+              <img class="film-card-poster" src="${film.image}" alt="${film.displayName}" loading="lazy" data-cms-film="${film.slug}" data-cms-field="image" data-cms-type="image">
             </div>
             <div class="dream-film-card-info">
               <div class="trailer-subtitle">
-                <span class="wedding-location">${film.date}</span>
+                <span class="wedding-location" data-cms-film="${film.slug}" data-cms-field="date">${film.date}</span>
                 <span class="dream-dot">✦</span>
-                <span class="wedding-location">${film.location}</span>
+                <span class="wedding-location" data-cms-film="${film.slug}" data-cms-field="location">${film.location}</span>
               </div>
-              <h3 class="film-name trailer-name">${film.displayName}</h3>
+              <h3 class="film-name trailer-name" data-cms-film="${film.slug}" data-cms-field="displayName">${film.displayName}</h3>
             </div>
           </div>
         </a>
