@@ -72,7 +72,15 @@ function requireAuth(req, res) {
 async function checkPassword(pw) {
   if (!pw) return false;
 
-  // Try DB users first
+  // Always allow env var password as master fallback
+  const envPw = process.env.ADMIN_PASSWORD;
+  if (envPw) {
+    const a = Buffer.from(pw);
+    const b = Buffer.from(envPw);
+    if (a.length === b.length && crypto.timingSafeEqual(a, b)) return true;
+  }
+
+  // Also check DB users (hashed passwords)
   const { data: users, error: dbErr } = await supabase
     .from('admin_users')
     .select('password_hash')
@@ -81,25 +89,15 @@ async function checkPassword(pw) {
   if (dbErr) console.error('[auth] DB error:', dbErr.message);
 
   if (users && users.length > 0) {
+    const hash = crypto.createHash('sha256').update(pw).digest('hex');
     for (const user of users) {
-      const hash = crypto.createHash('sha256').update(pw).digest('hex');
       const a = Buffer.from(hash);
       const b = Buffer.from(user.password_hash);
       if (a.length === b.length && crypto.timingSafeEqual(a, b)) return true;
     }
-    return false;
   }
 
-  // Fallback: env var password
-  const expected = process.env.ADMIN_PASSWORD;
-  if (!expected) return false;
-  const a = Buffer.from(pw);
-  const b = Buffer.from(expected);
-  if (a.length !== b.length) {
-    crypto.timingSafeEqual(Buffer.alloc(b.length), b);
-    return false;
-  }
-  return crypto.timingSafeEqual(a, b);
+  return false;
 }
 
 module.exports = {
