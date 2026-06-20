@@ -9,7 +9,10 @@
     "test:seo": "node test-seo.js",
     "test:perf": "node test-performance.js",
     "test:ui": "node test-ui.js",
-    "backup": "node scripts/build-backup-manifest.js && powershell -ExecutionPolicy Bypass -File backup.ps1"
+    "backup": "node scripts/build-backup-manifest.js && powershell -ExecutionPolicy Bypass -File backup.ps1",
+    "migrate:content": "node scripts/migrate-content.js",
+    "dev": "node server.js",
+    "dev:cms": "node server.js"
   },
   "devDependencies": {
     "playwright": "^1.52.0"

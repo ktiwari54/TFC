@@ -88,3 +88,6 @@ function initCsStatCounters() {
 
   nums.forEach((n) => observer.observe(n));
 }
+
+window.TFC_initStatCounters = initCsStatCounters;
+document.addEventListener('tfc:homepage-applied', initCsStatCounters);

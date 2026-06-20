@@ -1,0 +1,137 @@
+{
+  "tagline": {
+    "text": "Our films bring <em>people closer</em>"
+  },
+  "heroSlides": [
+    {
+      "slug": "arya-federico",
+      "title": "Arya & Federico",
+      "location": "Lake Como, Italy",
+      "date": "June 2025",
+      "description": "When a supermodel married her Italian Stallion on a horse ranch outside Milan, it was so dreamy they had to have two weddings. Absolute goosebumps.",
+      "image": "https://cdn.prod.website-files.com/658138cfb5ff0b77ba94f1a6/68b95bf2db16a47758441157_AryaFed.jpeg",
+      "video": "https://player.vimeo.com/progressive_redirect/playback/1115761410/rendition/1080p/file.mp4?loc=external&log_user=0&signature=9975e843ca0874532925cddc3c17284392e82a52c045047b15a851487de76362"
+    },
+    {
+      "slug": "priya-akshay",
+      "title": "Priya & Akshay",
+      "location": "Hyderabad, India",
+      "date": "December 2024",
+      "description": "Love is not about finding the perfect person, but about seeing perfection in the person you choose. Beautifully told by TFC Films & CO.",
+      "image": "https://cdn.prod.website-files.com/658138cfb5ff0b77ba94f1a6/68cd4796ad7681b7b12f4f1f_For%20website%20Images%20.png",
+      "video": "https://player.vimeo.com/progressive_redirect/playback/1120076645/rendition/1080p/file.mp4?loc=external&log_user=0&signature=7d187646a9f1d25c26670a514df3479973a025045bf6c87cfce832825579f926"
+    },
+    {
+      "slug": "apoorva-kshitij",
+      "title": "Apoorva & Kshitij",
+      "location": "Uttarakhand",
+      "date": "March 2025",
+      "description": "An intimate, honest wedding filmed with a small crew, big hearts, and open skies. Somewhere between sunlight and song, magic happened.",
+      "image": "https://cdn.prod.website-files.com/658138cfb5ff0b77ba94f1a6/693a8aba3360a6accfb6d867_Website%20Main%20Cover%20Image%20-2.png",
+      "video": ""
+    },
+    {
+      "slug": "nikki-vishal",
+      "title": "Nikki & Vishal",
+      "location": "Mumbai, India",
+      "date": "March 2025",
+      "description": "The love we felt from our crew, friends, and family was overwhelming. Now we know what it truly means to have a TFC film — to feel it all over again.",
+      "image": "https://cdn.prod.website-files.com/658138cfb5ff0b77ba94f1a6/68762fb1fb6c30dddaefc218_W%20(15).webp",
+      "video": "https://player.vimeo.com/progressive_redirect/playback/1100541792/rendition/1080p/file.mp4?loc=external&log_user=0&signature=ffba76abf45ce393136bfff470e7c8d8420ecf180d516c94195371280264c516"
+    }
+  ],
+  "gallery": [
+    {
+      "src": "https://cdn.prod.website-files.com/658138cfb5ff0b77ba94f1a6/68b95bf2db16a47758441157_AryaFed.jpeg",
+      "alt": "Wedding film still",
+      "class": ""
+    },
+    {
+      "src": "https://cdn.prod.website-files.com/658138cfb5ff0b77ba94f1a6/68cd4796ad7681b7b12f4f1f_For%20website%20Images%20.png",
+      "alt": "Celebration moment",
+      "class": "tall"
+    },
+    {
+      "src": "https://cdn.prod.website-files.com/658138cfb5ff0b77ba94f1a6/693a8aba3360a6accfb6d867_Website%20Main%20Cover%20Image%20-2.png",
+      "alt": "Intimate wedding",
+      "class": ""
+    },
+    {
+      "src": "https://cdn.prod.website-files.com/658138cfb5ff0b77ba94f1a6/68762fb1fb6c30dddaefc218_W%20(15).webp",
+      "alt": "Cinematic couple",
+      "class": "wide"
+    },
+    {
+      "src": "https://cdn.prod.website-files.com/652e625ed083f8127673075c/67583bf43827e311a0e6735b_Website.jpg",
+      "alt": "Destination wedding",
+      "class": ""
+    },
+    {
+      "src": "https://cdn.prod.website-files.com/652e625ed083f8127673075c/675855fa7fdbb8b8299e9c47_alpana.webp",
+      "alt": "Traditional ceremony",
+      "class": "tall"
+    },
+    {
+      "src": "https://cdn.prod.website-files.com/658138cfb5ff0b77ba94f1a6/6703b649f87dd72a7bb4ce74_W-18.webp",
+      "alt": "Global celebration",
+      "class": ""
+    },
+    {
+      "src": "https://cdn.prod.website-files.com/652e625ed083f8127673075c/6758563415ee032506577218_anushka.avif",
+      "alt": "Celebrity wedding film",
+      "class": "wide"
+    }
+  ],
+  "stats": [
+    {
+      "count": 35,
+      "suffix": "+",
+      "label": "Countries Filmed",
+      "description": "Spread across the globe"
+    },
+    {
+      "count": 500,
+      "suffix": "+",
+      "label": "Happy Couples",
+      "description": "Stories we've honoured"
+    },
+    {
+      "count": 1000,
+      "suffix": "+",
+      "label": "Hours of Film",
+      "description": "Cinematic memories delivered"
+    },
+    {
+      "count": 12,
+      "suffix": "",
+      "label": "Awards Won",
+      "description": "Recognition worldwide"
+    }
+  ],
+  "aboutTeaser": {
+    "kicker": "Who We Are",
+    "title": "Real Films Made By",
+    "titleAccent": "Real Filmmakers",
+    "body": "TFC Films & CO. — Tales From the Culture — is not just a videography company. We are storytellers who bring the magic of cinema to life's most precious moments, honouring tradition and culture in every frame.",
+    "images": {
+      "main": "https://cdn.prod.website-files.com/658138cfb5ff0b77ba94f1a6/68cd4796ad7681b7b12f4f1f_For%20website%20Images%20.png",
+      "accent": "https://cdn.prod.website-files.com/658138cfb5ff0b77ba94f1a6/68b95bf2db16a47758441157_AryaFed.jpeg"
+    },
+    "stats": [
+      {
+        "value": "500+",
+        "label": "Films Created"
+      },
+      {
+        "value": "35+",
+        "label": "Countries"
+      },
+      {
+        "value": "12",
+        "label": "Awards Won"
+      }
+    ],
+    "ctaText": "Work With Us",
+    "ctaLink": "contact.html"
+  }
+}

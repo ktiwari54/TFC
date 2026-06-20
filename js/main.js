@@ -1,6 +1,10 @@
+window.TFC_initHeroSlider = initHeroSlider;
+
 document.addEventListener('DOMContentLoaded', () => {
   initNavbar();
-  if (document.getElementById('heroSlider')) initHeroSlider();
+  if (document.getElementById('heroSlider') && typeof window.TFC_loadContent !== 'function') {
+    initHeroSlider();
+  }
   if (document.getElementById('filmTabs') && !document.getElementById('trailerMount')) initFilmTabs();
   if (!document.getElementById('trailerMount')) initFilmHoverPreview();
   if (document.querySelector('.crew-card')) initCrewBtsPreview();
@@ -11,6 +15,12 @@ document.addEventListener('DOMContentLoaded', () => {
   if (document.querySelector('.track-item')) initTrackList();
   if (document.getElementById('faqList')) initFaq();
   if (document.querySelector('section[id]') && document.body.dataset.page === 'home') initSmoothNav();
+});
+
+document.addEventListener('tfc:homepage-applied', () => {
+  const dots = document.getElementById('heroDots');
+  if (dots) dots.innerHTML = '';
+  if (document.getElementById('heroSlider')) initHeroSlider();
 });
 
 function initNavbar() {

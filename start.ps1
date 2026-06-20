@@ -14,4 +14,9 @@ if (-not (Get-Command python -ErrorAction SilentlyContinue)) {
 }
 
 Start-Process "http://localhost:8080/"
-python serve.py
+if ($env:ADMIN_PASSWORD) {
+  node server.js
+} else {
+  Write-Host "Tip: Set ADMIN_PASSWORD to enable CMS editor at /admin"
+  python serve.py
+}

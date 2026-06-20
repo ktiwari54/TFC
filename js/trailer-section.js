@@ -1,6 +1,7 @@
 /* Dream carousel — horizontal film showcase */
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async () => {
   if (!document.getElementById('trailerMount')) return;
+  if (window.TFC_CONTENT_BOOT) await window.TFC_CONTENT_BOOT;
   initTrailerSection();
 });
 

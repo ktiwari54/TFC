@@ -116,7 +116,8 @@
       </article>`;
   }
 
-  document.addEventListener('DOMContentLoaded', () => {
+  document.addEventListener('DOMContentLoaded', async () => {
+    if (window.TFC_CONTENT_BOOT) await window.TFC_CONTENT_BOOT;
     const page = document.querySelector('.dream-films-page');
     const grid = document.getElementById('allFilmsGrid');
     const countEl = document.getElementById('filmsCount');
